@@ -1,0 +1,1088 @@
+<?php
+
+namespace App\Http\Livewire\Inner;
+
+use App\Jobs\EmailIncompleteTransfer;
+use App\Mail\BeneficiaryCreated;
+use App\Mail\BeneficiaryNameChanged;
+use App\Mail\IncompleteTransfer;
+use App\Mail\RegisterDone;
+use App\Mail\TransferCreated;
+use App\Models\Customer\Customer;
+use App\Models\Partner\Payer;
+use App\Models\Partner\PayerValidation;
+use App\Models\Partner\Routing;
+use App\Models\Transfer\Ledger;
+use App\Models\Transfer\StatusTracker;
+use App\Models\Transfer\Transfer;
+use App\Models\Transfer\TransferBeneficiary;
+use App\Models\Transfer\TransferBeneficiaryBank;
+use App\Models\Transfer\TransferCustomer;
+use App\Models\Transfer\TransferDetail;
+use App\Models\User\Beneficiary;
+use App\Models\User\BeneficiaryBank;
+use App\Traits\Modals\BeneficiaryBankList;
+use App\Traits\Modals\BeneficiaryList;
+use App\Traits\Modals\PayerList;
+use App\Traits\Modals\ReceivingCountries;
+use App\Traits\Modals\ReceivingMethods;
+use App\Traits\Modals\Relationship;
+use App\Traits\Modals\SearchBanks;
+use App\Traits\Modals\SearchDestination;
+use App\Traits\Modals\SendingMethods;
+use App\Traits\Modals\SendingReasons;
+use App\Traits\Validation\UserDocumentValidation;
+use App\Traits\Validation\UserProfileValidation;
+use Devzone\Rms\AdminFee;
+use Devzone\Rms\AllRates;
+use Devzone\Rms\Source;
+
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Validator;
+use Livewire\Component;
+
+class SendMoney extends Component
+{
+
+
+    public $source_of_funds;
+
+    public function render()
+    {
+        return view('livewire.inner.send-money');
+    }
+
+    use ReceivingCountries, SendingMethods, ReceivingMethods, PayerList, SearchDestination,
+        BeneficiaryList, Relationship, SendingReasons,
+
+        BeneficiaryBankList, SearchBanks,
+        UserProfileValidation, UserDocumentValidation;
+
+    public $receiving_country_id;
+    public $receiving_country = [];  // Detail of country where customer will send money
+    public $receiving_method; //selected receiving method detail like Bank,Cash
+    public $receiving_method_id;
+    public $receiving_methods = []; //possible list of all receiving methods
+    public $payers = []; //list of all possible payers against receiving country
+    public $payer_id;
+    public $selected_payer = []; //selected payer details
+    public $selected_beneficiary = [
+        'name' => '',
+        'first_name' => '',
+        'last_name' => ''
+    ];
+    public $show_beneficiary = false;
+    public $show_beneficiary_bank = false;
+    public $selected_cash_destination;
+    public $selected_bank_beneficiary = [];
+    public $branches = [];
+    public $routings = [];
+    public $sending_method_id;
+    public $selected_sending_method = [];
+
+    public $selected_sending_reason;
+    public $beneficiary_id;
+    public $beneficiary_bank_id = null;
+    public $selected_window = 'transfer';
+    public $selected_window_profile = '';
+    public $success_page;
+    public $amounts = [
+        'sending_amount' => 0,
+        'receive_amount' => 0,
+        'fees' => 0,
+        'calculation_mode' => 'S',
+        'total' => 0
+    ];
+    public $request;
+    public $rates = [];
+    public $validation = [];
+    public $error;
+    protected $listeners = [
+        'emit_receiving_country' => 'getReceivingMethods',
+        'emit_receiving_methods' => 'getPayers',
+        'emit_sending_methods' => 'setSendingMethod',
+        'emit_payer_list' => 'setPayer',
+        'emit_select_beneficiary' => 'selectBeneficiary',
+        'documentAdded' => 'documentAdded',
+        'addressUpdated' => 'addressUpdated',
+        'profileUpdated' => 'profileUpdated',
+        'profileDone' => 'profileDone',
+        'addressDone' => 'addressDone',
+        'documentDone' => 'documentDone',
+        'resetErrors' => 'resetErrors',
+        'handleBackNavigation' => 'handleBackNavigation'
+    ];
+    protected $validationAttributes = [
+        'receiving_country.iso2' => 'sending to',
+        'receiving_method' => 'receiving method',
+        'selected_payer.id' => 'payer',
+        'amounts.total' => 'total amount',
+        'amounts.sending_amount' => 'sending amount',
+        'selected_beneficiary.first_name' => 'beneficiary first name',
+        'selected_beneficiary.last_name' => 'beneficiary last name',
+        'selected_beneficiary.phone' => 'beneficiary phone',
+        'selected_beneficiary.code' => 'beneficiary phone code',
+        'selected_beneficiary.relationship_id' => 'beneficiary relationship',
+        'selected_bank_beneficiary.account_no' => 'account #',
+        'selected_bank_beneficiary.iban' => 'iban',
+        'selected_sending_method.id' => 'sending method',
+        'selected_sending_reason' => 'sending reason',
+        'selected_bank_beneficiary.bank_id' => 'bank',
+        'selected_bank_beneficiary.name' => 'bank name',
+        'selected_bank_beneficiary.ifsc' => 'ifsc code',
+        'selected_bank_beneficiary.branch_name' => 'branch name',
+        'selected_cash_destination' => 'Cash Pickup Location',
+        'selected_bank_beneficiary.branch_code' => 'Routing #'
+    ];
+
+    protected $messages = [
+        'selected_cash_destination.required' => 'Cash pick-up location is required.',
+        'selected_beneficiary.first_name.required' => 'Beneficiary first name is required.',
+        'selected_beneficiary.first_name.regex' => 'Beneficiary first name format is invalid.',
+        'selected_beneficiary.last_name.required' => 'Beneficiary last name is required.',
+        'selected_beneficiary.last_name.regex' => 'Beneficiary last name format is invalid.',
+        'selected_beneficiary.phone.required' => 'Beneficiary phone is required.',
+        'selected_beneficiary.relationship_id.required' => 'Beneficiary relationship is required.',
+        'selected_sending_reason.required' => 'Sending reason is required.',
+        'selected_bank_beneficiary.bank_id.required' => 'Bank is required.',
+        'selected_bank_beneficiary.branch_name.required' => 'Branch name is required.',
+        'selected_bank_beneficiary.account_no.required' => 'Account # is required.',
+        'selected_bank_beneficiary.branch_code.required' => 'Routing # is required.',
+        'selected_bank_beneficiary.ifsc.required' => 'Ifsc code is required.',
+        'selected_bank_beneficiary.iban.required' => 'Iban is required.',
+        'selected_sending_method.id.required' => 'Sending method is required.',
+        'selected_beneficiary.code.required' => 'Beneficiary phone code is required.',
+        'amounts.sending_amount.required' => 'Sending amount is required.',
+        'amounts.total.required' => 'Total amount is required.',
+        'selected_payer.id.required' => 'Payer is required.',
+        'receiving_method.required' => 'Receiving method is required.',
+        'receiving_country.iso2.required' => 'Sending to is required.',
+    ];
+
+
+    public $profile = false;
+    public $address = false;
+    public $documents = false;
+    public $profile_tab = false;
+    public $address_tab = false;
+    public $documents_tab = false;
+    public $color_amount;
+    public $color_beneficiary;
+    public $color_confirm;
+    public $color_profile;
+    public $color_address;
+
+
+    public function documentDone()
+    {
+        $this->documents = false;
+
+    }
+
+    public function addressDone()
+    {
+        $this->color_address = 'success-tab';
+        $this->dispatchBrowserEvent('show-tab', ['tab' => 'documents']);
+        $this->address = false;
+    }
+
+    public function profileDone()
+    {
+        $this->color_profile = 'success-tab';
+        if ($this->address == true) {
+            $this->dispatchBrowserEvent('show-tab', ['tab' => 'address']);
+        } else {
+            $this->dispatchBrowserEvent('show-tab', ['tab' => 'documents']);
+        }
+
+        $this->profile = false;
+    }
+
+
+    public function mount($request, $redirect = null)
+    {
+        $customer = Customer::where('id', session('customer_id'))->where('type', 'on')->first();
+
+        $doc = $this->validateUserDocuments($customer);
+        if ($doc['status'] != true) {
+            $this->redirectTo = url('/user/document/add') . '?incomplete=true';
+        }
+
+        if (!$this->validateUserProfile($customer)) {
+            $this->redirectTo = url('profile') . '?incomplete=true';
+        }
+
+
+        $this->request = $request;
+        $this->success_page = $redirect;
+        $this->rcFetchData();
+        $this->smfetchData();
+        $this->rlfetchData();
+        $this->srfetchData();
+
+        $query = (request()->all());
+        if (!empty($query['receiving_country_id'])) {
+            $this->receiving_country_id = $query['receiving_country_id'];
+            $this->updatedReceivingCountryId($query['receiving_country_id']);
+        }
+
+    }
+
+
+    public function getReceivingMethods()
+    {
+
+        try {
+            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination']);
+            if (empty($this->receiving_country['iso2'])) {
+                throw new \Exception('Sending to country is required.');
+            }
+            $source = new Source();
+            $source->userAgentId = session('user_agent_id');
+            $source->destinationCountry = $this->receiving_country['iso2'];
+            $rates = new AllRates($source);
+            $rates = $rates->rate();
+            $this->rates = json_decode(json_encode($rates), true);
+
+            $rates = collect($rates);
+            $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
+            $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
+
+        } catch (\Exception $e) {
+            $this->reset('amounts');
+            $this->error = $e->getMessage();
+            $this->addError('error', $e->getMessage());
+        }
+    }
+
+    public function setSendingMethod()
+    {
+        //   $this->reset(['receiving_method']);
+    }
+
+
+    public function getPayers()
+    {
+        if (empty($this->selected_sending_method) && false) {
+            $this->addError('error', 'Sending method field is required.');
+        } else {
+            $this->resetErrors();
+            $this->reset(['payers', 'selected_payer', 'amounts', 'receiving_method_id', 'selected_cash_destination']);
+
+
+            if (strtolower($this->receiving_method) == 'cash') {
+                $this->receiving_method_id = 8;
+            } else if (strtolower($this->receiving_method) == 'bank') {
+                $this->receiving_method_id = 7;
+            } else if (strtolower($this->receiving_method) == 'mobile wallet') {
+                $this->receiving_method_id = 173;
+            }
+
+            $source = new Source();
+            $source->userAgentId = session('user_agent_id');
+            $source->destinationCountry = $this->receiving_country['iso2'];
+            $source->receiving_method_id = $this->receiving_method_id;
+            //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+
+            $rates = new AllRates($source);
+            $rates = $rates->rate();
+            $this->rates = json_decode(json_encode($rates), true);
+            $this->payers = collect($this->rates)->where('method', $this->receiving_method)->toArray();
+        }
+    }
+
+    public function setPayer()
+    {
+        $this->reset(['amounts', 'selected_cash_destination']);
+        $this->sdfetchData();
+        $this->selected_payer = collect($this->rates)->where('id', $this->selected_payer['id'])->first();
+        if (empty($this->selected_payer['main_agent_rate'])) {
+            $this->selected_payer['main_agent_rate'] = $this->selected_payer['rate_before_spread'];
+        }
+        $this->amounts['sending_amount'] = 1;
+        $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'], 2);
+        $this->validation = PayerValidation::where('payer_id', $this->selected_payer['id'])->get()->toArray();
+        //$this->calculateRate();
+    }
+
+    public function updatedAmountsSendingAmount($value)
+    {
+
+        if (empty($value)) {
+            $this->amounts['sending_amount'] = 1;
+            $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'], 2);
+            $this->calculateRate();
+        } else {
+
+            $this->amounts['calculation_mode'] = 'S';
+            $this->calculateRate();
+        }
+    }
+
+    public function updatedReceivingCountryId($val)
+    {
+        $this->receiving_country = collect($this->rc_data)->firstWhere('id', $val);
+        $this->getReceivingMethods();
+    }
+
+    public function updatedSendingMethodId($val)
+    {
+        $this->selected_sending_method = collect($this->sm_data)->firstWhere('id', $val);
+        //$this->reset(['receiving_method']);
+
+    }
+
+    public function updatedReceivingMethod($val)
+    {
+        $this->getPayers();
+    }
+
+    public function updatedPayerId($id)
+    {
+        if (!empty($id)) {
+            $this->selected_payer = collect($this->payers)->firstWhere('id', $id);
+            $this->setPayer();
+        } else {
+            $this->reset(['selected_payer']);
+        }
+
+    }
+
+    public function updatedBeneficiaryId($id)
+    {
+        if (!empty($id)) {
+            $this->selected_beneficiary = collect($this->bene_data)->firstWhere('id', $id);
+            $this->show_beneficiary = true;
+        }
+    }
+
+    public function updatedBeneficiaryBankId($id)
+    {
+        if (!empty($id)) {
+            $this->selected_bank_beneficiary = collect($this->bb_data)->firstWhere('id', $id);
+            $this->branches = Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->select('branch_name','dist_name')->orderBy('dist_name')->get()->groupBy('dist_name')->toArray();
+            $this->dispatchBrowserEvent('existingBranch',$this->selected_bank_beneficiary['branch_name']);
+            $this->show_beneficiary_bank = true;
+        }
+    }
+
+    public function updatedSelectedBankBeneficiaryBankId($id)
+    {
+        $this->reset('branches', 'routings');
+        $this->selected_bank_beneficiary['branch_code'] = null;
+        $bank = collect($this->sb_data)->firstWhere('id', $id);
+        if (!empty($bank)) {
+            $this->selected_bank_beneficiary['bank_id'] = $bank['id'];
+            $this->selected_bank_beneficiary['name'] = $bank['name'];
+            $this->branches = Routing::where('bank_name', $bank['name'])->select('branch_name','dist_name')->orderBy('dist_name')->get()->groupBy('dist_name')->toArray();
+        }
+    }
+
+
+    public function updatedSelectedBankBeneficiary($value, $name)
+    {
+
+        $this->selected_bank_beneficiary['branch_code'] = null;
+        if ($name == 'branch_name' && !empty($value)) {
+//            $this->routings = Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->where('branch_name', $value)->select('code')->get()->toArray();
+            $this->selected_bank_beneficiary['branch_code'] = optional(Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->where('branch_name', $value)->select('code')->first())->code;
+        }
+
+//        $this->withValidator(function (Validator $validator) {
+//            if ($validator->fails()) {
+//                $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+//                $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+//                $this->color_beneficiary = '';
+//                $this->color_confirm = '';
+//            } else {
+//                $this->color_beneficiary = 'success-tab';
+//                $this->color_confirm = '';
+//            }
+//        })->validate();
+    }
+
+    private function calculateRate()
+    {
+        $this->reset(['error']);
+        $this->resetErrorBag();
+
+        $this->amounts['sending_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['sending_amount']);//filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $this->amounts['receive_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']);//filter_var($this->amounts['receive_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+
+
+        try {
+            if (empty($this->selected_payer['id'])) {
+                throw new \Exception('Payer is required');
+            }
+
+            if (empty($this->amounts['sending_amount']) && empty($this->amounts['receive_amount'])) {
+                throw new \Exception('Please enter sending amount or receiving amount.');
+            }
+
+            if ($this->amounts['calculation_mode'] == 'S') {
+                // $this->dispatchBrowserEvent('focus-out', ['id' => 'youSend']);
+                $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'] * $this->amounts['sending_amount'], 2);
+            } else {
+                // $this->dispatchBrowserEvent('focus-out', ['id' => 'recipient_gets']);
+                $this->amounts['sending_amount'] = round($this->amounts['receive_amount'] / $this->selected_payer['rate_after_spread'], 2);
+            }
+
+//            $this->validate([
+//                'amounts.sending_amount' => 'required|numeric|gte:1',
+//            ]);
+
+            $source = new Source();
+            $source->userAgentId = session('user_agent_id');
+            $source->destinationCountry = $this->receiving_country['iso2'];
+            $source->payerId = $this->selected_payer['id'];
+            $source->sourceAmount = $this->amounts['sending_amount'];
+            $source->sourceCurrency = $this->selected_payer['source_currency'];
+            $source->receiving_method_id = $this->receiving_method_id;
+            //  dd($this->selected_sending_method);
+            //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+
+            $rates = new AdminFee($source);
+            $fees = $rates->apply();
+            $this->amounts['fees'] = round($fees, 2);
+            $this->amounts['total'] = $fees + $this->amounts['sending_amount'];
+
+            if ($this->amounts['calculation_mode'] == 'S') {
+                $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'], 2);
+                $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'], 2);
+            } else {
+                $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'], 2);
+                $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'], 2);
+            }
+
+            if (!$this->payerLimits()) {
+                $this->reset('amounts');
+                return false;
+            }
+
+
+        } catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            $this->addError('error', $e->getMessage());
+            $this->feeLimitBreech();
+            $this->reset('amounts');
+
+
+        }
+    }
+
+    public function updatedAmountsReceiveAmount($value)
+    {
+
+        if (empty($value)) {
+            $this->amounts['sending_amount'] = 1;
+            $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'], 2);
+            $this->calculateRate();
+        } else {
+            $this->amounts['calculation_mode'] = 'R';
+            $this->calculateRate();
+        }
+    }
+
+    public function validateSendingDetails()
+    {
+        $this->reset(['error']);
+
+
+        $this->withValidator(function (Validator $validator) {
+            if ($validator->fails()) {
+                $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+                $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+                $this->color_amount = '';
+                $this->color_beneficiary = '';
+                $this->color_confirm = '';
+            } else {
+                $this->color_amount = 'bg-success';
+                $this->color_beneficiary = '';
+                $this->color_confirm = '';
+            }
+        })->validate();
+        if (!$this->payerLimits()) {
+            $this->reset('amounts');
+            return false;
+        }
+        $this->benefetchData();
+        $this->dispatchBrowserEvent('close-modal', ['model' => 'exchangeActionSheet']);
+        $this->selected_window = 'beneficiary';
+
+    }
+
+    public function addNewBeneficiary()
+    {
+        $this->reset(['selected_beneficiary', 'selected_bank_beneficiary', 'beneficiary_id']);
+        $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
+        $this->show_beneficiary = true;
+    }
+
+    public function selectBeneficiary()
+    {
+        $this->error = '';
+        $this->reset(['selected_bank_beneficiary']);
+        if ($this->receiving_country['id'] != $this->selected_beneficiary['country_id']) {
+            $this->error = 'Please choose beneficiary from ' . $this->receiving_country['name'];
+            $this->reset(['selected_beneficiary']);
+        }
+    }
+
+    public function sendMoney()
+    {
+        $this->reset(['profile', 'address', 'documents']);
+        if (!$this->payerLimits()) {
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+            return false;
+        }
+        $this->withValidator(function (Validator $validator) {
+            if ($validator->fails()) {
+                $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+                $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+            }
+        })->validate();
+
+        try {
+            $this->reset(['error']);
+
+            DB::beginTransaction();
+            $customer = Customer::where('id', session('customer_id'))->where('type', 'on')->first();
+
+//            $this->validateUserProfile($customer);
+//            $this->validateUserDocuments($customer);
+
+            if ($this->documents || $this->profile || $this->address) {
+
+//                if ($this->profile == true) {
+//                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
+//                }
+//                if ($this->profile == false && $this->address == true) {
+//                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
+//                }
+//                if ($this->profile == false && $this->address == false && $this->documents == true) {
+//
+//                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
+//                }
+
+
+                //  return;
+            }
+
+
+            $this->validateRates();
+
+            if (empty($this->selected_beneficiary['id'])) {
+                $beneficiary = Beneficiary::create($this->beneficiaryMapping());
+                $this->beneficiary_id = $beneficiary->id;
+
+                //$mail = (new BeneficiaryCreated($this->beneficiaryMapping()))->onQueue('portal_' . config('app.company_id'))->afterCommit();
+                //Mail::to(session('email'))->queue($mail);
+            } else {
+
+                $this->beneficiary_id = $this->selected_beneficiary['id'];
+                $old_bene = optional(Beneficiary::find($this->beneficiary_id))->toArray();
+                Beneficiary::where('id', $this->beneficiary_id)->update($this->beneficiaryMapping());
+
+                $new = $this->beneficiaryMapping();
+                if ($old_bene['first_name'] != $new['first_name'] || $old_bene['last_name'] != $new['last_name'] || $old_bene['phone'] != $new['phone'] || $old_bene['relationship_id'] != $new['relationship_id']) {
+                    //$mail = (new BeneficiaryNameChanged($old_bene, $this->beneficiaryMapping()))->onQueue('portal_' . config('app.company_id'))->afterCommit();
+                    //Mail::to(session('email'))->queue($mail);
+                }
+
+            }
+
+
+            if (strtolower($this->receiving_method) == 'bank') {
+                if (empty($this->selected_bank_beneficiary['id'])) {
+                    $bank = BeneficiaryBank::create($this->beneficiaryBankMapping());
+                    $this->beneficiary_bank_id = $bank->id;
+                } else {
+                    $this->beneficiary_bank_id = $this->selected_bank_beneficiary['id'];
+                    BeneficiaryBank::where('id', $this->selected_bank_beneficiary['id'])->update($this->beneficiaryBankMapping());
+                }
+            }
+
+            $status = 'PEN';
+
+            if ($this->selected_sending_method['sending_method_id'] == '96' || $this->selected_sending_method['sending_method_id'] == '97') {
+                $status = 'INC';
+            }
+
+            $transfer = Transfer::create([
+                'status' => $status,
+                'channel' => 'on',
+                'customer_id' => session('customer_id'),
+                'beneficiary_id' => $this->beneficiary_id,
+                'beneficiary_bank_id' => $this->beneficiary_bank_id,
+                'payer_id' => $this->selected_payer['id'],
+                'user_agent_id' => session('user_agent_id'),
+                'sending_currency' => $this->selected_payer['source_currency'],
+                'receiving_currency' => $this->selected_payer['currency'],
+                'sending_country_id' => session('country_id'),
+                'sending_country' => session('country_name'),
+                'receiving_country_id' => $this->receiving_country['id'],
+                'receiving_country' => $this->receiving_country['name'],
+                'customer_rate' => $this->selected_payer['rate_after_spread'],
+                'agent_rate' => $this->selected_payer['rate_before_spread'],
+                'main_agent_rate' => $this->selected_payer['main_agent_rate'],
+                'sending_amount' => $this->amounts['sending_amount'],
+                'receiving_amount' => $this->amounts['receive_amount'],
+                'agent_charges' => 0,
+                'company_charges' => $this->amounts['fees'],
+                'sending_method_id' => $this->selected_sending_method['sending_method_id'],
+                'gateway_id' => $this->selected_sending_method['id'],
+                'sending_reason' => $this->selected_sending_reason,
+                'receiving_method_id' => $this->selected_payer['method_id'],
+                'user_id' => $this->request['user_id'],
+                'company_id' => config('app.company_id'),
+                'payout_location_id' => $this->selected_cash_destination ?? null
+            ]);
+
+            StatusTracker::create([
+                'key' => $status,
+                'caused_by' => $this->request['user_id'],
+                'subject_id' => $transfer->id
+            ]);
+            if (strtolower($this->receiving_method) == 'bank') {
+                $this->dumpBeneficiaryBank($transfer);
+            }
+
+            $payer = Payer::find($this->selected_payer['id']);
+            $number = rand(111111, 999999);
+            $code = $payer['prefix'] . str_pad($transfer->id, 6, $number, STR_PAD_LEFT);
+
+
+            Transfer::find($transfer->id)->update([
+                'transfer_code' => $code
+            ]);
+
+            TransferDetail::create([
+                'transfer_id' => $transfer->id,
+                'created_on' => 'w',
+                'source_of_fund' => $this->source_of_funds
+            ]);
+
+            Ledger::create([
+                'user_id' => session('user_id'),
+                'debit' => $this->amounts['sending_amount'] + $this->amounts['fees'],
+                'credit' => 0,
+                'description' => 'INV ' . $transfer->id . '; Payment # ' . $code . '; Admin Charges ' . $this->amounts['fees'] . '; Sending Amount ' . $this->amounts['sending_amount'] . '; Rate ' . $this->selected_payer['rate_after_spread'],
+                'admin_charges' => $this->amounts['fees'],
+                'agent_charges' => 0,
+                'date' => date('Y-m-d'),
+                'added_by' => session('user_id')
+            ]);
+
+            $this->dumpBeneficiary($transfer);
+            $this->dumpCustomer($transfer, $customer);
+            EmailIncompleteTransfer::dispatch(session('name'), $transfer->id, session('email'))
+                ->delay(now()->addMinutes(30))->onQueue('portal_' . config('app.company_id'));
+
+            EmailIncompleteTransfer::dispatch(session('name'), $transfer->id, session('email'))
+                ->delay(now()->addHours(8))->onQueue('portal_' . config('app.company_id'));
+
+
+            EmailIncompleteTransfer::dispatch(session('name'), $transfer->id, session('email'))
+                ->delay(now()->addHours(16))->onQueue('portal_' . config('app.company_id'));
+
+
+            DB::commit();
+
+            //redirect to payment gateway
+
+            if (!empty($this->selected_sending_method['redirect_uri'])) {
+                if ($this->selected_sending_method['gateway_code'] == 'online-transfer') {
+                    return $this->redirect($this->selected_sending_method['redirect_uri'] . '?transfer_code=' . $code);
+                } else {
+                    return $this->redirect($this->selected_sending_method['redirect_uri'] . $code);
+                }
+            } else {
+                return $this->redirect('/transfer/success?transfer_code=' . $code);
+            }
+
+//
+
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->reset('amounts');
+            $this->addError('error', $e->getMessage());
+            $this->error = $e->getMessage();
+            $this->feeLimitBreech();
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+        }
+    }
+
+    private function validateRates()
+    {
+
+        $this->amounts['sending_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['sending_amount']);
+        $this->amounts['receive_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']);
+        $this->amounts['fees'] = preg_replace("/[^0-9.]/", "", $this->amounts['fees']);
+        $this->amounts['total'] = preg_replace("/[^0-9.]/", "", $this->amounts['total']);
+
+
+        $source = new Source();
+        $source->userAgentId = session('user_agent_id');
+        $source->destinationCountry = $this->receiving_country['iso2'];
+        $source->payerId = $this->selected_payer['id'];
+        $source->receiving_method_id = $this->receiving_method_id;
+        //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+        $rates = new AllRates($source);
+        $rates = $rates->rate();
+        if (empty($rates)) {
+            throw new \Exception('Payer not found. Please try again.');
+        }
+        $rates = json_decode(json_encode($rates[0]), true);
+        if (round($rates['rate_after_spread'], 2) != round($this->selected_payer['rate_after_spread'], 2)) {
+            throw new \Exception('New rate has been updated. Please try again.');
+        }
+
+        if ($this->amounts['calculation_mode'] == 'S') {
+            $sending_amount = $this->amounts['sending_amount'];
+            $receiving_amount = round($rates['rate_after_spread'] * $sending_amount, 2);
+        } else {
+            $receiving_amount = $this->amounts['receive_amount'];
+            $sending_amount = round($receiving_amount / $rates['rate_after_spread'], 2);
+        }
+
+
+        if (round($receiving_amount, 2) != round($this->amounts['receive_amount'], 2)) {
+            throw new \Exception("Rates has been updated. Please try again.");
+        }
+
+
+        $source = new Source();
+        $source->userAgentId = session('user_agent_id');
+        $source->destinationCountry = $this->receiving_country['iso2'];
+        $source->payerId = $this->selected_payer['id'];
+        $source->sourceAmount = $this->amounts['sending_amount'];
+        $source->sourceCurrency = $this->selected_payer['source_currency'];
+        $source->receiving_method_id = $this->receiving_method_id;
+        //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+        $rates = new AdminFee($source);
+        $fees = $rates->apply();
+        if (round($this->amounts['fees'], 2) != round($fees, 2)) {
+            throw new \Exception('New fees has been updated against your sending amount. Please try again');
+        }
+
+
+        if (round($this->amounts['total'], 2) != round($sending_amount + $fees, 2)) {
+            throw new \Exception("Rates has been updated. Please try again.");
+        }
+
+
+    }
+
+    private function beneficiaryMapping()
+    {
+        $first_name = preg_replace('/\s+/', ' ', $this->selected_beneficiary['first_name']);
+        $last_name = preg_replace('/\s+/', ' ', $this->selected_beneficiary['last_name']);
+        return [
+            'customer_id' => session('customer_id'),
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'relationship_id' => $this->selected_beneficiary['relationship_id'],
+            'nationality_country_id' => $this->selected_payer['country_id'],
+            'country_id' => $this->selected_payer['country_id'],
+            'phone' => $this->selected_beneficiary['phone'],
+            'code' => $this->selected_beneficiary['code'],
+            'type' => 'on'
+        ];
+    }
+
+    private function beneficiaryBankMapping()
+    {
+        return [
+            'beneficiary_id' => $this->beneficiary_id,
+            'name' => $this->selected_bank_beneficiary['name'],
+            'bank_id' => $this->selected_bank_beneficiary['bank_id'],
+            'code' => $this->selected_bank_beneficiary['code'] ?? null,
+            'branch_name' => $this->selected_bank_beneficiary['branch_name'] ?? null,
+            'branch_code' => $this->selected_bank_beneficiary['branch_code'] ?? null,
+            'account_no' => $this->selected_bank_beneficiary['account_no'] ?? null,
+            'iban' => $this->selected_bank_beneficiary['iban'] ?? null,
+            'ifsc' => $this->selected_bank_beneficiary['ifsc'] ?? null,
+            'country_id' => $this->receiving_country['id']
+        ];
+    }
+
+    private function dumpBeneficiaryBank($transfer)
+    {
+        $beneficiary_bank = $this->beneficiaryBankMapping();
+        $beneficiary_bank['beneficiary_bank_id'] = $transfer->beneficiary_bank_id;
+        $beneficiary_bank['transfer_id'] = $transfer->id;
+        TransferBeneficiaryBank::create($beneficiary_bank);
+    }
+
+    private function dumpBeneficiary($transfer)
+    {
+        $beneficiary = $this->beneficiaryMapping();
+        $beneficiary['beneficiary_id'] = $transfer->beneficiary_id;
+        $beneficiary['transfer_id'] = $transfer->id;
+        TransferBeneficiary::create($beneficiary);
+    }
+
+    private function dumpCustomer($transfer, $customer)
+    {
+        TransferCustomer::create([
+            'transfer_id' => $transfer->id,
+            'customer_id' => $customer->id,
+            'first_name' => $customer->first_name,
+            'middle_name' => $customer->middle_name,
+            'last_name' => $customer->last_name,
+            'relation_id' => $customer->relation_id,
+            'relation_name' => $customer->relation_name,
+            'gender' => $customer->gender,
+            'dob' => $customer->dob,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+            'phone_code' => $customer->phone_code,
+            'city_name' => $customer->city_name,
+            'house_no' => $customer->house_no,
+            'street_name' => $customer->street_name,
+            'postal_code' => $customer->postal_code,
+            'city_id' => $customer->city_id,
+            'country_id' => $customer->country_id,
+            'occupation' => $customer->occupation,
+            'nationality_country_id' => $customer->nationality_country_id
+        ]);
+    }
+
+    public function addNewBeneficiaryBank()
+    {
+        $this->reset(['selected_bank_beneficiary']);
+        $this->show_beneficiary_bank = true;
+
+    }
+
+    public function validateBeneficiaryDetail()
+    {
+        $this->reset(['error']);
+        $this->withValidator(function (Validator $validator) {
+            if ($validator->fails()) {
+                $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+                $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+                if (strtolower($this->receiving_method) == 'cash') {
+                    $this->color_beneficiary = '';
+                    $this->color_confirm = '';
+                }
+            } else {
+                if (strtolower($this->receiving_method) == 'cash') {
+                    $this->color_beneficiary = 'bg-success';
+                    $this->color_confirm = '';
+                }
+            }
+        })->validate();
+
+        try {
+            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+            $number = $phoneUtil->parse($this->selected_beneficiary['code'] . $this->selected_beneficiary['phone'], $this->receiving_country['iso2']);
+            $isValid = $phoneUtil->isValidNumber($number);
+            if (!$isValid) {
+                $this->addError('selected_beneficiary.phone', 'Please enter valid phone number.');
+                return;
+            }
+        } catch (Exception $exception) {
+            $this->addError('selected_beneficiary.phone', 'Please enter valid phone number.');
+            return;
+        }
+
+        $name = collect($this->rl_data)->firstWhere('id', $this->selected_beneficiary['relationship_id']);
+        if (!empty($name)) {
+            $this->selected_beneficiary['relationship_name'] = $name['name'];
+        }
+
+
+        //$this->dispatchBrowserEvent('goUp');
+        if (strtolower($this->receiving_method) == 'bank') {
+            $this->bbfetchData();
+            $this->sbfetchData();
+            $this->selected_window = 'bank';
+        } else {
+            $this->selected_window = 'confirm';
+        }
+    }
+
+    public function validateBeneficiaryBankDetail()
+    {
+        $this->reset(['error']);
+        $this->withValidator(function (Validator $validator) {
+            if ($validator->fails()) {
+                $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+                $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+                $this->color_beneficiary = '';
+                $this->color_confirm = '';
+            } else {
+                $this->color_beneficiary = 'bg-success';
+                $this->color_confirm = '';
+            }
+        })->validate();
+        //  $this->dispatchBrowserEvent('goUp');
+        $this->selected_window = 'confirm';
+    }
+
+    public function goTo($window)
+    {
+        if (strtolower($this->receiving_method) != 'bank') {
+            if ($window == 'bank') {
+                $this->selected_window = 'beneficiary';
+            } else {
+                $this->selected_window = $window;
+            }
+        } else {
+            $this->selected_window = $window;
+        }
+
+    }
+
+    public function handleBackNavigation()
+    {
+
+        if ($this->profile || $this->address || $this->documents) {
+            $this->selected_window = 'confirm';
+            $this->profile = false;
+            $this->address = false;
+            $this->documents = false;
+        } else {
+            if ($this->selected_window == 'confirm') {
+                if (strtolower($this->receiving_method) == 'bank') {
+                    $this->selected_window = 'bank';
+                } else {
+                    $this->selected_window = 'beneficiary';
+                }
+                return;
+            }
+
+            if ($this->selected_window == 'bank') {
+                $this->selected_window = 'beneficiary';
+            } elseif ($this->selected_window == 'beneficiary') {
+                $this->selected_window = 'transfer';
+            } elseif ($this->selected_window == 'transfer') {
+                return $this->redirect('/mobile/dashboard');
+            }
+
+        }
+
+
+    }
+
+    protected function rules()
+    {
+        $rules = [];
+        if ($this->selected_window == 'transfer') {
+            $rules = [
+                'receiving_country.iso2' => 'required|string',
+                'receiving_method' => 'required|string',
+                'selected_payer.id' => 'required',
+                'amounts.total' => 'required',
+                'amounts.sending_amount' => 'required|string',
+                //'selected_sending_method.id' => 'required'
+            ];
+            if (strtolower($this->receiving_method) == 'cash') {
+                $rules['selected_cash_destination'] = 'required';
+            }
+        }
+        if ($this->selected_window == 'beneficiary') {
+            $rules = [
+                'selected_beneficiary.first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+                'selected_beneficiary.last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+                'selected_beneficiary.phone' => 'required|string',
+                'selected_beneficiary.code' => 'required|string',
+                'selected_beneficiary.relationship_id' => 'required',
+                'selected_sending_reason' => 'required',
+            ];
+        }
+        if ($this->selected_window == 'bank') {
+            //TODO need to update rules dynamically here and confirm section also
+            $rules = [
+                'selected_bank_beneficiary.name' => 'required|string',
+                'selected_bank_beneficiary.bank_id' => 'required',
+            ];
+            foreach ($this->validation as $r) {
+                $rules['selected_bank_beneficiary.' . $r['name']] = $r['validation'];
+            }
+
+        }
+        if ($this->selected_window == 'confirm') {
+            $rules = [
+                'receiving_country.iso2' => 'required|string',
+                'receiving_method' => 'required|string',
+                'selected_payer.id' => 'required',
+                'amounts.total' => 'required',
+                'amounts.sending_amount' => 'required|string',
+                'amounts.receive_amount' => 'required|string',
+                'selected_beneficiary.first_name' => 'required|string',
+                'selected_beneficiary.last_name' => 'required|string',
+                'selected_beneficiary.phone' => 'required|string',
+                'selected_beneficiary.relationship_id' => 'required',
+                'selected_sending_method.id' => 'required',
+                'selected_sending_reason' => 'required',
+                'source_of_funds' => 'required'
+            ];
+            if (!empty($this->receiving_method)) {
+                if (strtolower($this->receiving_method) == 'bank') {
+                    $rules['selected_bank_beneficiary.name'] = 'required|string';
+                    $rules['selected_bank_beneficiary.bank_id'] = 'required';
+                    foreach ($this->validation as $r) {
+                        $rules['selected_bank_beneficiary.' . $r['name']] = $r['validation'];
+                    }
+                }
+
+                if (strtolower($this->receiving_method) == 'cash') {
+                    $rules['selected_cash_destination'] = 'required';
+                }
+            }
+        }
+        return $rules;
+    }
+
+
+    public function resetErrors()
+    {
+        $this->resetErrorBag();
+        $this->resetValidation();
+    }
+
+    private function payerLimits()
+    {
+        $this->resetErrorBag();
+        if (empty($this->selected_payer['id'])) {
+            return true;
+        }
+        $receive_amount = preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']);//filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $payer = Payer::find($this->selected_payer['id']);
+        $error_message = "You cannot send less than " . $payer['currency'] . ' ' . number_format($payer['min']) . ' or more than ' . $payer['currency'] . ' ' . number_format($payer['max']);
+
+        if ($payer['min'] > $receive_amount) {
+            $this->addError('amounts.receive_amount', $error_message);
+            return false;
+        }
+
+
+        if ($payer['max'] < $receive_amount) {
+            $this->addError('amounts.receive_amount', $error_message);
+            return false;
+        }
+
+        return true;
+
+
+    }
+
+    private function feeLimitBreech()
+    {
+        if ($this->error = 'Fee is not configured.') {
+            $payer = Payer::find($this->selected_payer['id']);
+            $error_message = "You cannot send less than " . $payer['currency'] . ' ' . number_format($payer['min']) . ' or more than ' . $payer['currency'] . ' ' . number_format($payer['max']);
+            $this->addError('amounts.receive_amount', $error_message);
+            $this->reset('error');
+            $this->resetErrorBag('error');
+        }
+    }
+}

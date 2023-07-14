@@ -1,0 +1,45 @@
+<section class="pt-4  pt-md-11 bg-cover  size-100"
+         style="background-image: url(/assets/img/covers/default.png);
+         background-position: top;
+"  >
+    <div data-aos="fade-up">
+        @livewire('outer.country-page',['iso' => $iso2])
+    </div>
+</section>
+
+<section class="pt-10 pt-md-12" data-aos="fade-up">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8 text-center">
+
+                <!-- Heading -->
+                <h2 class="fw-bold">
+                    Available Payout Options
+                </h2>
+
+                <!-- Text -->
+                <p class="fs-lg text-muted mb-7 mb-md-9">
+                    We make sure your money is delivered quickly and easily. Choose from our multiple payout options.
+                </p>
+
+            </div>
+        </div> <!-- / .row -->
+
+    </div> <!-- / .container -->
+</section>
+
+<section class="pb-10">
+    <div class="container">
+        <div class="row  gy-7">
+            <div class="col-sm-6 col-12">
+                <h3 class="fw-bold">Bank Deposit </h3>
+                <ul class="text-muted ">
+                    <li>All Commercial Banks in India</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

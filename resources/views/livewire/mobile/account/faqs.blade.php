@@ -1,0 +1,10 @@
+<div id="appCapsule">
+
+
+
+
+
+
+
+
+</div>
