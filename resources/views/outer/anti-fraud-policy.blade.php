@@ -599,7 +599,7 @@
 
                             <!-- Text -->
                             <p class="fs-sm mb-0">
-                                info@xmgremit.com
+                                 info@oriumglobalresources.com
                             </p>
 
                         </div>

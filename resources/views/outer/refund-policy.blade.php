@@ -68,11 +68,11 @@
                         All refunds shall be available within Ten (10) calendar days of the stop order or as soon as the
                         refunds are
                         returned by the paying agent and, whichever is first. If you want a refund, you must email at
-                        info@xmgremit.com or post your written request to {{ config('app.company_name') }} at 140 High Street,
+                         info@oriumglobalresources.com or post your written request to {{ config('app.company_name') }} at 140 High Street,
                         North, Eastham,
                         London. E6 2HT. For further information please contact our customer service team at 02084709606,
                         or email;
-                        info@xmgremit.com
+                         info@oriumglobalresources.com
                     </p>
                     <h3 class="fw-bold">
                         2. Refunds

@@ -140,7 +140,7 @@
 
                         <p><strong>The right to be notified</strong> – If there has been a data breach which compromises an individual's personal data, we will inform the individual within 72 hours of first having become aware of the breach.</p>
 
-                        <p><strong>You can always exercise your right at any time by contacting us at </strong><a href="mailto:info@xmgremit.com">info@xmgremit.com</a></p>
+                        <p><strong>You can always exercise your right at any time by contacting us at </strong><a href="mailto: info@oriumglobalresources.com"> info@oriumglobalresources.com</a></p>
 
                         <p><strong>Security Precaution</strong></p>
 
@@ -178,7 +178,7 @@
 
                         <p><strong>How to Contact Us</strong></p>
 
-                        <p>If you have any questions about our Privacy Policy or your information, please contact us in writing to; info@xmgremit.com</p>
+                        <p>If you have any questions about our Privacy Policy or your information, please contact us in writing to;  info@oriumglobalresources.com</p>
 
                     </div>
                 </div>
@@ -218,7 +218,7 @@
 
                             <!-- Text -->
                             <p class="fs-sm mb-0">
-                                info@xmgremit.com
+                                 info@oriumglobalresources.com
                             </p>
 
                         </div>

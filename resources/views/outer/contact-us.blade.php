@@ -41,8 +41,7 @@
                     <!-- Link -->
                     <div class="mb-5 mb-md-0">
                         <p class="h4 text-secondary fw-light">
-                            +447931195864 |
-                            +447513191685
+                            +44 772 574 6316
                         </p>
                     </div>
 
@@ -57,7 +56,7 @@
                     <!-- Link -->
                     <div class="mb-5 mb-md-0">
                         <p class="h4 text-secondary fw-light">
-                            +44 737 799 3520
+                            +44 772 574 6316
                         </p>
                     </div>
 
@@ -72,7 +71,7 @@
                     <!-- Link -->
                     <div class="mb-5 mb-md-0">
                         <p class="h4 text-secondary fw-light">
-                            info@xmgremit.com
+                             info@oriumglobalresources.com
                         </p>
                     </div>
 

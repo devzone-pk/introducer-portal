@@ -16,11 +16,11 @@
 
                 <li>
                     <span>Account Name </span>
-                    <strong>XMG FINANCIAL SERVICES LTD </strong>
+                    <strong>BANK NAME </strong>
                 </li>
                 <li>
                     <span>Sort Code</span>
-                    <strong>04-00-72</strong>
+                    <strong>CODE</strong>
                 </li>
                 <li>
                     <span>Account Number</span>

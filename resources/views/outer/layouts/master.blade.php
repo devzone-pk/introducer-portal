@@ -31,8 +31,11 @@
 
 <div id="preloader">
     <div class="d-flex justify-content-center  align-items-center" style="height: 100%;">
-        <img style="" src="{{ asset('assets/img/xmg-loader.gif') }}" alt="icon"
-             class="loading-icon">
+
+        <img src="{{ asset('assets/img/ogr-loading.gif') }}" alt="icon"
+             class="loading-icon" style="width: 180px;">
+
+
     </div>
 </div>
 
@@ -183,27 +186,32 @@
 
                 <!-- Text -->
                 <p class="text-gray fs-12px mb-2 my-2">
-                    Xmg Financial Services Limited is a Small Payment Institution, regulated by the Financial Conduct Authority (FCA) with Firm reference number: 790926. We are also supervised by HMRC as a Money Service Business (MSB) with Registration number: XKML00000115637. Incorporated in England and Wales under Company No: 10966723, our registered address is located at Unit 3, 29-31 Greatorex Street, London, England, E1 5NP. We prioritise the protection of your data and are fully compliant with data protection regulations, holding registration number: ZB552423.
+                    Orium Global Resources is registered with FCA as PSD agent of Remit
+                    Union and holds Firm Reference Number 998336. <br>
+                    Companies House No: SC769545
                 </p>
 
                 <!-- Social -->
                 <ul class="list-unstyled list-inline list-social mb-6 mb-md-0">
                     <li class="list-inline-item list-social-item me-3">
-                        <a href="https://www.instagram.com/xmgremit/" class="text-decoration-none" target="_blank">
+                        <a href="" class="text-decoration-none" target="_blank">
                             <img src="/assets/img/icons/social/instagram.svg" class="list-social-icon" alt="...">
                         </a>
                     </li>
                     <li class="list-inline-item list-social-item me-3">
-                        <a href="https://www.facebook.com/XMGFinancialServices?notif_id=1686441372508187&notif_t=page_user_activity&ref=notif" class="text-decoration-none" target="_blank">
+                        <a href=""
+                           class="text-decoration-none" target="_blank">
                             <img src="/assets/img/icons/social/facebook.svg" class="list-social-icon" alt="...">
                         </a>
                     </li>
                     <li class="list-inline-item list-social-item me-3">
-                        <a href="https://twitter.com/XmgRemit" class="text-decoration-none" target="_blank">
+                        <a href="" class="text-decoration-none" target="_blank">
                             <img src="/assets/img/icons/social/twitter.svg" class="list-social-icon" alt="...">
                         </a>
-                    </li> <li class="list-inline-item list-social-item me-3">
-                        <a href="https://www.linkedin.com/in/xmg-remit-50a121263/" class="text-decoration-none" target="_blank">
+                    </li>
+                    <li class="list-inline-item list-social-item me-3">
+                        <a href="" class="text-decoration-none"
+                           target="_blank">
                             <img src="/assets/img/icons/social/linkedin.svg" class="list-social-icon" alt="...">
                         </a>
                     </li>
@@ -271,11 +279,7 @@
                             Privacy Policy
                         </a>
                     </li>
-                    <li class="mb-1">
-                        <a href="#" class="text-reset">
-                            Refund Policy
-                        </a>
-                    </li>
+
                     <li class="mb-1">
                         <a href="https://www.takefive-stopfraud.org.uk/" class="text-reset">
                             Scam Awareness
@@ -294,7 +298,7 @@
         <div class="row justify-content-center">
             <div class="col-12">
                 <p class="text-white fs-12px text-center p-0 m-0">
-                    Copyright © {{ date('Y') }} {{ config('app.company_name') }} Limited. All Rights Reserved.
+                    Copyright © {{ date('Y') }} {{ config('app.company_name') }}. All Rights Reserved.
                 </p>
             </div>
         </div>

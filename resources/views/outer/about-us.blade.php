@@ -34,29 +34,44 @@
 
 
                     <!-- Text -->
-                    <p class=" mb-7 fw-light text-center text-gray">
+                    <p class=" mb-7 fw-light   text-gray">
                         Welcome to {{ config('app.company_name') }}!
                     </p>
 
                     <!-- Text -->
-                    <p class=" mb-7 fw-light text-center text-gray">
-                        XMG Remit, a trading name of Xmg Financial Services Limited, is a trusted financial institution authorised and regulated by the Financial Conduct Authority (FCA). Our FCA Firm reference number is 790926, which demonstrates our commitment to providing secure and reliable services.                    </p>
+                    <p class=" mb-7 fw-light   text-gray">
+                        Welcome to {{ config('app.company_name') }}, your trusted partner for secure and efficient money transfers worldwide. Based in the United Kingdom, we specialize in providing seamless international remittance services, enabling individuals and businesses to send money across borders quickly and reliably.
+                    </p>
 
-                    <p class=" mb-7 fw-light text-center text-gray">
-                        As a Small Payment Institution, we specialise in facilitating seamless and efficient money transfers using our website; mobile apps available on both the Apple store and Android. Whether you need to send funds to friends and family by making international payments, XMG Remit is here to simplify the process.
+                    <p class=" mb-7 fw-light  text-gray">
+                        At {{ config('app.company_name') }}, we understand the importance of fast, secure, and cost-effective money transfers. With our extensive network and cutting-edge technology, we connect people from the UK to destinations around the globe, ensuring their funds reach their intended recipients promptly and safely.
                     </p>
-                    <p class=" mb-7 fw-light text-center text-gray">
-                        Rest assured; we operate under the supervision of His Majesty's Revenue and Customs (HMRC) as a registered Money Service Business (MSB). Our MSB registration number, XKML00000115637, signifies our compliance with the highest standards of financial regulations and customer protection.
+
+                    <p class="  fw-light  text-gray">
+                        Why Choose Us:
                     </p>
-                    <p class=" mb-7 fw-light text-center text-gray">
-                        Xmg Financial Services Limited (Company No 10966723) is headquartered at Unit 3, 29-31 Greatorex Street, London, England, E1 5NP. We proudly serve our clients with integrity and transparency, prioritising your trusted service.                    </p>
-                    <p class=" mb-7 fw-light text-center text-gray">
-                        At XMG Remit, we understand the importance of your money and the value of reliable financial services. With our expertise and dedication, we strive to make your financial transactions smooth, secure, and cost-effective.                    </p>
-                    <p class=" mb-7 fw-light text-center text-gray">
-                        Choose XMG Remit for your money transfer needs and experience a seamless and trustworthy service. Get started today, and let us assist you in achieving your financial goals with confidence.                    </p>
-                    <p class=" mb-7 fw-light text-center text-gray">
-                        Remember, at XMG Remit, your satisfaction is our success!
+                    <ul class=" mb-7 fw-light  text-gray">
+                        <li>Trust and Reliability: We prioritize the trust and satisfaction of our customers above all else. With a proven track record and a robust compliance framework, we ensure your money is handled with the utmost care and security throughout the transfer process.</li>
+                        <li>Global Reach: Whether you need to send money to loved ones abroad, make business payments, or support international causes, our expansive network allows us to facilitate transfers to numerous countries across the world. No matter where your recipient is located, we strive to provide a seamless and hassle-free experience.</li>
+                        <li>Competitive Rates and Low Fees: We understand the significance of affordability when it comes to international money transfers. That's why we offer competitive exchange rates and transparent fee structures, helping you maximize the value of your transferred funds.</li>
+                        <li>User-Friendly Platform: Our user-friendly online platform or mobile app allows you to initiate and track your transfers with ease. With intuitive navigation, real-time updates, and dedicated customer support, we ensure a seamless experience from start to finish.</li>
+                        <li>Compliance and Security: As a fully licensed and regulated money transfer company, we adhere to strict compliance measures, ensuring that your transactions meet all legal requirements. Your personal and financial information is safeguarded using state-of-the-art encryption technologies, providing you with peace of mind.</li>
+                        <li>Customer Support: Our knowledgeable and friendly customer support team is available to assist you every step of the way. Whether you have questions about the transfer process, need assistance with documentation, or require any other support, we are here to help.</li>
+
+                    </ul>
+                    <p class=" mb-7 fw-light  text-gray">
+                        Join thousands of satisfied customers who have chosen [Company Name] for their international money transfer needs. Experience the convenience, reliability, and value we offer as we help you bridge distances and connect with your loved ones or business partners across the globe.
                     </p>
+                    <p class=" mb-7 fw-light  text-gray">
+                        {{ config('app.company_name') }} - Your Trusted Partner for Global Money Transfers.
+
+                    </p>
+
+
+
+
+
+
                 </div>
             </div> <!-- / .row -->
         </div> <!-- / .container -->

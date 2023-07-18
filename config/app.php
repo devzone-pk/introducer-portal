@@ -55,8 +55,8 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
     'company_id' => env('COMPANY_ID', '1'),
     'asset_url' => env('ASSET_URL', null),
-    'company_name' => 'XMG Remit',
-    'company_address' => 'Unit 3 , 29-31 Greatorex Street, London, England, E1 5NP',
+    'company_name' => 'Orium Global Resources',
+    'company_address' => '13 Smithfield Road, Aberdeen, Scotland, AB24 4NR',
 
     /*
     |--------------------------------------------------------------------------
@@ -71,22 +71,7 @@ return [
 
     'timezone' => 'Europe/London',
 
-    'allowip' => [
-        '58.27.202.195',
-        '206.84.143.37',
-        '202.141.241.110',
-        '58.27.202.195',
-        '104.28.200.115',
-        '58.65.172.25',
-        '58.65.172.26',
-        '58.65.172.27',
-        '103.139.140.86',
-        '154.192.48.23',
-        '39.50.117.121',
-        '2407:d000:b:ae94:7403:e14f:b4b0:bcb8',
-        '103.139.140.10'
 
-    ],
 
     /*
     |--------------------------------------------------------------------------

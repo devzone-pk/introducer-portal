@@ -18,6 +18,7 @@ class SwipenController extends Controller
 {
     public function index($transfer_code)
     {
+        die;
         $lock = Cache::lock('transfer.gateway.' . $transfer_code, 10);
         if ($lock->get()) {
             $req = request()->all();

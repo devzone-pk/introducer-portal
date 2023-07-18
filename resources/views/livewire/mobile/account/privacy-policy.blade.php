@@ -98,7 +98,7 @@
                         Contact Us
                     </h3>
                     <p class="text-gray-800 mb-5">
-                        If you have any questions or concerns about this privacy policy or our information practices, please contact us at info@xmgremit.com
+                        If you have any questions or concerns about this privacy policy or our information practices, please contact us at  info@oriumglobalresources.com
                     </p>
 
                 </div>

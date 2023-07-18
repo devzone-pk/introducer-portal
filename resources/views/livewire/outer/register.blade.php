@@ -160,7 +160,9 @@
                                    class="form-check-input @error('promotion') is-invalid @enderror"
                                    value="" id="flexCheckDefault1">
                             <label class="form-check-label" for="flexCheckDefault1">
-                                Yes, I'd like to receive the latest information and offers from XMG Remit via email, SMS or other electronic means. I can opt-out at any time.
+                                Yes, I'd like to receive the latest information and offers
+                                from {{ config('app.company_name') }} via email, SMS or other electronic means. I can
+                                opt-out at any time.
                             </label>
                             @error('promotion')
                             <div class="invalid-feedback">
@@ -185,11 +187,15 @@
                 <div class="col-lg-7 offset-lg-1 align-self-stretch d-none d-lg-block">
 
                     <!-- Image -->
-                    <div class="h-100 w-cover bg-cover" style="background-image: url(assets/img/covers/xmg-login.png);"></div>
+                    <div class="h-100 w-cover bg-cover"
+                         style="background-image: url(/assets/img/login-signup.png);"></div>
 
                     <!-- Shape -->
                     <div class="shape shape-start shape-fluid-y text-white">
-                        <svg viewBox="0 0 100 1544" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h100v386l-50 772v386H0V0z" fill="currentColor"></path></svg>            </div>
+                        <svg viewBox="0 0 100 1544" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h100v386l-50 772v386H0V0z" fill="currentColor"></path>
+                        </svg>
+                    </div>
 
                 </div>
             </div> <!-- / .row -->

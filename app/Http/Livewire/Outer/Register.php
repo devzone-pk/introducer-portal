@@ -172,6 +172,7 @@ class Register extends Component
                 'name' => $this->first_name . ' ' . $this->last_name,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
+                'email_verified_at' => date('Y-m-d H:i:s'),
                 'type' => 'on',
                 'status' => 't',
                 'company_id' => $this->company_id
@@ -206,20 +207,13 @@ class Register extends Component
                         'email' => true,
                     ]);
             }
-            $code = rand(100000, 999999);
-            PasswordReset::updateOrCreate([
-                'email' => $this->email,
-                'company_id' => $this->company_id,
-            ], [
-                '2fa_code' => $code
-            ]);
-            Http::get('https://www.smsalert.co.in/api/push.json?apikey=638eddf2c608f&sender=CVDEMO&mobileno=' . $this->code . $this->phone . "&text=Dear " . $this->first_name . ", Your OTP for XMG Remit is " . $code . ". Don't share with any one.");
+
             //$mail = (new RegisterDone())->onQueue('portal_' . config('app.company_id'));
             //Mail::to($this->email)->queue($mail);
 
             DB::commit();
 
-            return $this->redirect('verify/' . $user->id . '/' . $this->email);
+
             $this->reset(['receiving_country', 'referral_code', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
             $this->success = 'Registration Successful! Please login.';
             $this->dispatchBrowserEvent('open-modal', ['model' => 'success-register']);

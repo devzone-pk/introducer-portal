@@ -29,7 +29,7 @@
 
                     <!-- Image -->
                     <div class="h-100 w-cover bg-cover"
-                         style="background-image: url(/assets/img/covers/xmg-login.png);"></div>
+                         style="background-image: url(/assets/img/login-signup.png);"></div>
 
                     <!-- Shape -->
                     <div class="shape shape-start shape-fluid-y text-white">
