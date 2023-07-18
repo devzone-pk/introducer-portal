@@ -61,7 +61,7 @@
                              style="max-width: 155px;">
                     </a>
 
-                    <a href="https://play.google.com/store/apps/details?id=com.xmg.remit" class="text-reset d-inline-block">
+                    <a href="#" class="text-reset d-inline-block">
                         <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."
                              style="max-width: 155px;">
                     </a>
