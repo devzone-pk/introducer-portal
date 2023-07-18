@@ -101,6 +101,7 @@ class Register extends Component
         $this->validate();
         $request = request()->all();
         try {
+            throw new Exception('Please contact support.');
             $sending_country = Country::find($this->sending_country);
             if (empty(env('LOGIN_FROM_ANYWHERE'))) {
                 $iso2 = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null;
