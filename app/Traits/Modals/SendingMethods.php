@@ -31,6 +31,9 @@ trait SendingMethods
             ->when(!empty($this->sm_search_query), function ($q) {
                 $q->where('name', 'LIKE', '%' . $this->sm_search_query . '%');
             })->where('g.status', 't')
+
+            ->where('g.company_id', config('app.company_id'))
+            ->where('g.sending_country_id', session('country_id'))
             ->select('g.*', 'options.name')->get();
         if ($data->isEmpty()) {
             $this->sm_data = [];
