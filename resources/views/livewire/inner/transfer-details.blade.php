@@ -99,15 +99,15 @@
 
                         <li>
                             <span>Account Name </span>
-                            <strong>XMG FINANCIAL SERVICES LTD</strong>
+                            <strong>-</strong>
                         </li>
                         <li>
                             <span>Sort Code</span>
-                            <strong>04-00-72</strong>
+                            <strong>-</strong>
                         </li>
                         <li>
                             <span>Account Number</span>
-                            <strong>27942155</strong>
+                            <strong>-</strong>
                         </li>
 
                         <li>
