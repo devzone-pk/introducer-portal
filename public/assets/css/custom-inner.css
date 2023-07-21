@@ -24,7 +24,7 @@ body {
 }
 
 .nav-link:focus, .nav-link:hover {
-    color: #85a555;
+    color: #BD7C3C;
 }
 
 .btn {
@@ -32,7 +32,7 @@ body {
 }
 
 .btn-primary {
-    background-color: #85a555;
+    background-color: #BD7C3C;
 }
 
 .btn-secondary {
@@ -40,13 +40,13 @@ body {
 }
 
 .btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
-    background-color: #85a555;
-    border-color: #85a555;
+    background-color: #BD7C3C;
+    border-color: #BD7C3C;
 }
 
 .btn-primary:hover {
-    background-color: #85a555;
-    border-color: #85a555;
+    background-color: #BD7C3C;
+    border-color: #BD7C3C;
 }
 
 .btn-secondary:hover {
@@ -55,7 +55,7 @@ body {
 }
 
 .text-primary {
-    color: #85a555 !important;
+    color: #BD7C3C !important;
 }
 
 .bg-red {
@@ -119,12 +119,12 @@ body {
     border-radius: 0;
     display: none;
     color: #161C2D;
-    background-color: #85a555;
-    border-color: #85a555;
+    background-color: #BD7C3C;
+    border-color: #BD7C3C;
 }
 
 .text-warning {
-    color: #85a555 !important;
+    color: #BD7C3C !important;
 }
 
 .text-link {
@@ -193,7 +193,7 @@ body {
 
 .country-calculator {
     font-weight: 600 !important;
-    color: #85a555 !important;
+    color: #BD7C3C !important;
     padding: 12px !important;
 }
 
@@ -242,17 +242,17 @@ input:read-only {
 }
 
 .text-blue {
-    color: #85a555;
+    color: #BD7C3C;
 }
 
 .bg-info {
-    background-color: #85a555 !important;
+    background-color: #BD7C3C !important;
     color: #fff !important;
 }
 
 .btn-info:active, .btn-info:hover, .btn-info:focus {
     color: #fff !important;
-    background-color: #85a555 !important;
+    background-color: #BD7C3C !important;
 }
 
 .btn-success, .btn-success:active, .btn-success:hover, .btn-success:focus {
@@ -290,7 +290,7 @@ input:read-only {
 }
 
 .btn:focus-visible {
-    background-color: #85a555;
+    background-color: #BD7C3C;
 }
 
 .calculator-bg {
@@ -298,11 +298,11 @@ input:read-only {
 }
 
 .bg-primary {
-    background-color: #85a555 !important;
+    background-color: #BD7C3C !important;
 }
 
 .border-primary {
-    border-color: #85a555 !important;
+    border-color: #BD7C3C !important;
 }
 
 .shadow-light-lg {
