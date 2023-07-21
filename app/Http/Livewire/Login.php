@@ -53,13 +53,13 @@ class Login extends Component
 
                 if (!empty($response['success'])) {
 
-//                    if (empty(env('LOGIN_FROM_ANYWHERE')) ) {
-//                        $iso2 = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null;
-//                        if ($response['data']['iso2'] != $iso2 && env('APP_ENV') == 'production') {
-//                            $country_name = Country::where('iso2', $iso2)->first();
-//                            throw new Exception('You cannot login from ' . optional($country_name)->name);
-//                        }
-//                    }
+                    if (empty(env('LOGIN_FROM_ANYWHERE')) ) {
+                        $iso2 = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null;
+                        if ($response['data']['iso2'] != $iso2 && env('APP_ENV') == 'production') {
+                            $country_name = Country::where('iso2', $iso2)->first();
+                            throw new Exception('You cannot login from ' . optional($country_name)->name);
+                        }
+                    }
                     $this->success = $response['message'];
                     Session::put($response['data']);
                     return $this->redirect('/dashboard');
