@@ -117,18 +117,17 @@
 
                     <!-- Icon -->
                     <div class="icon text-primary mb-3">
-                        <img class="w-48px" src="{{ asset('icons/customer-support.png') }}" alt="">
+                        <img class="w-48px" src="{{ asset('icons/scheck.png') }}" alt="">
                     </div>
 
                     <!-- Heading -->
                     <h3>
-                        24/7 Customer Support
+                        100% Secure
                     </h3>
 
                     <!-- Text -->
                     <p class="text-muted mb-0">
-                        Our team of experts is available 24/7 to provide you with prompt and efficient support for all
-                        your money transfer needs.
+                        A secured platform with commitment to protect your personal and financial information.
                     </p>
 
                 </div>

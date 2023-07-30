@@ -34,23 +34,23 @@
 
 
                     <!-- Text -->
-                    <p class=" mb-7 fw-light   text-gray">
+                    <p class=" mb-7    ">
                         Welcome to {{ config('app.company_name') }}!
                     </p>
 
                     <!-- Text -->
-                    <p class=" mb-7 fw-light   text-gray">
+                    <p class=" mb-7    ">
                         Welcome to {{ config('app.company_name') }}, your trusted partner for secure and efficient money transfers worldwide. Based in the United Kingdom, we specialize in providing seamless international remittance services, enabling individuals and businesses to send money across borders quickly and reliably.
                     </p>
 
-                    <p class=" mb-7 fw-light  text-gray">
+                    <p class=" mb-7   ">
                         At {{ config('app.company_name') }}, we understand the importance of fast, secure, and cost-effective money transfers. With our extensive network and cutting-edge technology, we connect people from the UK to destinations around the globe, ensuring their funds reach their intended recipients promptly and safely.
                     </p>
 
-                    <p class="  fw-light  text-gray">
+                    <p class="    ">
                         Why Choose Us:
                     </p>
-                    <ul class=" mb-7 fw-light  text-gray">
+                    <ul class=" mb-7   ">
                         <li>Trust and Reliability: We prioritize the trust and satisfaction of our customers above all else. With a proven track record and a robust compliance framework, we ensure your money is handled with the utmost care and security throughout the transfer process.</li>
                         <li>Global Reach: Whether you need to send money to loved ones abroad, make business payments, or support international causes, our expansive network allows us to facilitate transfers to numerous countries across the world. No matter where your recipient is located, we strive to provide a seamless and hassle-free experience.</li>
                         <li>Competitive Rates and Low Fees: We understand the significance of affordability when it comes to international money transfers. That's why we offer competitive exchange rates and transparent fee structures, helping you maximize the value of your transferred funds.</li>
@@ -59,10 +59,10 @@
                         <li>Customer Support: Our knowledgeable and friendly customer support team is available to assist you every step of the way. Whether you have questions about the transfer process, need assistance with documentation, or require any other support, we are here to help.</li>
 
                     </ul>
-                    <p class=" mb-7 fw-light  text-gray">
+                    <p class=" mb-7   ">
                         Join thousands of satisfied customers who have chosen [Company Name] for their international money transfer needs. Experience the convenience, reliability, and value we offer as we help you bridge distances and connect with your loved ones or business partners across the globe.
                     </p>
-                    <p class=" mb-7 fw-light  text-gray">
+                    <p class=" mb-7   ">
                         {{ config('app.company_name') }} - Your Trusted Partner for Global Money Transfers.
 
                     </p>
@@ -89,7 +89,7 @@
 {{--                    </h1>--}}
 
 {{--                    <!-- Text -->--}}
-{{--                    <p class=" mb-7 fw-light text-center text-gray">--}}
+{{--                    <p class=" mb-7  text-center ">--}}
 {{--                        We offered the services to transfer money to Pakistan, India, Bangladesh, Sri Lanka, UAE, South Asia, Europe, America, Canada & Africa at very competitive exchange rates.--}}
 
 {{--                        Online transfer facility is currently limited to Pakistan corridor only. The money can be received from any branch of one of these banks; United Bank Limited, Muslim Commercial Bank,  very next day in Pakistan. Moreover you can transfer money into any bank account in Pakistan.--}}
@@ -110,7 +110,7 @@
 {{--                    </h1>--}}
 
 {{--                    <!-- Text -->--}}
-{{--                    <p class=" mb-7 fw-light text-center text-gray">--}}
+{{--                    <p class=" mb-7  text-center ">--}}
 {{--                        Instant Cash is the fastest mode of transferring your money to any part of the world in minutes. As one of the most popular instant money transfer services of the world, Instant Cash offers true value for your money with nominal charges, reliability ensured with state-of-the-art technologies, simplified transaction procedures, and instant payout to the beneficiary.--}}
 {{--                    </p>--}}
 {{--                </div>--}}

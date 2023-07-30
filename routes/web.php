@@ -189,7 +189,7 @@ Route::middleware(['auth.allow'])->group(function () {
     Route::get('gateway/swipen/payment/{transfer_code}', [\App\Http\Controllers\Gateways\SwipenController::class, 'index']);
 
 });
-Route::post('gateway/swipen/payment/{token}', [\App\Http\Controllers\Gateways\SwipenController::class, 'response']);
+//Route::post('gateway/swipen/payment/{token}', [\App\Http\Controllers\Gateways\SwipenController::class, 'response']);
 
 Route::middleware(RedirectToDashboard::class)->group(function () {
     Route::get('/login', function () {

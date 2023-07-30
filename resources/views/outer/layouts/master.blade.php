@@ -65,14 +65,19 @@
 
             <!-- Navigation -->
             <ul class="navbar-nav   ms-auto ">
-                @if(empty(\Illuminate\Support\Facades\Request::segment(1)))
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ url('/') }}">
+                        Home
+                    </a>
+                </li>
+
 
                     <li class="nav-item ms-3">
-                        <a class="nav-link" href="#how-works">
+                        <a class="nav-link" href="{{ url('how-it-works') }}">
                             How it Works
                         </a>
                     </li>
-                @endif
+
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ url('about') }}">
                         About Us

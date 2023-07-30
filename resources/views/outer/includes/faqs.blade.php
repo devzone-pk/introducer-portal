@@ -29,11 +29,11 @@
             <div class="accordion-body">
 
                 <!-- Text -->
-                <p class="text-gray">
+                <p class="">
                     {{ config('app.company_name') }} has made Sending money easier for your complete peace of mind. Just
                     follow the simple steps as below:
                 </p>
-                <ul class="text-gray">
+                <ul class="">
                     <li><a href="{{ url('sign-up') }}">Register yourself</a></li>
                     <li> Update information (Personal Data and Address)</li>
                     <li> Upload identification Documents</li>
@@ -101,10 +101,10 @@
             <div class="accordion-body">
 
                 <!-- Text -->
-                <p class="text-gray">
+                <p class="">
                     You can pay for your online transactions using:
                 </p>
-                <ul class="text-gray">
+                <ul class="">
                     <li> Debit Card / Credit Card</li>
                     <li> Online Transfer
                     </li>
@@ -170,12 +170,12 @@
             <div class="accordion-body">
 
                 <!-- Text -->
-                <p class="text-gray">
+                <p class="">
                     For Making a transaction, you need to Sign up or log in to your account and
                     follow these simple steps:
                 </p>
 
-                <ul class="text-gray">
+                <ul class="">
                     <li> Choose Destination Country</li>
                     <li> Select payout option i.e. Cash Pick up or Bank Deposit</li>
                     <li> Select payout location</li>
@@ -249,13 +249,13 @@
             <div class="accordion-body">
 
                 <!-- Text -->
-                <p class="text-gray">
+                <p class="">
                     We may acquire any of the following documents as proof of identity for a
                     transfer:
                 </p>
 
                 <p>Proof of ID</p>
-                <ul class="text-gray">
+                <ul class="">
                     <li>Valid passport from any country.</li>
                     <li>Residence permit of the UK.
                     </li>
@@ -267,12 +267,12 @@
                 </ul>
 
                 <p>Proof of address</p>
-                <ul class="text-gray">
+                <ul class="">
                     <li>Utility bill gas, electric, landline bill and bank statement issued within the last three months.</li>
                 </ul>
 
                 <p>Proof of funds: As per declared Source</p>
-                <ul class="text-gray">
+                <ul class="">
                     <li>Pay/wage slips</li>
                     <li>Credit card statement (Document must contain identification such as
                         name and account number)
@@ -341,12 +341,12 @@
             <div class="accordion-body">
 
                 <!-- Text -->
-                <p class="text-gray">
+                <p class="">
                     On our app, you can check the transaction status in the “Track your transaction”
                     option.
                 </p>
 
-                <p class="text-gray">
+                <p class="">
                     On our website, click on the “Track your transaction” option from the header and
                     enter your transaction code to check the status.
                 </p>
@@ -409,12 +409,12 @@
             <div class="accordion-body">
 
                 <!-- Text -->
-                <p class="text-gray">
+                <p class="">
                     If you wish to cancel a transaction you have made, please follow the following
                     steps:
                 </p>
 
-                <ul class="text-gray">
+                <ul class="">
                     <li> Please Login to your {{ config('app.company_name') }} account and go to Customer Support.
                     </li>
                     <li> Click on Add New Complaint and select complaint type (Cancel
@@ -486,7 +486,7 @@
                 <div class="accordion-body">
 
 
-                    <p class="text-gray">
+                    <p class="">
                         There is no maximum limit when sending money with {{ config('app.company_name') }}, as long as you can
                         meet the compliance requisites.
                     </p>
@@ -549,17 +549,17 @@
                 <div class="accordion-body">
 
 
-                    <p class="text-gray">
+                    <p class="">
                         If you are sending money using a Debit card, then most transactions are
                         completed in minutes.
                     </p>
 
-                    <p class="text-gray">
+                    <p class="">
                         If sending money using the Online Bank Transfer method, then transactions are
                         completed within 1-2 banking days.
                     </p>
 
-                    <p class="text-gray">
+                    <p class="">
                         Note: Following factors may also effect delivery times:
                     </p>
 
@@ -635,7 +635,7 @@
                 <div class="accordion-body">
 
                     <!-- Text -->
-                    <p class="text-gray">
+                    <p class="">
                         You may access your account by using the password reset feature on the Login
                         page. Click on “Forgot Password” and enter your registered email address. You’ll
                         receive the verification code on your registered email address to reset the
@@ -701,7 +701,7 @@
                 <div class="accordion-body">
 
                     <!-- Text -->
-                    <p class="text-gray">
+                    <p class="">
                         We provide 24/7 customer service around the globe.
                     </p>
 
@@ -764,12 +764,12 @@
                 <div class="accordion-body">
 
                     <!-- Text -->
-                    <p class="text-gray">
+                    <p class="">
                         Yes – protecting your money and data is our prime priority That’s why we are:
                     </p>
 
 
-                    <ul class="text-gray">
+                    <ul class="">
                         <li> Verified by MasterCard and Visa</li>
                         <li> Fully regulated by the Financial Conduct Authority (FCA)</li>
                         <li> Registered by Her Majesty’s Revenue and Customs (HMRC)</li>
@@ -836,12 +836,12 @@
                 <div class="accordion-body">
 
                     <!-- Text -->
-                    <p class="text-gray">
+                    <p class="">
                         For payment collection, the receiver needs to provide the following details:
                     </p>
 
 
-                    <ul class="text-gray">
+                    <ul class="">
                         <li> Transaction number (also known as payment number, PIN, or pin code)
                         </li>
                         <li> Beneficiary’s valid National ID Card of the destination country</li>
@@ -906,13 +906,13 @@
                 <div class="accordion-body">
 
                     <!-- Text -->
-                    <p class="text-gray">
+                    <p class="">
                         We advise you to check the individual country page for delivery methods and
                         timescales
                     </p>
 
 
-                    <p class="text-gray">
+                    <p class="">
                         <strong>Cash Pickup</strong>
                         <br>
                         Cash is available to collect instantly. If the transaction is created after
@@ -921,14 +921,14 @@
                     </p>
 
 
-                    <p class="text-gray">
+                    <p class="">
                         <strong>Bank Deposits</strong>
                         <br>
                         Bank Deposit delivery timescales vary per country but are usually credited within 1 - 2 business
                         days. In case of incorrect bank details, it may incur additional delays
                     </p>
 
-                    <p class="text-gray">
+                    <p class="">
                         <strong>Wallet</strong>
                         <br>
                         (specific countries only)
@@ -993,7 +993,7 @@
                 <div class="accordion-body">
 
 
-                    <ul class="text-gray">
+                    <ul class="">
                         <li> Please Login to your {{ config('app.company_name') }} account and go to Customer Support.</li>
                         <li>Click on Add New Ticket and select ticket type (Name Change)</li>
                         <li>Select Payment Number and Click on submit after entering the Message for Name Change
