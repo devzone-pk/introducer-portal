@@ -60,7 +60,7 @@
 
                     </ul>
                     <p class=" mb-7   ">
-                        Join thousands of satisfied customers who have chosen [Company Name] for their international money transfer needs. Experience the convenience, reliability, and value we offer as we help you bridge distances and connect with your loved ones or business partners across the globe.
+                        Join thousands of satisfied customers who have chosen {{ config('app.company_name') }} for their international money transfer needs. Experience the convenience, reliability, and value we offer as we help you bridge distances and connect with your loved ones or business partners across the globe.
                     </p>
                     <p class=" mb-7   ">
                         {{ config('app.company_name') }} - Your Trusted Partner for Global Money Transfers.

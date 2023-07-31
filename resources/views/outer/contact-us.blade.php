@@ -16,7 +16,7 @@
 
                     <!-- Text -->
                     <p class="lead text-white-75 mb-0">
-                        If you have any questions about the services we provide simply use the form below. We try and respond to all queries and comments within 24 hours.
+                        If you have any questions about the services we provide simply use the form below.
                     </p>
 
                 </div>
@@ -117,7 +117,8 @@
 
                     <!-- Text -->
                     <p class="fs-lg text-muted mb-7 mb-md-9">
-                        We are always here for you!
+                        Business Support Hours:<br>
+                        Monday to Friday: 9:00 AM - 6:00 PM (London)
                     </p>
 
                 </div>
