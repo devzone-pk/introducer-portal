@@ -72,11 +72,11 @@
                 </li>
 
 
-                    <li class="nav-item ms-3">
-                        <a class="nav-link" href="{{ url('how-it-works') }}">
-                            How it Works
-                        </a>
-                    </li>
+                <li class="nav-item ms-3">
+                    <a class="nav-link" href="{{ url('how-it-works') }}">
+                        How it Works
+                    </a>
+                </li>
 
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ url('about') }}">
@@ -192,8 +192,15 @@
                 <!-- Text -->
                 <p class="text-gray fs-12px mb-2 my-2">
                     Orium Global Resources is registered with FCA as PSD agent of Remit
-                    Union and holds Firm Reference Number 998336. <br>
-                    Companies House No: SC769545
+                    Union.
+                    <br>
+                    Registration details are as follows:
+                    <br>
+                    FCA FRN # :927726<br>
+                    HMRC # :XXML00000152409<br>
+                    Companies House # :12562683<br>
+                    ICO Registration # :ZA794718<br>
+                    PSD FRN # :998336
                 </p>
 
                 <!-- Social -->
