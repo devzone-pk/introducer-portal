@@ -237,7 +237,7 @@
 
                     <li class="mb-1">
                         <a href="{{ url('faqs') }}" class="text-white">
-                            FAQs
+                            Help
                         </a>
                     </li>
                     <li class="mb-1">
@@ -292,13 +292,13 @@
 
 
                     <li class="mb-1">
-                        <a href="{{ url('anti-fraud-policy') }}" class="text-white">
+                        <a href="{{ url('gdpr-policy') }}" class="text-white">
                             GDPR Policy
                         </a>
                     </li>
 
                     <li class="mb-1">
-                        <a href="{{ url('anti-fraud-policy') }}" class="text-white">
+                        <a href="{{ url('refer-friend') }}" class="text-white">
                             Refer a Friend
                         </a>
                     </li>
