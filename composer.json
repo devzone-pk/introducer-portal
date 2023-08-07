@@ -24,6 +24,7 @@
         "livewire/livewire": "^2.10",
         "predis/predis": "^2.0",
         "sendgrid/sendgrid": "~7",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-ray": "^1.32"
     },
     "repositories": [

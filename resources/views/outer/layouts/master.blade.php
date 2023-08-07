@@ -181,30 +181,157 @@
     </div> <!-- / .container -->
 </section>
 
-<footer class="py-8 py-md-11  bg-white">
+<footer class="py-8 py-md-11" style="background-color: #002f6c">
     <div class="container">
         <div class="row" data-aos="fade-up">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-5 text-white">
 
                 <!-- Brand -->
-                <img class="w-25" src="{{ env('COMPANY_LOGO') }}" alt="..." class="footer-brand img-fluid mb-2">
+                {{--                <img class="w-25" src="{{ env('COMPANY_LOGO') }}" alt="..." class="footer-brand img-fluid mb-2">--}}
+                <h6 class="fw-bold mt-2 text-uppercase text-white">
 
+                    About Orium Global Resources</h6>
                 <!-- Text -->
-                <p class="text-gray fs-12px mb-2 my-2">
-                    Orium Global Resources is registered with FCA as PSD agent of Remit
-                    Union.
+                <p class="text-white fs-14px mb-2 my-2">
+                    Orium Global Resources Limited is a company registered
+                    in Scotland (registration number SC769545).
+                    Orium Global Resources Limited is registered with
+                    Financial Conduct Authority (FCA).
+                    <br>
                     <br>
                     Registration details are as follows:
                     <br>
-                    FCA FRN # :927726<br>
-                    HMRC # :XXML00000152409<br>
-                    Companies House # :12562683<br>
+                    <br>
+                    PSD FRN:998336<br>
+                    HMRC:XXML00000152409<br>
                     ICO Registration # :ZA794718<br>
-                    PSD FRN # :998336
+                    FCA FRN:927726<br>
+                </p>
+            </div>
+
+            <div class="col-12 col-md-2">
+
+                <!-- Heading -->
+                <h6 class="fw-bold mt-2 text-uppercase text-white">
+                    Corporate
+                </h6>
+
+                <!-- List -->
+                <ul class="list-unstyled text-muted mb-6 fs-14px mb-md-8 mb-lg-0">
+                    <li class="mb-1">
+                        <a href="{{ url('/') }}" class="text-white">
+                            Home
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url('about') }}" class="text-white">
+                            About Us
+                        </a>
+                    </li>
+
+                    <li class="mb-1">
+                        <a href="{{ url('about') }}" class="text-white">
+                            How it works
+                        </a>
+                    </li>
+
+                    <li class="mb-1">
+                        <a href="{{ url('faqs') }}" class="text-white">
+                            FAQs
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url('contact-us') }}" class="text-white">
+                            Contact Us
+                        </a>
+                    </li>
+                    {{--                    <li class="mb-1">--}}
+                    {{--                        <a href="{{ url('sign-in') }}" class="text-white">--}}
+                    {{--                            Login--}}
+                    {{--                        </a>--}}
+                    {{--                    </li>--}}
+                    {{--                    <li class="mb-1">--}}
+                    {{--                        <a href="{{ url('sign-up') }}" class="text-white">--}}
+                    {{--                            Register--}}
+                    {{--                        </a>--}}
+                    {{--                    </li>--}}
+                </ul>
+
+            </div>
+            <div class="col-12 col-md-2">
+
+                <!-- Heading -->
+                <h6 class="fw-bold mt-2 text-uppercase text-white">
+                    Legal
+                </h6>
+
+                <!-- List -->
+                <ul class="list-unstyled text-muted mb-6 fs-14px mb-md-8 mb-lg-0">
+                    <li class="mb-1">
+                        <a href="{{ url('terms-and-conditions') }}" class="text-white">
+                            Terms & Conditions
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url('privacy-policy') }}" class="text-white">
+                            Privacy Notice
+                        </a>
+                    </li>
+
+                    <li class="mb-1">
+                        <a href="{{ url('faqs') }}" class="text-white">
+                            FAQs
+                        </a>
+                    </li>
+
+                    <li class="mb-1">
+                        <a href="{{ url('anti-fraud-policy') }}" class="text-white">
+                            Anti Fraud Policy
+                        </a>
+                    </li>
+
+
+                    <li class="mb-1">
+                        <a href="{{ url('anti-fraud-policy') }}" class="text-white">
+                            GDPR Policy
+                        </a>
+                    </li>
+
+                    <li class="mb-1">
+                        <a href="{{ url('anti-fraud-policy') }}" class="text-white">
+                            Refer a Friend
+                        </a>
+                    </li>
+
+                    {{--                    <li class="mb-1">--}}
+                    {{--                        <a href="https://www.takefive-stopfraud.org.uk/" class="text-white">--}}
+                    {{--                            Scam Awareness--}}
+                    {{--                        </a>--}}
+                    {{--                    </li>--}}
+                </ul>
+
+            </div>
+
+
+            <div class="col-12 col-md-3">
+
+                <!-- Heading -->
+                <h6 class="fw-bold mt-2 text-uppercase text-white">
+
+                    Address Info</h6>
+                <!-- Text -->
+                <p class="text-white fs-14px mb-2 my-2">
+                    13 Smithfield Road, Aberdeen,<br>
+                    Scotland, AB24 4NR<br>
+                    Phone:+447435950568<br>
+                    Whatsapp: +447435950568<br>
+                    Email: info@oriumglobalresources.com
                 </p>
 
                 <!-- Social -->
-                <ul class="list-unstyled list-inline list-social mb-6 mb-md-0">
+
+
+                <ul class="list-unstyled list-inline list-social mb-6 mb-md-3">
                     <li class="list-inline-item list-social-item me-3">
                         <a href="" class="text-decoration-none" target="_blank">
                             <img src="/assets/img/icons/social/instagram.svg" class="list-social-icon" alt="...">
@@ -234,70 +361,22 @@
                     {{--                    </li>--}}
                 </ul>
 
-            </div>
-            <div class="col-12 col-md-3">
+                <ul class="list-unstyled list-inline list-social mb-md-0">
 
-                <!-- Heading -->
-                <h6 class="fw-bold mt-2 text-uppercase text-gray-700">
-                    Quick Links
-                </h6>
-
-                <!-- List -->
-                <ul class="list-unstyled text-muted mb-6 fs-14px mb-md-8 mb-lg-0">
-                    <li class="mb-1">
-                        <a href="{{ url('about') }}" class="text-reset">
-                            About Us
+                    <li class="list-inline-item list-social-item">
+                        <a href="#!" class="text-reset d-inline-block">
+                            <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."
+                                 style="max-width: 97px;">
                         </a>
                     </li>
-                    <li class="mb-1">
-                        <a href="{{ url('contact-us') }}" class="text-reset">
-                            Contact Us
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ url('faqs') }}" class="text-reset">
-                            FAQs
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ url('sign-in') }}" class="text-reset">
-                            Login
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ url('sign-up') }}" class="text-reset">
-                            Register
+                    <li class="list-inline-item list-social-item me-3">
+                        <a href="#!" class="text-reset d-inline-block me-1">
+                            <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."
+                                 style="max-width: 97px;">
                         </a>
                     </li>
                 </ul>
 
-            </div>
-            <div class="col-12 col-md-3">
-
-                <!-- Heading -->
-                <h6 class="fw-bold mt-2 text-uppercase text-gray-700">
-                    Legal
-                </h6>
-
-                <!-- List -->
-                <ul class="list-unstyled text-muted mb-6 fs-14px mb-md-8 mb-lg-0">
-                    <li class="mb-1">
-                        <a href="{{ url('terms-and-conditions') }}" class="text-reset">
-                            Terms & Conditions
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ url('privacy-policy') }}" class="text-reset">
-                            Privacy Policy
-                        </a>
-                    </li>
-
-                    <li class="mb-1">
-                        <a href="https://www.takefive-stopfraud.org.uk/" class="text-reset">
-                            Scam Awareness
-                        </a>
-                    </li>
-                </ul>
 
             </div>
 
@@ -453,6 +532,19 @@
     /*
 * Javascript to show and hide cookie banner using localstorage
 */
+
+    <!--Start of Tawk.to Script-->
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/64d0e05e94cf5d49dc68eeea/1h77uot75';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+
+    <!--End of Tawk.to Script-->
 
     /**
      * @description Shows the cookie banner

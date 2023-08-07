@@ -8,13 +8,14 @@
 
 
     <!-- WELCOME -->
-    <section data-jarallax data-speed=".8" class="pt-12 pb-10 pt-md-15 pb-md-14"
-             style="background-image: url(/assets/img/covers/cover-3.jpg)">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-12 col-md-8 col-lg-6">
+    <section data-jarallax data-speed=".8" class="pt-12 pb-10 pt-md-8 pb-md-12"
+             style="background-image: url(/assets/img/covers/cover-new-4.jpg);">
+        <div class="container mx-15">
+            <div class="d-flex justify-content-between">
+                <div class="w-100 col-12 col-md-8 col-lg-7 d-flex align-items-end">
 
                     <!-- Heading -->
+                    <div style="text-shadow: 2px 2px 3px #00000030">
                     <h1 class="display-3 fw-bold text-white" id="welcomeHeadingSource">
                         Send Money to <br/>
                         <span class="text-warning"
@@ -23,53 +24,59 @@
 
 
                     <!-- Text -->
-                    <p class="fs-lg text-white-80 mb-6">
-                        Experience hassle-free global money transfers with our secure and user-friendly online platform.
+                    <p class="fs-lg text-white-80 mb-6" style="text-shadow: 2px 2px 1px #00000090">
+                        Experience hassle-free global money transfers with our secure <br>
+                        and user-friendly online platform.
                     </p>
+                        <span>
+                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate('https://www.sendwave.com/'); !!}
+                        </span>
 
+                    </div>
                     <!-- Form -->
 
-
                 </div>
+                <div class="col-12 col-md-8 col-lg-5 mt-10">
                 @livewire('outer.send-money')
-            </div> <!-- / .row -->
-        </div> <!-- / .container -->
-    </section>
-
-    <section class="pt-6 pt-md-8 bg-black">
-        <div class="container pb-6 pb-md-8 border-bottom">
-            <div class="row align-items-center">
-                <div class="col-12 col-md">
-
-                    <!-- Heading -->
-                    <h3 class="fw-bold mb-1">
-                        Get the app now!
-                    </h3>
-
-                    <!-- Text -->
-                    <p class=" mb-6 mb-md-0">
-                        Download our mobile app for fast and secure money transfers. Our app is easy to use and offers a
-                        seamless transfer experience.
-                    </p>
-
-                </div>
-
-                <div class="col-auto">
-
-                    <a href="#!" class="text-reset d-inline-block me-1">
-                        <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."
-                             style="max-width: 155px;">
-                    </a>
-
-                    <a href="#" class="text-reset d-inline-block">
-                        <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."
-                             style="max-width: 155px;">
-                    </a>
-
                 </div>
             </div> <!-- / .row -->
         </div> <!-- / .container -->
     </section>
+
+{{--    <section class="pt-6 pt-md-8 bg-black">--}}
+{{--        <div class="container pb-6 pb-md-8 border-bottom">--}}
+{{--            <div class="row align-items-center">--}}
+{{--                <div class="col-12 col-md">--}}
+
+{{--                    <!-- Heading -->--}}
+{{--                    <h3 class="fw-bold mb-1">--}}
+{{--                        Get the app now!--}}
+{{--                    </h3>--}}
+
+{{--                    <!-- Text -->--}}
+{{--                    <p class=" mb-6 mb-md-0">--}}
+{{--                        Download our mobile app for fast and secure money transfers. Our app is easy to use and offers a--}}
+{{--                        seamless transfer experience.--}}
+{{--                    </p>--}}
+
+{{--                </div>--}}
+
+{{--                <div class="col-auto">--}}
+
+{{--                    <a href="#!" class="text-reset d-inline-block me-1">--}}
+{{--                        <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."--}}
+{{--                             style="max-width: 155px;">--}}
+{{--                    </a>--}}
+
+{{--                    <a href="#" class="text-reset d-inline-block">--}}
+{{--                        <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."--}}
+{{--                             style="max-width: 155px;">--}}
+{{--                    </a>--}}
+
+{{--                </div>--}}
+{{--            </div> <!-- / .row -->--}}
+{{--        </div> <!-- / .container -->--}}
+{{--    </section>--}}
 
 
     <section class="py-8 py-md-11 border-bottom">
@@ -89,7 +96,7 @@
                     </h3>
 
                     <!-- Text -->
-                    <p class="text-muted mb-6 mb-md-0">
+                    <p class=" mb-6 mb-md-0">
                         Our money transfer website provides fast and secure transactions that are designed to meet the
                         needs of modern-day consumers.
                     </p>
@@ -108,7 +115,7 @@
                     </h3>
 
                     <!-- Text -->
-                    <p class="text-muted mb-6 mb-md-0">
+                    <p class=" mb-6 mb-md-0">
                         We pride ourselves on offering the lowest fees and best rates in the industry.
                     </p>
 
@@ -126,7 +133,7 @@
                     </h3>
 
                     <!-- Text -->
-                    <p class="text-muted mb-0">
+                    <p class=" mb-0">
                         A secured platform with commitment to protect your personal and financial information.
                     </p>
 
@@ -295,19 +302,8 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-3 mb-4">
 
-                    <!-- Heading -->
-                    <h4 class="fw-bold text-white mb-5">
-                        Asia
-                    </h4>
+
                     <!-- List -->
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/au.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Australia
-                        </p>
-                    </div>
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/bd.svg') }}" alt="">
@@ -316,22 +312,8 @@
                             Bangladesh
                         </p>
                     </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/kh.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Cambodia
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cn.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            China
-                        </p>
-                    </div>
+
+
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/in.svg') }}" alt="">
@@ -350,28 +332,13 @@
                     </div>
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/jp.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Japan
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/my.svg') }}" alt="">
                         <!-- Text -->
                         <p class="text-white mb-0">
                             Malaysia
                         </p>
                     </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/np.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Nepal
-                        </p>
-                    </div>
+
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/pk.svg') }}" alt="">
@@ -380,6 +347,12 @@
                             Pakistan
                         </p>
                     </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 mb-4">
+
+                    <!-- Heading -->
+
+
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/ph.svg') }}" alt="">
@@ -388,14 +361,7 @@
                             Philippines
                         </p>
                     </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/kr.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            South Korea
-                        </p>
-                    </div>
+
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/sg.svg') }}" alt="">
@@ -422,204 +388,30 @@
                     </div>
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/tr.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Turkey
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/vn.svg') }}" alt="">
                         <!-- Text -->
                         <p class="text-white mb-0">
                             Vietnam
                         </p>
                     </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3 mb-4">
 
-                    <!-- Heading -->
-                    <h4 class="fw-bold text-white mb-5">
-                        Europe
-                    </h4>
-
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/be.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Belgium
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/gb.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            United Kingdom
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/fi.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Finland
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/fr.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            France
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/de.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Germany
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/it.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Italy
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/lt.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Lithuania
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/nl.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Netherlands
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/no.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Norway
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/pl.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Poland
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/pt.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Portugal
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/es.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Spain
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/se.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Sweden
-                        </p>
-                    </div>
 
 
                 </div>
+
                 <div class="col-12 col-md-6 col-lg-3 mb-4">
 
                     <!-- Heading -->
-                    <h4 class="fw-bold text-white mb-5">
-                        Africa
-                    </h4>
 
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/bj.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Benin
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/bf.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Burkina Faso
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cm.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Cameroon
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/gn.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Guinea
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/gm.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Gambia
-                        </p>
-                    </div>
+
+
+
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/gh.svg') }}" alt="">
                         <!-- Text -->
                         <p class="text-white mb-0">
                             Ghana
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/ci.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Ivory Coast
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/ne.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Niger
                         </p>
                     </div>
                     <div class="d-flex align-items-center mb-2 ">
@@ -638,45 +430,12 @@
                             Senegal
                         </p>
                     </div>
-
-                </div>
-                <div class="col-12 col-md-6 col-lg-3 mb-4">
-
-                    <!-- Heading -->
-                    <h4 class="fw-bold text-white mb-5">
-                        Latin America
-                    </h4>
-
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/ar.svg') }}" alt="">
+                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cn.svg') }}" alt="">
                         <!-- Text -->
                         <p class="text-white mb-0">
-                            Argentina
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/br.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Brazil
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/co.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Colombia
-                        </p>
-                    </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/uy.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Uruguay
+                            China
                         </p>
                     </div>
 
