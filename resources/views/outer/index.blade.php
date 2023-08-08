@@ -37,8 +37,8 @@
                         {{--                            and user-friendly online platform.--}}
                         {{--                        </p>--}}
                         <div class=" d-flex mt-7">
-                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(110)->generate('http://ogr-portal.test/'); !!}
-                            <p class="fw-bold text-white ms-4 mt-5"  style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">Scan this Qr code with your <br> phone to download our app!</p>
+                            <img src="{{ asset('assets/qrc.png') }}" style="width: 100px" alt="">
+                            <p class="fw-bold   ms-4 "  style="  color: #c99430;">Scan this Qr code with your <br> phone to download our app!</p>
                         </div>
 
                     </div>
