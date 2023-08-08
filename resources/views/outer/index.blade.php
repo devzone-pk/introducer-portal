@@ -23,11 +23,11 @@
                     <div style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">
                         <h1 class="display-3 fw-bold text-white" id="welcomeHeadingSource">
                             Send Money to <br/>
-                            <span class="text-black"
+                            <span class="text-white"
                                   data-typed='{"strings": {{ $countries->pluck('name')->toJson() }} }'></span>
                         </h1>
 
-                        <div class="mb-5 mt-8">
+                        <div class="mb-5 mt-5">
                             <img src="{{url('/assets/img/covers/cover-new-4.jpg')}}" alt="fdsafs"
                                  style=" width: 35vw !important;position:relative; bottom: -0; z-index: 1; border: 0.675625rem solid rgba(255, 255, 255, .6); border-radius: 1.25rem; ">
                         </div>
@@ -36,11 +36,9 @@
                         {{--                            Experience hassle-free global money transfers with our secure <br>--}}
                         {{--                            and user-friendly online platform.--}}
                         {{--                        </p>--}}
-                        <div class="align-items-center d-flex justify-content-center text-white mt-7"
-                             style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">
-                            <p class="fw-bold me-4 ">Scan this Qr code with your <br> phone to download our app!</p>
-
-                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate('http://ogr-portal.test/'); !!}
+                        <div class=" d-flex mt-7">
+                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(110)->generate('http://ogr-portal.test/'); !!}
+                            <p class="fw-bold ms-4 mt-5"  style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important; color: #0e0d5d">Scan this Qr code with your <br> phone to download our app!</p>
                         </div>
 
                     </div>
