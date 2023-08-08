@@ -6,77 +6,86 @@
 
 @section('content')
 
-
     <!-- WELCOME -->
-    <section data-jarallax data-speed=".8" class="pt-12 pb-10 pt-md-8 pb-md-12"
-             style="background-image: url(/assets/img/covers/cover-new-4.jpg);">
-        <div class="container mx-15">
-            <div class="d-flex justify-content-between">
-                <div class=" col-12 col-md-8 col-lg-7 d-flex align-items-end">
+    <section data-jarallax data-speed=".8" class="pt-12 pb-10 pt-md-8 pb-md-10"
+             style="background-color: #002f6c; position:relative;">
+        <img src="{{url('/assets/img/covers/cover-curve.svg')}}" alt="fdsafs"
+             style=" width: 100vw !important; position:absolute; bottom: 0; z-index: 1;">
+
+
+        {{--        <div style="height: 300px; margin-top: auto; background-size: cover;  background: red url(/assets/img/covers/cover-curve.svg) no-repeat  right bottom;"></div>--}}
+
+        <div class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class=" col-12 col-md-8 col-lg-8 d-flex align-items-end">
 
                     <!-- Heading -->
-                    <div style="text-shadow: 2px 2px 3px #00000030">
-                    <h1 class="display-3 fw-bold text-white" id="welcomeHeadingSource">
-                        Send Money to <br/>
-                        <span class="text-warning"
-                              data-typed='{"strings": {{ $countries->pluck('name')->toJson() }} }'></span>
-                    </h1>
+                    <div style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">
+                        <h1 class="display-3 fw-bold text-white" id="welcomeHeadingSource">
+                            Send Money to <br/>
+                            <span class="text-white"
+                                  data-typed='{"strings": {{ $countries->pluck('name')->toJson() }} }'></span>
+                        </h1>
 
-
-                    <!-- Text -->
-                    <p class="fs-lg text-white-80 mb-6" style="text-shadow: 2px 2px 1px #00000090">
-                        Experience hassle-free global money transfers with our secure <br>
-                        and user-friendly online platform.
-                    </p>
-                        <span>
-                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->generate('https://www.sendwave.com/'); !!}
-                        </span>
+                        <div class="mb-5 mt-5">
+                            <img src="{{url('/assets/img/covers/cover-new-4.jpg')}}" alt="fdsafs"
+                                 style=" width: 35vw !important;position:relative; bottom: -0; z-index: 1; border: 0.675625rem solid rgba(255, 255, 255, .6); border-radius: 1.25rem; ">
+                        </div>
+                        <!-- Text -->
+                        {{--                        <p class="fs-lg text-white-80 mb-6" style="text-shadow: 2px 2px 1px #00000090">--}}
+                        {{--                            Experience hassle-free global money transfers with our secure <br>--}}
+                        {{--                            and user-friendly online platform.--}}
+                        {{--                        </p>--}}
+                        <div class=" d-flex mt-7">
+                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(110)->generate('http://ogr-portal.test/'); !!}
+                            <p class="fw-bold text-white ms-4 mt-5"  style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">Scan this Qr code with your <br> phone to download our app!</p>
+                        </div>
 
                     </div>
                     <!-- Form -->
 
                 </div>
-                <div class="col-12 col-md-8 col-lg-5 mt-10">
-                @livewire('outer.send-money')
+                <div class="col-12 col-md-8 col-lg-4 ">
+                    @livewire('outer.send-money')
                 </div>
             </div> <!-- / .row -->
         </div> <!-- / .container -->
     </section>
 
-{{--    <section class="pt-6 pt-md-8 bg-black">--}}
-{{--        <div class="container pb-6 pb-md-8 border-bottom">--}}
-{{--            <div class="row align-items-center">--}}
-{{--                <div class="col-12 col-md">--}}
+    {{--    <section class="pt-6 pt-md-8 bg-black">--}}
+    {{--        <div class="container pb-6 pb-md-8 border-bottom">--}}
+    {{--            <div class="row align-items-center">--}}
+    {{--                <div class="col-12 col-md">--}}
 
-{{--                    <!-- Heading -->--}}
-{{--                    <h3 class="fw-bold mb-1">--}}
-{{--                        Get the app now!--}}
-{{--                    </h3>--}}
+    {{--                    <!-- Heading -->--}}
+    {{--                    <h3 class="fw-bold mb-1">--}}
+    {{--                        Get the app now!--}}
+    {{--                    </h3>--}}
 
-{{--                    <!-- Text -->--}}
-{{--                    <p class=" mb-6 mb-md-0">--}}
-{{--                        Download our mobile app for fast and secure money transfers. Our app is easy to use and offers a--}}
-{{--                        seamless transfer experience.--}}
-{{--                    </p>--}}
+    {{--                    <!-- Text -->--}}
+    {{--                    <p class=" mb-6 mb-md-0">--}}
+    {{--                        Download our mobile app for fast and secure money transfers. Our app is easy to use and offers a--}}
+    {{--                        seamless transfer experience.--}}
+    {{--                    </p>--}}
 
-{{--                </div>--}}
+    {{--                </div>--}}
 
-{{--                <div class="col-auto">--}}
+    {{--                <div class="col-auto">--}}
 
-{{--                    <a href="#!" class="text-reset d-inline-block me-1">--}}
-{{--                        <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."--}}
-{{--                             style="max-width: 155px;">--}}
-{{--                    </a>--}}
+    {{--                    <a href="#!" class="text-reset d-inline-block me-1">--}}
+    {{--                        <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."--}}
+    {{--                             style="max-width: 155px;">--}}
+    {{--                    </a>--}}
 
-{{--                    <a href="#" class="text-reset d-inline-block">--}}
-{{--                        <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."--}}
-{{--                             style="max-width: 155px;">--}}
-{{--                    </a>--}}
+    {{--                    <a href="#" class="text-reset d-inline-block">--}}
+    {{--                        <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."--}}
+    {{--                             style="max-width: 155px;">--}}
+    {{--                    </a>--}}
 
-{{--                </div>--}}
-{{--            </div> <!-- / .row -->--}}
-{{--        </div> <!-- / .container -->--}}
-{{--    </section>--}}
+    {{--                </div>--}}
+    {{--            </div> <!-- / .row -->--}}
+    {{--        </div> <!-- / .container -->--}}
+    {{--    </section>--}}
 
 
     <section class="py-8 py-md-11 border-bottom">
@@ -396,14 +405,11 @@
                     </div>
 
 
-
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-3 mb-4">
 
                     <!-- Heading -->
-
-
 
 
                     <div class="d-flex align-items-center mb-2 ">
