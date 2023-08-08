@@ -12,7 +12,7 @@
              style="background-image: url(/assets/img/covers/cover-new-4.jpg);">
         <div class="container mx-15">
             <div class="d-flex justify-content-between">
-                <div class="w-100 col-12 col-md-8 col-lg-7 d-flex align-items-end">
+                <div class=" col-12 col-md-8 col-lg-7 d-flex align-items-end">
 
                     <!-- Heading -->
                     <div style="text-shadow: 2px 2px 3px #00000030">
