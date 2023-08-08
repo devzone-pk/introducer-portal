@@ -16,7 +16,7 @@
         {{--        <div style="height: 300px; margin-top: auto; background-size: cover;  background: red url(/assets/img/covers/cover-curve.svg) no-repeat  right bottom;"></div>--}}
 
         <div class="container mt-5">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between align-items-center">
                 <div class=" col-12 col-md-8 col-lg-8 d-flex align-items-end">
 
                     <!-- Heading -->
@@ -38,7 +38,7 @@
                         {{--                        </p>--}}
                         <div class=" d-flex mt-7">
                             {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(110)->generate('http://ogr-portal.test/'); !!}
-                            <p class="fw-bold ms-4 mt-5"  style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important; color: #0e0d5d">Scan this Qr code with your <br> phone to download our app!</p>
+                            <p class="fw-bold text-white ms-4 mt-5"  style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">Scan this Qr code with your <br> phone to download our app!</p>
                         </div>
 
                     </div>
