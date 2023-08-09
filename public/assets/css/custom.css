@@ -152,7 +152,7 @@ body {
 
 .select2-container--bootstrap-5.select2-container--focus .select2-selection, .select2-container--bootstrap-5.select2-container--open .select2-selection {
     box-shadow: none;
-    border-color: #FFFFFF;
+    border-color: #ced4da;
 }
 
 .select2-container--bootstrap-5 .select2-selection--single {
