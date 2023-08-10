@@ -39,7 +39,7 @@
                         {{--                            and user-friendly online platform.--}}
                         {{--                        </p>--}}
                         <div class=" mt-7 mb-7 mb-md-0 text-md-end text-center  ">
-                            <img src="{{ asset('assets/qrc.png') }}" style="width: 100px" alt="">
+                            <img src="{{ asset('assets/ogrqr.png') }}" style="width: 100px" alt="">
                             <p class="fw-bold mt-3 mt-md-0  ms-4 " style="  color: #c99430;">Scan this Qr code with your
                                 <br> phone
                                 to download our app!</p>
