@@ -245,8 +245,9 @@ Route::get('verify/{id}/{email}', function ($id, $email) {
 Route::view('terms-and-conditions', 'outer.terms-and-conditions')->name('terms-and-conditions');
 Route::view('privacy-policy', 'outer.privacy-policy')->name('privacy-policy');
 //Route::view('refund-policy', 'outer.refund-policy')->name('refund-policy');
-//Route::view('anti-fraud-policy', 'outer.anti-fraud-policy')->name('anti-fraud-policy');
-//Route::view('gdpr-policy', 'outer.gdpr-policy')->name('gdpr-policy');
+Route::view('anti-fraud-policy', 'outer.anti-fraud-policy')->name('anti-fraud-policy');
+Route::view('gdpr-policy', 'outer.gdpr-policy')->name('gdpr-policy');
+Route::view('refer-friend', 'outer.refer-friend')->name('refer-friend');
 
 
 
