@@ -7,7 +7,7 @@
 @section('content')
 
     <!-- WELCOME -->
-    <section data-jarallax data-speed=".8" class="pt-3 pb-10 pt-md-8 pb-md-10"
+    <section data-jarallax data-speed=".8" class="pt-3 pb-10 pt-md-8 pb-md-12 mb-7"
              style="background-color: #002f6c; position:relative;">
         <img src="{{url('/assets/img/covers/cover-curve.svg')}}" alt="fdsafs"
              style=" width: 100vw !important; position:absolute; bottom: 0; z-index: 1;">
@@ -16,20 +16,20 @@
         {{--        <div style="height: 300px; margin-top: auto; background-size: cover;  background: red url(/assets/img/covers/cover-curve.svg) no-repeat  right bottom;"></div>--}}
 
         <div class="container mt-5">
-            <div class="d-md-flex justify-content-between align-items-center">
-                <div class=" col-12 col-md-8 col-lg-8 d-md-flex align-items-end ">
+            <div class="d-lg-flex justify-content-between align-items-center">
+                <div class=" col-12 col-lg-8  d-lg-flex align-items-end ">
 
                     <!-- Heading -->
                     <div style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">
 
-                        <h1 class="display-3 fw-bold text-white text-center  text-md-start  " id="welcomeHeadingSource">
+                        <h1 class="display-3 fw-bold text-white text-center  text-lg-start  " id="welcomeHeadingSource">
                             Send Money to <br/>
                             <span class="text-white "
                                   data-typed='{"strings": {{ $countries->pluck('name')->toJson() }} }'></span>
                         </h1>
 
 
-                        <div class="mb-5 mt-5 d-none d-md-block">
+                        <div class="mb-12 mt-5 d-none d-lg-block">
                             <img src="{{url('/assets/img/covers/cover-new-4.jpg')}}" alt="fdsafs"
                                  style=" width: 35vw !important;position:relative; bottom: -0; z-index: 1; border: 0.675625rem solid rgba(255, 255, 255, .6); border-radius: 1.25rem; ">
                         </div>
@@ -38,21 +38,32 @@
                         {{--                            Experience hassle-free global money transfers with our secure <br>--}}
                         {{--                            and user-friendly online platform.--}}
                         {{--                        </p>--}}
-                        <div class=" mt-7 mb-7 mb-md-0 text-md-end text-center  ">
+
+                        <div class="mt-7 mb-7  mb-md-0 text-lg-end  text-center d-lg-none  ">
+
                             <img src="{{ asset('assets/ogrqr.png') }}" style="width: 100px" alt="">
-                            <p class="fw-bold mt-3 mt-md-0  ms-4 " style="  color: #c99430;">Scan this Qr code with your
+                            <p class="fw-bold mt-5 mt-lg-0  ms-4 " style="  color: #c99430;">Scan this Qr code with your
                                 <br> phone
                                 to download our app!</p>
                         </div>
+
 
                     </div>
                     <!-- Form -->
 
                 </div>
-                <div class="col-12 col-md-8 col-lg-4 ">
+                <div class="col-12 col-lg-4 col-md-8 m-0 ms-md-11 me-md-10 ">
                     @livewire('outer.send-money')
                 </div>
             </div> <!-- / .row -->
+
+
+            <div class=" mb-md-0 text-md-end d-lg-flex align-items-center justify-content-end text-center d-none d-lg-block  " style="width: 35vw; position: absolute">
+                <p class="fw-bold mt-3 mt-lg-4  ms-4 me-4 " style="  color: #c99430;">Scan this Qr code with your
+                    <br> phone
+                    to download our app!</p>
+                <img src="{{ asset('assets/ogrqr.png') }}" style="width: 100px" alt="">
+            </div>
         </div> <!-- / .container -->
     </section>
 
@@ -475,7 +486,7 @@
                     </div>
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/ng.svg') }}" alt="">
+                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/zm.svg') }}" alt="">
                         <!-- Text -->
                         <p class="text-white mb-0">
                             Zambia
