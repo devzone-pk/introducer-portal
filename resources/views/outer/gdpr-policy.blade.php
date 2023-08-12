@@ -1,51 +1,35 @@
 @extends('outer.layouts.master')
+============================================= -->
+@section('title')
+    GDPR Policy
+@endsection
 @section('content')
 
-    <!-- Page Header
-        ============================================= -->
-    <style>
-        ol, ul {
-            padding-left: 0;
-            font-size: 24px;
-        }
-        ::marker{
-            font-weight: bolder;
-        }
-    </style>
-
-    <section class="pt-8 pt-md-11 pb-8 pb-md-14 bg-light">
+    <section class="py-10 py-md-14 overlay bg-black  overlay-60 bg-cover"
+             style="background-image: url(assets/img/pattern.png);">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-12 col-md">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 text-center" data-aos="fade-up">
 
                     <!-- Heading -->
-                    <h1 class="display-4 mb-2">
-                        GDPR Policy
+                    <h1 class="display-2 fw-bold text-white">
+                       GDPR Policy
                     </h1>
 
                     <!-- Text -->
-                    <p class="fs-lg text-gray-700 mb-md-0">
-                        Following is our detailed GDPR Policy
+                    <p class="lead text-white-75 mb-0">
+                        {{ config('app.company_name') }}
+
                     </p>
 
                 </div>
-                <div class="col-auto">
-
-                    <!-- Buttons -->
-                    <a href="#!" class="btn btn-primary-soft d-none">
-                        Print
-                    </a>
-
-                </div>
             </div> <!-- / .row -->
-            <div class="row">
-                <div class="col-12">
+        </div> <!-- / .container -->
+    </section>
 
-                    <!-- Divider -->
-                    <hr class="my-6 my-md-8">
 
-                </div>
-            </div> <!-- / .row -->
+    <section class="pt-8 pt-md-11 pb-8 bg-light">
+        <div class="container"><!-- / .row -->
             <div class="row">
                 <div class="col-12 col-md-8">
                     <div><p><strong>Introduction</strong></p>
@@ -182,82 +166,82 @@
 
                     </div>
                 </div>
-                <div class="col-12 col-md-4">
+{{--                <div class="col-12 col-md-4">--}}
 
-                    <!-- Card -->
-                    <div class="card shadow-light-lg">
-                        <div class="card-body">
+{{--                    <!-- Card -->--}}
+{{--                    <div class="card shadow-light-lg">--}}
+{{--                        <div class="card-body">--}}
 
-                            <!-- Heading -->
-                            <h4 class="text-primary">
-                                Have a question?
-                            </h4>
+{{--                            <!-- Heading -->--}}
+{{--                            <h4 class="text-primary">--}}
+{{--                                Have a question?--}}
+{{--                            </h4>--}}
 
-                            <!-- Text -->
-                            <p class="fs-sm text-gray-800 mb-5">
-                                Not sure exactly what we’re looking for or just have a query? We’re always available to
-                                talk and help you with your money transfer needs. Anytime!
-                            </p>
+{{--                            <!-- Text -->--}}
+{{--                            <p class="fs-sm text-gray-800 mb-5">--}}
+{{--                                Not sure exactly what we’re looking for or just have a query? We’re always available to--}}
+{{--                                talk and help you with your money transfer needs. Anytime!--}}
+{{--                            </p>--}}
 
-                            <!-- Heading -->
-                            <h6 class="fw-bold text-uppercase text-primary mb-2">
-                                Call anytime
-                            </h6>
+{{--                            <!-- Heading -->--}}
+{{--                            <h6 class="fw-bold text-uppercase text-primary mb-2">--}}
+{{--                                Call anytime--}}
+{{--                            </h6>--}}
 
-                            <!-- Text -->
-                            <p class="fs-sm mb-5">
-                                +44 124 5953 337 <br>
-                                +44 124 5953 338<br>
-                                +44 734 140 5879 (Whatsapp)
-                            </p>
+{{--                            <!-- Text -->--}}
+{{--                            <p class="fs-sm mb-5">--}}
+{{--                                +44 124 5953 337 <br>--}}
+{{--                                +44 124 5953 338<br>--}}
+{{--                                +44 734 140 5879 (Whatsapp)--}}
+{{--                            </p>--}}
 
-                            <!-- Heading -->
-                            <h6 class="fw-bold text-uppercase text-primary mb-2">
-                                Email us
-                            </h6>
+{{--                            <!-- Heading -->--}}
+{{--                            <h6 class="fw-bold text-uppercase text-primary mb-2">--}}
+{{--                                Email us--}}
+{{--                            </h6>--}}
 
-                            <!-- Text -->
-                            <p class="fs-sm mb-0">
-                                 info@oriumglobalresources.com
-                            </p>
+{{--                            <!-- Text -->--}}
+{{--                            <p class="fs-sm mb-0">--}}
+{{--                                 info@oriumglobalresources.com--}}
+{{--                            </p>--}}
 
-                        </div>
-                    </div>
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                </div>
+{{--                </div>--}}
             </div> <!-- / .row -->
         </div> <!-- / .container -->
     </section>
 
-    <section class="pb-10 pt-10 pt-md-10 bg-dark">
-        <div class="container">
-            <div class="row  justify-content-center">
-                <div class="col-12 gy-5 col-md-10 col-lg-8 text-center">
+{{--    <section class="pb-10 pt-10 pt-md-10 bg-dark">--}}
+{{--        <div class="container">--}}
+{{--            <div class="row  justify-content-center">--}}
+{{--                <div class="col-12 gy-5 col-md-10 col-lg-8 text-center">--}}
 
-                    <!-- Badge -->
-                    <span class="badge rounded-pill bg-gray-700-soft mb-4">
-              <span class="h6 fw-bold text-uppercase">Get started</span>
-            </span>
+{{--                    <!-- Badge -->--}}
+{{--                    <span class="badge rounded-pill bg-gray-700-soft mb-4">--}}
+{{--              <span class="h6 fw-bold text-uppercase">Get started</span>--}}
+{{--            </span>--}}
 
-                    <!-- Heading -->
-                    <h1 class="display-4 text-white">
-                        Need Help?
-                    </h1>
+{{--                    <!-- Heading -->--}}
+{{--                    <h1 class="display-4 text-white">--}}
+{{--                        Need Help?--}}
+{{--                    </h1>--}}
 
-                    <!-- Text -->
-                    <p class="fs-lg text-muted mb-6 mb-md-8">
-                        We are always here for you!
-                    </p>
+{{--                    <!-- Text -->--}}
+{{--                    <p class="fs-lg text-muted mb-6 mb-md-8">--}}
+{{--                        We are always here for you!--}}
+{{--                    </p>--}}
 
-                    <!-- Button -->
-                    <a href="{{ url('contact-us') }}" target="_blank" class="btn btn-primary lift">
-                        Contact Us <i class="fe fe-arrow-right"></i>
-                    </a>
+{{--                    <!-- Button -->--}}
+{{--                    <a href="{{ url('contact-us') }}" target="_blank" class="btn btn-primary lift">--}}
+{{--                        Contact Us <i class="fe fe-arrow-right"></i>--}}
+{{--                    </a>--}}
 
-                </div>
-            </div> <!-- / .row -->
-        </div>
-    </section>
+{{--                </div>--}}
+{{--            </div> <!-- / .row -->--}}
+{{--        </div>--}}
+{{--    </section>--}}
 
 
 @endsection
