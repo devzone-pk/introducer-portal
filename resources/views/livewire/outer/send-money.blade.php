@@ -1,5 +1,5 @@
 <div class=" shadow-dark ">
-    <div class="card rounded ">
+    <div class="card rounded  ">
         <div class="card-header text-center p-4">
             <h3 class="fw-bold">Exchange Rate</h3>
         </div>

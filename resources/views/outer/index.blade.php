@@ -6,6 +6,13 @@
 
 @section('content')
 
+    <style>
+
+        section img{
+            vertical-align: revert!important;
+        }
+    </style>
+
     <!-- WELCOME -->
     <section data-jarallax data-speed=".8" class="pt-3 pb-10 pt-md-8 pb-md-12 mb-7"
              style="background-color: #002f6c; position:relative;">
@@ -31,7 +38,7 @@
 
                         <div class="mb-12 mt-5 d-none d-lg-block">
                             <img src="{{url('/assets/img/covers/cover-new-4.jpg')}}" alt="fdsafs"
-                                 style=" width: 35vw !important;position:relative; bottom: -0; z-index: 1; border: 0.675625rem solid rgba(255, 255, 255, .6); border-radius: 1.25rem; ">
+                                 style=" width: 75% !important;position:relative; bottom: -0; z-index: 1; border: 0.675625rem solid rgba(255, 255, 255, .6); border-radius: 1.25rem; ">
                         </div>
                         <!-- Text -->
                         {{--                        <p class="fs-lg text-white-80 mb-6" style="text-shadow: 2px 2px 1px #00000090">--}}
@@ -52,13 +59,13 @@
                     <!-- Form -->
 
                 </div>
-                <div class="col-12 col-lg-4 col-md-8 m-0 ms-md-11 me-md-10 ">
+                <div class="col-12 col-lg-4 col-md-12 px-lg-0 px-md-10 px-sm-0">
                     @livewire('outer.send-money')
                 </div>
             </div> <!-- / .row -->
 
 
-            <div class=" mb-md-0 text-md-end d-lg-flex align-items-center justify-content-end text-center d-none d-lg-block  " style="width: 35vw; position: absolute">
+            <div class=" col-12 col-lg-8  mb-md-0 text-md-end d-lg-flex align-items-center justify-content-end text-center d-none d-lg-block  " style="width: 50%; position: absolute">
                 <p class="fw-bold mt-3 mt-lg-4  ms-4 me-4 " style="  color: #c99430;">Scan this Qr code with your
                     <br> phone
                     to download our app!</p>
