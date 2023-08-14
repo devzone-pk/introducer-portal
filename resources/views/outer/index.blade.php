@@ -14,7 +14,7 @@
     </style>
 
     <!-- WELCOME -->
-    <section data-jarallax data-speed=".8" class="pt-3 pb-10 pt-md-8 pb-md-12 mb-7"
+    <section data-jarallax data-speed=".8" class="pt-3 pb-10 pt-md-8 pb-md-12 mb-10"
              style="background-color: #002f6c; position:relative;">
         <img src="{{url('/assets/img/covers/cover-curve.svg')}}" alt="fdsafs"
              style=" width: 100vw !important; position:absolute; bottom: 0; z-index: 1;">
@@ -48,7 +48,7 @@
 
                         <div class="mt-7 mb-7  mb-md-0 text-lg-end  text-center d-lg-none  ">
 
-                            <img src="{{ asset('assets/ogrqr.png') }}" style="width: 100px" alt="">
+                            <img src="{{ asset('assets/ogrqr.png') }}" style="width: 160px" alt="">
                             <p class="fw-bold mt-5 mt-lg-0  ms-4 " style="  color: #c99430;">Scan this Qr code with your
                                 <br> phone
                                 to download our app!</p>
@@ -69,7 +69,7 @@
                 <p class="fw-bold mt-3 mt-lg-4  ms-4 me-4 " style="  color: #c99430;">Scan this Qr code with your
                     <br> phone
                     to download our app!</p>
-                <img src="{{ asset('assets/ogrqr.png') }}" style="width: 100px" alt="">
+                <img src="{{ asset('assets/ogrqr.png') }}" style="width: 160px" alt="">
             </div>
         </div> <!-- / .container -->
     </section>
