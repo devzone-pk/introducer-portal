@@ -20,7 +20,7 @@
                     <a href="#" data-bs-dismiss="modal">Close</a>
                 </div>
                 <div class="modal-body">
-                   @include('mobile.include.mobile-terms-conditions')
+                   @include('include.terms-and-conditions')
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
                     <a href="#" data-bs-dismiss="modal">Close</a>
                 </div>
                 <div class="modal-body">
-                    @livewire('mobile.account.privacy-policy')
+                    @include('include.privacy-policy')
                 </div>
             </div>
         </div>

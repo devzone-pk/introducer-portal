@@ -1,7 +1,7 @@
 <div id="appCapsule">
 
     <div class="section mt-0 text-center">
-        <img style="width: 40%; margin-bottom: 30px;" src="{{ asset('assets/img/xmg-logo-rec.png') }}" alt="">
+        <img style="width: 40%; margin-bottom: 30px;" src="{{ asset('assets/img/ogr-crop.png') }}" alt="">
     </div>
 
     <div class="section mb-5 p-2">

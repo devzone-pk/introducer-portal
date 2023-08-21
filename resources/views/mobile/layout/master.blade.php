@@ -27,7 +27,7 @@
 <!-- loader -->
 <div id="loader">
     <div class="d-flex justify-content-center  align-items-center" style="height: 100%;">
-        <img style="width: 100px; height: 100px;" src="{{ asset('assets/img/icons/loading.gif') }}" alt="icon"
+        <img style="width: 100px; height: 50px;" src="{{ asset('assets/img/ogr-loading.gif') }}" alt="icon"
              class="loading-icon">
     </div>
 </div>
