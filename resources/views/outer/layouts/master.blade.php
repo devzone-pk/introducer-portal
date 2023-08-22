@@ -134,7 +134,7 @@
                 </p>
             </div>
             <div class="col-12 col-md-4  d-flex justify-content-end">
-                <button type="button" class="btn btn-secondary btn-sm " onclick="window.cb_hideCookieBanner()">
+                <button type="button" class="btn btn-primary btn-sm " onclick="window.cb_hideCookieBanner()">
                     Okay
                 </button>
                 {{--                <a href="">--}}

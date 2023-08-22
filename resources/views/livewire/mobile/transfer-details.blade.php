@@ -131,7 +131,7 @@
         <div class="rounded shadow-c bg-white mt-3 px-2 py-2 ">
             @if($details->status == 'INC')
                 <a href="{{ url('gateway/trust/payment') }}/{{$details->transfer_code}}"
-                   class="btn fs-12px btn-block btn-secondary mb-2 py-1">Complete</a>
+                   class="btn fs-12px btn-block btn-primary mb-2 py-1">Complete</a>
                 <br>
             @endif
 

@@ -20,7 +20,7 @@
             @endif
         </div>
         <div class="mx-auto d-grid " style="width: 170px;">
-            <button class="btn   btn-secondary shadow lift" type="submit">
+            <button class="btn   btn-primary shadow lift" type="submit">
                 Track Now <i class="fe fe-arrow-right d-none d-md-inline "></i>
             </button>
         </div>

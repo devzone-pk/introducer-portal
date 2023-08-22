@@ -56,7 +56,7 @@
 
 
 
-                        <a class="btn btn-secondary btn-block"
+                        <a class="btn btn-primary btn-block"
                            href="{{ url('mobile/receiver') }}/{{ $b->id }}">View Details</a>
                     </div>
                 </div>

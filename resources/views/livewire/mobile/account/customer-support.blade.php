@@ -58,7 +58,7 @@
                             Status
                         </p>
 
-                        <a class="btn btn-secondary btn-block" href="{{ url('mobile/customer-support/details') }}/{{$d->id}}">View Ticket</a>
+                        <a class="btn btn-primary btn-block" href="{{ url('mobile/customer-support/details') }}/{{$d->id}}">View Ticket</a>
                     </div>
                 </div>
             </div>
