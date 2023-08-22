@@ -197,7 +197,7 @@
 
 
 
-                <a class="btn mt-2 btn-block btn-secondary" href="{{ url('logout') }}">
+                <a class="btn mt-2 btn-block btn-primary " href="{{ url('logout') }}">
                     Logout
                 </a>
 

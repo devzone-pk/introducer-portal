@@ -241,7 +241,7 @@
 
     {{--                        <div class="d-grid">--}}
     {{--                            <a href="{{ url('send/money') }}?method={{ $method }}&receiving_country_id={{$country_id}}"--}}
-    {{--                               class="btn py-2 btn-secondary">Continue</a>--}}
+    {{--                               class="btn py-2 btn-primary ">Continue</a>--}}
     {{--                        </div>--}}
     {{--                    </div>--}}
     {{--                </div>--}}
