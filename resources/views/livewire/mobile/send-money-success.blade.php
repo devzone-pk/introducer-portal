@@ -109,7 +109,7 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">XMG FINANCIAL SERVICES LTD </p>
+                                <p class="fs-16px mb-0">Account Name</p>
                                 <p class="fs-16px m-0 text-muted">Account Name</p>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">04-00-72</p>
+                                <p class="fs-16px mb-0">00-00-00</p>
                                 <p class="fs-16px m-0 text-muted">Sort Code</p>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">27942155</p>
+                                <p class="fs-16px mb-0">00000000</p>
                                 <p class="fs-16px m-0 text-muted">Account Number</p>
                             </div>
                         </div>

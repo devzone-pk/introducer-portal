@@ -183,7 +183,7 @@
                             <input type="checkbox" wire:model="promotion" id="customCheckb12"
                                    class="form-check-input  @error('promotion') is-invalid @enderror">
                             <label class="form-check-label" for="customCheckb12">
-                                Yes, I'd like to receive the latest information and offers from XMG Remit via email, SMS or other electronic means. I can opt-out at any time.</a>
+                                Yes, I'd like to receive the latest information and offers from Orium Global Resources via email, SMS or other electronic means. I can opt-out at any time.</a>
                             </label>
                         </div>
 

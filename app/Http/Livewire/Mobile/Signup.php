@@ -188,7 +188,7 @@ class Signup extends Component
                 'name' => $this->first_name . ' ' . $this->last_name,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
-//                'email_verified_at' => date('Y-m-d H:i:s'),
+                'email_verified_at' => date('Y-m-d H:i:s'),
                 'type' => 'on',
                 'status' => 't',
                 'company_id' => $this->company_id
@@ -224,13 +224,7 @@ class Signup extends Component
                         'email' => true,
                     ]);
             }
-            $code = rand(100000, 999999);
-            PasswordReset::updateOrCreate([
-                'email' => $this->email,
-                'company_id' => $this->company_id,
-            ], [
-                '2fa_code' => $code
-            ]);
+
 
             if (!empty($this->data['notification-token'])) {
                 $user_token_id = UserToken::create([
@@ -243,7 +237,7 @@ class Signup extends Component
             }
 
 
-          Http::get('https://www.smsalert.co.in/api/push.json?apikey=638eddf2c608f&sender=CVDEMO&mobileno=' . $this->phone_code . $this->phone_number . "&text=Dear " . $this->first_name . ", Your OTP for XMG Remit is " . $code . ". Don't share with any one.");
+
 
 //            $mail = (new RegisterDone())->onQueue('portal_' . config('app.company_id'));
 //            Mail::to($this->email)->queue($mail);
@@ -251,7 +245,7 @@ class Signup extends Component
             DB::commit();
             $this->reset(['receiving_country', 'referral_code', 'agree', 'email', 'password', 'phone_number', 'first_name', 'last_name']);
             $this->success = true;
-            $this->is_signed_up = true;
+          //  $this->is_signed_up = true;
             $this->dispatchBrowserEvent('open-modal', ['model' => 'signup-success']);
         } catch (Exception $exception) {
             DB::rollBack();
