@@ -501,7 +501,7 @@
                     </div>
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/sn.svg') }}" alt="">
+                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/rw.svg') }}" alt="">
                         <!-- Text -->
                         <p class="text-white mb-0">
                             Rwanda
@@ -509,7 +509,7 @@
                     </div>
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cn.svg') }}" alt="">
+                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/et.svg') }}" alt="">
                         <!-- Text -->
                         <p class="text-white mb-0">
                             Ethiopia
