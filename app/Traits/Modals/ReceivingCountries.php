@@ -3,6 +3,7 @@
 namespace App\Traits\Modals;
 
 use App\Models\Country\Country;
+use App\Models\Country\SendingReceivingCountry;
 
 trait ReceivingCountries
 {
@@ -25,17 +26,33 @@ trait ReceivingCountries
 
     public function rcFetchData()
     {
+
+        if (!empty(session('currency'))) {
+            $country_id = session('country_id');
+        } elseif (isset($this->sending_country['id'])) {
+            $country_id = $this->sending_country['id'];
+        } else {
+            $country_id = $this->sending_country;
+        }
+
+
+        $countries = SendingReceivingCountry::from('sending_receiving_countries as sr')
+            ->join('countries as r', 'sr.receiving_country_id', '=', 'r.id')
+            ->where('sr.company_id', config('app.company_id'))
+            ->where('sr.status', 't')
+            ->where('sr.sending_country_id', $country_id)
+            ->select('s.iso2 as sending', 'r.iso2 as receiving')->get();
+
+
         $data = Country::when(!empty($this->rc_search_query), function ($q) {
             $q->where('name', 'LIKE', '%' . $this->rc_search_query . '%');
-        })->where('is_on_receiving', 't')
+        })->where('is_on_receiving', 't')->whereIn('iso2',$countries->pluck('receiving')->toArray())
             ->select('id', 'name', 'currency', 'iso2', 'iso3', 'phonecode')->get();
         if ($data->isEmpty()) {
             $this->rc_data = [];
         } else {
             $this->rc_data = $data->toArray();
         }
-
-
 
 
     }
