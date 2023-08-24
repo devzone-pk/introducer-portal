@@ -41,7 +41,7 @@ trait ReceivingCountries
             ->where('sr.company_id', config('app.company_id'))
             ->where('sr.status', 't')
             ->where('sr.sending_country_id', $country_id)
-            ->select('s.iso2 as sending', 'r.iso2 as receiving')->get();
+            ->select( 'r.iso2 as receiving')->get();
 
 
         $data = Country::when(!empty($this->rc_search_query), function ($q) {
