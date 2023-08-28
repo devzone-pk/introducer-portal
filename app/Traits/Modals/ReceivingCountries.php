@@ -31,6 +31,8 @@ trait ReceivingCountries
             $country_id = session('country_id');
         } elseif (isset($this->sending_country['id'])) {
             $country_id = $this->sending_country['id'];
+        } elseif(isset($this->country['id'])) {
+            $country_id = $this->country['id'];
         } else {
             $country_id = $this->sending_country;
         }
