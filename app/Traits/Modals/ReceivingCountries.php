@@ -27,7 +27,7 @@ trait ReceivingCountries
     public function rcFetchData()
     {
 
-        if (!empty(session('currency'))) {
+        if (!empty(session('country_id'))) {
             $country_id = session('country_id');
         } elseif (isset($this->sending_country['id'])) {
             $country_id = $this->sending_country['id'];
