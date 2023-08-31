@@ -26,6 +26,18 @@ trait SendingMethods
     public function smfetchData()
     {
 
+        if (!empty(session('currency'))) {
+            $country_id = session('country_id');
+        } elseif (isset($this->sending_country['id'])) {
+            $country_id = $this->sending_country['id'];
+        } elseif(isset($this->country['id'])) {
+            $country_id = $this->country['id'];
+        } else {
+            $country_id = $this->sending_country;
+        }
+
+
+
         $data = Option::where('option_type_id', '14')
             ->join('gateways as g', 'g.sending_method_id', '=', 'options.id')
             ->when(!empty($this->sm_search_query), function ($q) {
@@ -33,7 +45,7 @@ trait SendingMethods
             })->where('g.status', 't')
 
             ->where('g.company_id', config('app.company_id'))
-            ->where('g.sending_country_id', session('country_id'))
+            ->where('g.sending_country_id', $country_id)
             ->select('g.*', 'options.name')->get();
         if ($data->isEmpty()) {
             $this->sm_data = [];
