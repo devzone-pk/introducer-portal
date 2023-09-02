@@ -378,6 +378,15 @@
                             Pakistan
                         </p>
                     </div>
+
+                    <div class="d-flex align-items-center mb-2 ">
+                        <!-- Badge -->
+                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cn.svg') }}" alt="">
+                        <!-- Text -->
+                        <p class="text-white mb-0">
+                            China
+                        </p>
+                    </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3 mb-4">
 
@@ -458,14 +467,7 @@
                             Senegal
                         </p>
                     </div>
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cn.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            China
-                        </p>
-                    </div>
+
 
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
@@ -473,6 +475,14 @@
                         <!-- Text -->
                         <p class="text-white mb-0">
                             Gambia
+                        </p>
+                    </div>
+                    <div class="d-flex align-items-center mb-2 ">
+                        <!-- Badge -->
+                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cm.svg') }}" alt="">
+                        <!-- Text -->
+                        <p class="text-white mb-0">
+                            Cameroon
                         </p>
                     </div>
 
@@ -483,14 +493,7 @@
                     <!-- Heading -->
 
 
-                    <div class="d-flex align-items-center mb-2 ">
-                        <!-- Badge -->
-                        <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/cm.svg') }}" alt="">
-                        <!-- Text -->
-                        <p class="text-white mb-0">
-                            Cameroon
-                        </p>
-                    </div>
+
                     <div class="d-flex align-items-center mb-2 ">
                         <!-- Badge -->
                         <img class="rounded-2 w-36px me-3 border " src="{{ asset('images/flags/zm.svg') }}" alt="">
