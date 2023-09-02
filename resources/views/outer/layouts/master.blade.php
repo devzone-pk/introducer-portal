@@ -324,7 +324,7 @@
                     13 Smithfield Road, Aberdeen,<br>
                     Scotland, AB24 4NR<br>
                     Scotland, AB24 4NR<br>
-                    Landline: 01224-453978<br>
+                    Landline: +441224453978<br>
                     Phone: +447435950568<br>
                     Whatsapp: +447435950568<br>
                     Email: info@oriumglobalresources.com
