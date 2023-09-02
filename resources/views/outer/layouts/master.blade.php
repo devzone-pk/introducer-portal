@@ -323,7 +323,7 @@
                 <p class="text-white fs-14px mb-2 my-2">
                     13 Smithfield Road, Aberdeen,<br>
                     Scotland, AB24 4NR<br>
-                    Scotland, AB24 4NR<br>
+
                     Landline: +441224453978<br>
                     Phone: +447435950568<br>
                     Whatsapp: +447435950568<br>
