@@ -147,7 +147,7 @@
                     trustworthy. the
                     service must only be used to send funds to family or friends and not for business purposes.
                     If you suspect you are a victim of fraud, contact {{ config('app.company_name') }} immediately
-                    at +44 772 574 6316
+                    at 07821662833
                 </p>
                 <h2 class="">Access to Mobile App and Online Web Portal</h2>
                 <p class="text-3 ">
@@ -485,7 +485,7 @@
                     the {{ config('app.company_name') }} head
                     office by emailing us at <a href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a>
                     calling
-                    us at +44 772 574 6316,
+                    us at 07821662833,
                     or writing to us at the following address: {{ config('app.company_name') }} , {{ config('app.company_address') }}
                 </p>
                 <p class="text-3 ">
