@@ -893,6 +893,24 @@ class SendMoney extends Component
             return;
         }
 
+        if (empty($this->selected_beneficiary['id'])) {
+
+            $duplicate = Beneficiary::where('country_id', $this->receiving_country['id'])
+                ->where(function ($q) {
+                    return $q->orWhere(function ($w) {
+                        return $w->where('first_name', $this->selected_beneficiary['first_name'])->where('last_name', $this->selected_beneficiary['last_name']);
+                    })
+                        ->orWhere('phone', $this->selected_beneficiary['phone']);
+                })->where('customer_id',session('customer_id'))->exists();
+
+            if ($duplicate) {
+                $this->addError('error', 'Duplication Alert! The beneficiary already exists. Please choose from the existing receiver list.');
+                $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
+                $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
+                return;
+            }
+        }
+
         $name = collect($this->rl_data)->firstWhere('id', $this->selected_beneficiary['relationship_id']);
         if (!empty($name)) {
             $this->selected_beneficiary['relationship_name'] = $name['name'];
@@ -924,6 +942,32 @@ class SendMoney extends Component
             }
         })->validate();
         //  $this->dispatchBrowserEvent('goUp');
+
+        $bene_ids = Beneficiary::where('customer_id', session('customer_id'))
+            ->select('id')->get();
+
+        if ($bene_ids->isNotEmpty()) {
+            $bene_ids = $bene_ids->pluck('id')->toArray();
+
+            $duplicate = BeneficiaryBank::whereIn('beneficiary_id', $bene_ids)
+                ->where(function ($q) {
+                    return $q->when(!empty($this->selected_bank_beneficiary['account_no']), function ($q) {
+                        $q->orWhere('account_no', $this->selected_bank_beneficiary['account_no']);
+                    })->when(!empty($this->selected_bank_beneficiary['iban']), function ($q) {
+                        $q->orWhere('iban', $this->selected_bank_beneficiary['iban']);
+                    });
+                })->select('beneficiary_id')->first();
+
+            if (!empty($duplicate)) {
+
+                $bene = Beneficiary::find($duplicate['beneficiary_id']);
+
+                $this->addError('error', 'Duplication Alert! The bank details for the beneficiary named "' . $bene['first_name'] . ' ' . $bene['last_name'] . '" already exist. Please select from the existing options.');
+                $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
+                $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
+                return;
+            }
+        }
         $this->selected_window = 'confirm';
     }
 
