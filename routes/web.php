@@ -181,7 +181,7 @@ Route::middleware(['auth.allow'])->group(function () {
         return view('mobile.customer-support-details', compact('id'));
     });
 
-    Route::post('upload/documents',[\App\Http\Controllers\Documents\DocumentController::class,'upload']);
+    Route::post('upload/documents', [\App\Http\Controllers\Documents\DocumentController::class, 'upload']);
     //Trust Payments Routes
     Route::get('gateway/trust/payment/{transfer_code}', [\App\Http\Controllers\Gateways\TrustPaymentController::class, 'index']);
     Route::post('gateway/trust/payment/response', [\App\Http\Controllers\Gateways\TrustPaymentController::class, 'response']);
@@ -234,6 +234,16 @@ Route::view('sign-in', 'outer.sign-in')->name('login');
 Route::get('verify/{id}/{email}', function ($id, $email) {
     return view('outer.verify', compact('id', 'email'));
 });
+
+Route::get('mobile/app', function () {
+    $device = \Jenssegers\Agent\Facades\Agent::device();
+    if (in_array($device, ['iPhone', 'iPad'])) {
+        return redirect('https://apps.apple.com/us/app/orium-global-resources/id6463112338');
+    }
+    return redirect('https://play.google.com/store/apps/details?id=com.oriumglobal.resources');
+
+});
+
 //Route::view('forgot-password', 'outer.forgot-password-request');
 
 
