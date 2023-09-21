@@ -15,6 +15,7 @@ use App\Models\Partner\Routing;
 use App\Models\Transfer\Ledger;
 use App\Models\Transfer\StatusTracker;
 use App\Models\Transfer\Transfer;
+use App\Models\Transfer\TransferAdditionalDetail;
 use App\Models\Transfer\TransferBeneficiary;
 use App\Models\Transfer\TransferBeneficiaryBank;
 use App\Models\Transfer\TransferCustomer;
@@ -665,6 +666,19 @@ class SendMoney extends Component
                 'created_on' => 'w',
                 'source_of_fund' => $this->source_of_funds
             ]);
+
+            $ip = isset($_SERVER['HTTP_CF_CONNECTING_IP']) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : null;
+
+            $device = \Jenssegers\Agent\Facades\Agent::device();
+            $platform = \Jenssegers\Agent\Facades\Agent::platform();
+            $browser = \Jenssegers\Agent\Facades\Agent::browser();
+            $version = \Jenssegers\Agent\Facades\Agent::version($platform);
+
+            TransferAdditionalDetail::create([
+                'ip' => $ip,
+                'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
+            ]);
+
 
             Ledger::create([
                 'user_id' => session('user_id'),
