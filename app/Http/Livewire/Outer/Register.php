@@ -6,6 +6,7 @@ use App\Mail\RegisterDone;
 use App\Models\Agent;
 use App\Models\Country\Country;
 use App\Models\Customer\Customer;
+use App\Models\Customer\CustomerDetail;
 use App\Models\User\Leeds;
 use App\Models\User\PasswordReset;
 use App\Models\User\User;
@@ -101,7 +102,7 @@ class Register extends Component
         $this->validate();
         $request = request()->all();
         try {
-
+            $ip = isset($_SERVER['HTTP_CF_CONNECTING_IP']) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : null;
             $sending_country = Country::find($this->sending_country);
             if (empty(env('LOGIN_FROM_ANYWHERE'))) {
                 $iso2 = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null;
@@ -194,6 +195,18 @@ class Register extends Component
                 'phone_code' => $this->code,
                 'send_money_to' => $this->receiving_country,
                 'referral_code' => $this->referral_code
+            ]);
+
+
+            $device = \Jenssegers\Agent\Facades\Agent::device();
+            $platform =\Jenssegers\Agent\Facades\Agent::platform();
+            $browser = \Jenssegers\Agent\Facades\Agent::browser();
+            $version = \Jenssegers\Agent\Facades\Agent::version($platform);
+            CustomerDetail::create([
+                'customer_id' => $customer->id,
+                'ip' => $ip,
+                'registration_device' => $device,
+                'device_details' => $device . ',' .$platform . ' (' .$version . '),' .$browser,
             ]);
 
             if ($this->promotion) {

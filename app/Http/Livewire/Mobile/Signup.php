@@ -7,6 +7,7 @@ use App\Mail\RegisterDone;
 use App\Models\Agent;
 use App\Models\Country\Country;
 use App\Models\Customer\Customer;
+use App\Models\Customer\CustomerDetail;
 use App\Models\Notifications\PushNotificationChannel;
 use App\Models\Notifications\PushNotificationDetail;
 use App\Models\User\Leeds;
@@ -121,6 +122,7 @@ class Signup extends Component
 
 
         try {
+            $ip = isset($_SERVER['HTTP_CF_CONNECTING_IP']) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : null;
             $iso2 = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null;
             if ($this->sending_country['iso2'] != $iso2) {
                 $country_name = Country::where('iso2', $iso2)->first();
@@ -212,6 +214,19 @@ class Signup extends Component
                 'send_money_to' => $this->receiving_country['id'],
                 'referral_code' => $this->referral_code
             ]);
+
+
+            $device = \Jenssegers\Agent\Facades\Agent::device();
+            $platform =\Jenssegers\Agent\Facades\Agent::platform();
+            $browser = \Jenssegers\Agent\Facades\Agent::browser();
+            $version = \Jenssegers\Agent\Facades\Agent::version($platform);
+            CustomerDetail::create([
+                'customer_id' => $customer->id,
+                'ip' => $ip,
+                'registration_device' => $device,
+                'device_details' => $device . ',' .$platform . ' (' .$version . '),' .$browser,
+            ]);
+
             if ($this->promotion) {
                 \App\Models\Customer\CustomerPreference::updateOrCreate(
                     [
