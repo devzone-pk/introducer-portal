@@ -675,6 +675,7 @@ class SendMoney extends Component
             $version = \Jenssegers\Agent\Facades\Agent::version($platform);
 
             TransferAdditionalDetail::create([
+                'transfer_id' => $transfer->id,
                 'ip' => $ip,
                 'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
             ]);
