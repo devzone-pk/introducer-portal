@@ -203,7 +203,7 @@ class SendMoney extends Component
     }
 
 
-        public function mount($request, $redirect = null)
+    public function mount($request, $redirect = null)
     {
         $customer = Customer::where('id', session('customer_id'))->where('type', 'on')->first();
 
