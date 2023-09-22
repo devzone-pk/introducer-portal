@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Outer;
 
 use App\Models\Agent;
 use App\Models\Country\Country;
+use App\Models\Country\SendingReceivingCountry;
 use Devzone\Rms\AdminFee;
 use Devzone\Rms\AllRates;
 use Devzone\Rms\Source;
@@ -50,10 +51,27 @@ class CountryPage extends Component
         } else {
             $this->sending_iso2 = 'GB';
         }
+        $countries = SendingReceivingCountry::from('sending_receiving_countries as sr')
+            ->join('countries as s', 'sr.sending_country_id', '=', 's.id')
+            ->join('countries as r', 'sr.receiving_country_id', '=', 'r.id')
+            ->where('sr.company_id', config('app.company_id'))
+            ->where('sr.status', 't')
+            ->select('s.iso2 as sending', 'r.iso2 as receiving')->get();
 
-        $receiving = Country::where('is_on_receiving', 't')->select('id', 'name', 'currency', 'iso2', 'iso3')->get();
-        $sending = Country::where('is_on_sending', 't')->select('id', 'name', 'currency', 'iso2', 'iso3')->get();
+        $configured_countries = [];//config('app.countries');
+        foreach ($countries->groupBy(['sending', 'receiving'])->toArray() as $key => $value) {
+            $configured_countries[$key] = array_keys($value);
+        }
+
+
+        $sending = Country::whereIn('iso2', array_keys($configured_countries))
+            ->select('id', 'name', 'currency', 'iso2', 'iso3')->get();
+
         $selected_sending = $sending->where('iso2', $this->sending_iso2)->first();
+
+        $receiving = Country::whereIn('iso2', $configured_countries[$selected_sending['iso2']])
+            ->select('id', 'name', 'currency', 'iso2', 'iso3')->get();
+
         if (empty($selected_sending)) {
             $selected_sending = $sending->where('iso2', 'GB')->first();
         }
