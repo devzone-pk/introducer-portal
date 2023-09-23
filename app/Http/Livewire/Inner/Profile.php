@@ -22,7 +22,7 @@ class Profile extends Component
     public $occupation_id;
     public $nationality; //To capture nationality selected from Trait in listening method
     public $city; //To capture city selected from Trait in listening method
-    public $countries=[]; //To find city corresponding to country
+    public $countries = []; //To find city corresponding to country
     public $country_id; //To find city corresponding to country; //To find city corresponding to country
     public $show_password = true;
     public $incomplete_profile = false;
@@ -120,8 +120,6 @@ class Profile extends Component
         $this->countries = Country::whereNull('deleted_at')->get()->toArray();
         $this->ocfetchData();
         $this->nFetchData();
-
-
     }
 
     private function nullCheck($collection): array
@@ -170,6 +168,17 @@ class Profile extends Component
             return;
         }
 
+        $customer_user_ids = Customer::where('id', '!=', session('customer_id'))->where('phone', $this->customer['phone'])
+            ->where('phone_code', $this->customer['code'])->whereNotNull('user_id')->pluck('user_id')->toArray();
+
+
+        if (User::whereIn('id', $customer_user_ids)->where('company_id', env('COMPANY_ID'))->exists()) {
+            $this->addError('phone', 'The phone number has already been taken.');
+            return;
+        }
+
+
+
         $customer = Customer::find(session('customer_id'));
         $update = [
             'phone' => $this->customer['phone'],
@@ -200,21 +209,16 @@ class Profile extends Component
             $doc = $this->validateUserDocuments($customer);
             if ($doc['status'] != true) {
                 return $this->redirect('/user/document/add?incomplete=true');
-            }else{
+            } else {
                 return $this->redirect('/send/money');
             }
         }
         if ($result) session()->flash('success', 'Profile Updated Successfully.');
         else session()->flash('error', 'Unknown error while uploading profile. Please try again later.');
-
-
-
     }
 
     public function toggleEdit()
     {
         $this->edit = !$this->edit;
     }
-
-
 }
