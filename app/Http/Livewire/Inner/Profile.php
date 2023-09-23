@@ -164,7 +164,7 @@ class Profile extends Component
         $isValid = $phoneUtil->isValidNumber($number);
         if (!$isValid) {
 
-            $this->addError('phone', 'Please enter valid phone number.');
+            $this->addError('customer.phone', 'Please enter valid phone number.');
             return;
         }
 
@@ -173,7 +173,7 @@ class Profile extends Component
 
 
         if (User::whereIn('id', $customer_user_ids)->where('company_id', env('COMPANY_ID'))->exists()) {
-            $this->addError('phone', 'The phone number has already been taken.');
+            $this->addError('customer.phone', 'The phone number has already been taken.');
             return;
         }
 
