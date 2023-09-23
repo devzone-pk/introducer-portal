@@ -72,7 +72,7 @@ class Profile extends Component
     public function mount($modal = false)
     {
         $req = request()->all();
-        if(!empty($req['success'])){
+        if (!empty($req['success'])) {
             $this->success = $req['success'];
         }
         $this->modal = $modal;
@@ -108,7 +108,6 @@ class Profile extends Component
         if (!empty($req['incomplete'])) {
             $this->incomplete_profile = true;
         }
-
     }
 
 
@@ -130,6 +129,15 @@ class Profile extends Component
             if (!$isValid) {
 
                 $this->addError('phone', 'Please enter valid phone number.');
+                return;
+            }
+
+            $customer_user_ids = Customer::where('id', '!=', session('customer_id'))->where('phone', $this->phone)
+                ->where('phone_code', $this->code)->whereNotNull('user_id')->pluck('user_id')->toArray();
+
+
+            if (User::whereIn('id', $customer_user_ids)->where('company_id', env('COMPANY_ID'))->exists()) {
+                $this->addError('phone', 'The phone number has already been taken.');
                 return;
             }
 
@@ -177,12 +185,10 @@ class Profile extends Component
             }
             $this->success = 'Customer profile has been updated.';
             return $this->redirect('/mobile/profile?success=Customer profile has been updated.');
-
         } catch (Exception $e) {
             DB::rollBack();
             $this->addError('alert', $e->getMessage());
         }
-
     }
 
     public function updatedDay($value)
@@ -191,14 +197,12 @@ class Profile extends Component
             $this->day = 31;
         } else {
             $this->makeDOB();
-
         }
     }
 
     private function makeDOB()
     {
         $this->dob = $this->year . '-' . str_pad($this->month, 2, "0", STR_PAD_LEFT) . '-' . str_pad($this->day, 2, "0", STR_PAD_LEFT);
-
     }
 
     public function updatedMonth($value)
@@ -206,12 +210,9 @@ class Profile extends Component
 
         if ($value > 0 && $value <= 12) {
             $this->makeDOB();
-
-
         } else {
             $this->month = 12;
         }
-
     }
 
     public function updatedYear($value)
@@ -230,5 +231,4 @@ class Profile extends Component
         $this->resetErrorBag();
         $this->resetValidation();
     }
-
 }
