@@ -43,7 +43,7 @@ class SendMoney extends Component
             ->where('sr.status', 't')
             ->select('s.iso2 as sending', 'r.iso2 as receiving')->get();
 
-        $configured_countries = [];//config('app.countries');
+        $configured_countries = []; //config('app.countries');
         foreach ($countries->groupBy(['sending', 'receiving'])->toArray() as $key => $value) {
             $configured_countries[$key] = array_keys($value);
         }
@@ -68,17 +68,16 @@ class SendMoney extends Component
             ->select('id', 'name', 'currency', 'iso2', 'iso3')->get();
 
         $this->receiving = $receiving->toArray();
-
     }
 
     public function render()
     {
 
-//        $receiving = Country::when(!empty($this->search_receiving), function ($q) {
-//            $q->where('name', 'LIKE', '%' . $this->search_receiving . '%');
-//        })->where('is_on_receiving', 't')
-//            ->select('id', 'name', 'currency', 'iso2', 'iso3')
-//            ->get()->toArray();
+        //        $receiving = Country::when(!empty($this->search_receiving), function ($q) {
+        //            $q->where('name', 'LIKE', '%' . $this->search_receiving . '%');
+        //        })->where('is_on_receiving', 't')
+        //            ->select('id', 'name', 'currency', 'iso2', 'iso3')
+        //            ->get()->toArray();
 
         return view('livewire.outer.send-money');
     }
