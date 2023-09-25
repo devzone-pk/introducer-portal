@@ -33,6 +33,11 @@ class IsUserLoggedIn
                 if (!Session::has('email')) {
                     Session::put(json_decode($login_detail, true));
                 }
+
+                $tk = PersonalAccessToken::findToken($token);
+                if (empty($tk)) {
+                    throw new Exception('Unauthorized.');
+                }
                 return $next($request);
             }
 
@@ -59,7 +64,6 @@ class IsUserLoggedIn
             Redis::set("user.auth.{$token}", json_encode($details), 'EX', 36000);
             return redirect($_SERVER['REQUEST_URI']);
             return $next($request);
-
         } catch (\Exception $e) {
 
             $request->session()->flush();
@@ -69,8 +73,6 @@ class IsUserLoggedIn
             }
             return redirect('login');
         }
-
-
     }
 
     private function getToken($request)
