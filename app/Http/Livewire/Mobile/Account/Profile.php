@@ -135,10 +135,11 @@ class Profile extends Component
             $customer_user_ids = Customer::where('id', '!=', session('customer_id'))->where('phone', $this->phone)
                 ->where('phone_code', $this->code)->whereNotNull('user_id')->pluck('user_id')->toArray();
 
-
+            if(!empty($customer_user_ids)){
             if (User::whereIn('id', $customer_user_ids)->where('company_id', env('COMPANY_ID'))->exists()) {
                 $this->addError('phone', 'The phone number has already been taken.');
                 return;
+            }
             }
 
 
