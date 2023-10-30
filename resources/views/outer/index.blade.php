@@ -312,7 +312,7 @@
     </section>
 
 
-    <section class="py-8 pt-md-11 pb-md-12 bg-black">
+    <section class="py-8 pt-md-11 pb-md-12 bg-black d-none">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8 text-center">
