@@ -32,7 +32,8 @@
                         <h1 class="display-3 fw-bold text-white text-center  text-lg-start  " id="welcomeHeadingSource">
                             Send Money to <br/>
                             <span class="text-white "
-                                  data-typed='{"strings": {{ $countries->pluck('name')->toJson() }} }'></span>
+                                  data-typed='{"strings": Nigeria }'></span>
+
                         </h1>
 
 
