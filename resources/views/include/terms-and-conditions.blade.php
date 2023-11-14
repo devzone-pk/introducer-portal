@@ -56,7 +56,7 @@
                 </p>
                 <p class="text-3 ">
                     If you would like a copy of the terms and conditions or additional information about our
-                    services, please contact us at <a href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a>
+                    services, please contact us at <a href="mailto:info@oriumpay.com">info@oriumpay.com</a>
 
                 </p>
                 <h2 class="">Our Services</h2>
@@ -483,7 +483,7 @@
                 <p class="text-3 ">
                     For any problems that you face concerning the service, please contact
                     the {{ config('app.company_name') }} head
-                    office by emailing us at <a href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a>
+                    office by emailing us at <a href="mailto:info@oriumpay.com">info@oriumpay.com</a>
                     calling
                     us at 07821662833,
                     or writing to us at the following address: {{ config('app.company_name') }} , {{ config('app.company_address') }}

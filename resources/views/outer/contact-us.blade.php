@@ -71,7 +71,7 @@
                     <!-- Link -->
                     <div class="mb-5 mb-md-0">
                         <p class="h4 text-secondary fw-light">
-                             info@oriumglobalresources.com
+                             info@oriumpay.com
                         </p>
                     </div>
 

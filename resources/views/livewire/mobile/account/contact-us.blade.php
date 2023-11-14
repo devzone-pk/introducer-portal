@@ -50,12 +50,12 @@
                         </a>
                     </li>
                     <li class="profile-list">
-                        <a target="_blank" href="mailto: info@oriumglobalresources.com" class="item">
+                        <a target="_blank" href="mailto: info@oriumpay.com" class="item">
                             <img src="{{ asset('mobile/assets/img/icon/email11.png') }}" alt="image"
                                  class="image me-1 rounded-0">
                             <div class="in">
                                 <div>
-                                    <p class="fs-16px mb-0 "> info@oriumglobalresources.com</p>
+                                    <p class="fs-16px mb-0 "> info@oriumpay.com</p>
                                     <p class="fs-16px m-0 text-muted">Email</p>
 
                                 </div>

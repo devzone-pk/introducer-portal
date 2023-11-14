@@ -148,7 +148,7 @@
 
                 {{--                            <!-- Text -->--}}
                 {{--                            <p class="fs-sm mb-0">--}}
-                {{--                                 info@oriumglobalresources.com--}}
+                {{--                                 info@oriumpay.com--}}
                 {{--                            </p>--}}
 
                 {{--                        </div>--}}

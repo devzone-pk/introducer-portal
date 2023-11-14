@@ -325,7 +325,7 @@
                     Landline: +44(0)1224453978<br>
                     Phone: +44(0)7821662833<br>
                     Whatsapp: +44(0)7821662833<br>
-                    Email: info@oriumglobalresources.com
+                    Email: info@oriumpay.com
                 </p>
 
                 <!-- Social -->
