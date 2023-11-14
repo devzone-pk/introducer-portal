@@ -49,7 +49,7 @@
 
                         <div class="mt-7 mb-7  mb-md-0 text-lg-end  text-center d-lg-none  ">
 
-                            <img src="{{ asset('assets/ogr-qr-new1.jpg') }}" style="width: 160px" alt="">
+                            <img src="{{ asset('assets/ogr-qr-new1.png') }}" style="width: 160px" alt="">
                             <p class="fw-bold mt-5 mt-lg-0  ms-4 " style="  color: #c99430;">Scan this Qr code with your
                                 <br> phone
                                 to download our app!</p>
@@ -70,7 +70,7 @@
                 <p class="fw-bold mt-3 mt-lg-4  ms-4 me-4 " style="  color: #c99430;">Scan this Qr code with your
                     <br> phone
                     to download our app!</p>
-                <img src="{{ asset('assets/ogr-qr-new1.jpg') }}" style="width: 150px" alt="">
+                <img src="{{ asset('assets/ogr-qr-new1.png') }}" style="width: 150px" alt="">
             </div>
         </div> <!-- / .container -->
     </section>
