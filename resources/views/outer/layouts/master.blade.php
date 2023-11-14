@@ -190,13 +190,12 @@
                 {{--                <img class="w-25" src="{{ env('COMPANY_LOGO') }}" alt="..." class="footer-brand img-fluid mb-2">--}}
                 <h6 class="fw-bold mt-2 text-uppercase text-white">
 
-                    About Orium Global Resources</h6>
+                    About Orium Pay</h6>
                 <!-- Text -->
                 <p class="text-white fs-14px mb-2 my-2">
-                    Orium Global Resources Limited is a company registered
-                    in Scotland (registration number SC769545).
-                    Orium Global Resources Limited is registered with
-                    Financial Conduct Authority (FCA).
+                    OriumPay is a trading name of Orium Global Resources Limited that is a company registered in
+                    Scotland (registration number SC769545). Orium Global Resources Limited is registered with Financial
+                    Conduct Authority (FCA).
                     <br>
                     <br>
                     Registration details are as follows:
@@ -204,7 +203,7 @@
                     <br>
                     PSD FRN:998336<br>
                     HMRC:XXML00000152409<br>
-                    ICO Registration # :ZA794718<br>
+                    ICO Registration # :ZB622346<br>
                     FCA FRN:927726<br>
                 </p>
             </div>

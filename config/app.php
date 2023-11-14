@@ -55,7 +55,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
     'company_id' => env('COMPANY_ID', '1'),
     'asset_url' => env('ASSET_URL', null),
-    'company_name' => 'Orium Global Resources',
+    'company_name' => 'Orium Pay',
     'company_address' => '13 Smithfield Road, Aberdeen, Scotland, AB24 4NR',
 
     /*
