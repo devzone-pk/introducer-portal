@@ -32,7 +32,7 @@
                         <h1 class="display-3 fw-bold text-white text-center  text-lg-start  " id="welcomeHeadingSource">
                             Send Money to <br/>
                             <span class="text-white "
-                                  data-typed='{"strings": Nigeria }'></span>
+                                  data-typed='{"strings": {{ $countries->where('name','Nigeria')->pluck('name')->toJson() }} }'></span>
 
                         </h1>
 
