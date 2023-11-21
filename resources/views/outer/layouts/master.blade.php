@@ -45,7 +45,7 @@
 
         <!-- Brand -->
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ env('COMPANY_LOGO') }}" class="navbar-brand-img" alt="...">
+            <img src="{{ env('COMPANY_LOGO') }}" style="width: 90px;" alt="...">
         </a>
 
         <!-- Toggler -->
