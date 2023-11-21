@@ -3,7 +3,7 @@
 
     <div class="d-flex flex-column justify-content-center align-items-center mt-3">
         <div class="image-wrapper text-center">
-            <img src="{{ asset('assets/img/ogr-crop.png') }}" alt="image" width="70px"
+            <img src="{{ asset('assets/img/oriump.jpg') }}" alt="image" width="70px"
                  class="imaged   rounded">
         </div>
         <div>
