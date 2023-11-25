@@ -138,7 +138,7 @@
 
                                 <input class="form-control  @error('front') is-invalid @enderror" type="file"
                                        id="formFilefront" wire:model="front" wire:loading.remove
-                                       accept="image/*, .pdf"
+                                       accept=".pdf, .jpg, .jpeg, .png, .bmp, .svg, .webp"
                                        capture
                                        @change="setImage">
 
@@ -177,7 +177,7 @@
 
                                 <input class="form-control  @error('back') is-invalid @enderror" type="file"
                                        id="formFilefront" wire:model="back" wire:loading.remove
-                                       accept="image/*, .pdf"
+                                       accept=".pdf, .jpg, .jpeg, .png, .bmp, .svg, .webp"
                                        capture
                                        @change="setImage"
                                 >

@@ -28,7 +28,7 @@ class AddReceiver extends Component
     protected $rules = [
         'first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
         'last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
-        'phone' => 'required|string',
+        'phone' => 'required|regex:/^[0-9]+$/',
         'code' => 'required|string',
         'country.id' => 'required|integer',
         'relation.relationship_id' => 'required|integer'
@@ -39,7 +39,8 @@ class AddReceiver extends Component
     ];
     protected $messages = [
         'first_name.regex' => 'The first name must only contain letters.',
-        'last_name.regex' => 'The last name must only contain letters.'
+        'last_name.regex' => 'The last name must only contain letters.',
+        'phone.regex' => 'The phone number must contain only digits.'
     ];
 
     public function render()

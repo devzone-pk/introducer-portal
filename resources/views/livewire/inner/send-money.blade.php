@@ -386,7 +386,7 @@
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">{{ $selected_beneficiary['code'] ?? ''  }}</span>
                                                 <input type="text"
-                                                       class="form-control fs-16px  allow-number @error('selected_beneficiary.phone') is-invalid @enderror"
+                                                       class="form-control only-just-numbers fs-16px   @error('selected_beneficiary.phone') is-invalid @enderror"
                                                        wire:model.defer="selected_beneficiary.phone"
                                                        placeholder="Phone number">
                                                 @error('selected_beneficiary.phone')

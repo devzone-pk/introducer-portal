@@ -175,6 +175,9 @@
         $(document).on('keyup', '.only-numbers', function () {
             this.value = this.value.replace(/[^0-9.,]/gi, '');
         });
+        $(document).on('keyup', '.only-just-numbers', function () {
+            this.value = this.value.replace(/[^0-9,]/gi, '');
+        });
 
 
         $(document).on('keyup', '.only-alpha', function () {

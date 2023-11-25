@@ -441,9 +441,9 @@
                                                    wire:model.defer="selected_beneficiary.code" placeholder="Code">
                                         </div>
                                         <div class="col-8">
-                                            <input type="number"
+                                            <input type="tel"
                                                    wire:model.defer="selected_beneficiary.phone"
-                                                   class="form-control   allow-number @error('selected_beneficiary.phone') is-invalid @enderror"
+                                                   class="form-control only-just-numbers   @error('selected_beneficiary.phone') is-invalid @enderror"
                                                    placeholder="Phone Number">
                                             <i class="clear-input">
                                                 <ion-icon name="close-circle"></ion-icon>

@@ -27,7 +27,7 @@
                         </label>
 
                         <!-- Input -->
-                        <input class="form-control"  wire:model.defer="name" type="text" placeholder="Full name">
+                        <input class="form-control only-alpha"  wire:model.defer="name" type="text" placeholder="Full name">
 
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                         </label>
 
                         <!-- Input -->
-                        <input class="form-control" wire:model.defer="contact" type="text" placeholder="+44">
+                        <input class="form-control country-code" wire:model.defer="contact" type="text" placeholder="+44">
 
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                         </label>
 
                         <!-- Input -->
-                        <textarea class="form-control"  wire:model.defer="message"  rows="5" placeholder="Tell us what we can help you with!"></textarea>
+                        <textarea class="form-control alphanumeric"  wire:model.defer="message"  rows="5" placeholder="Tell us what we can help you with!"></textarea>
 
                     </div>
                 </div>

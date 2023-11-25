@@ -24,7 +24,7 @@ class AddRecipients extends Component
     protected $rules = [
         'first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
         'last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
-        'phone' => 'required|string',
+        'phone' => 'required|regex:/^[0-9]+$/',
         'code' => 'required|string',
         'country' => 'required|integer',
         'relation' => 'required|integer'
@@ -39,6 +39,7 @@ class AddRecipients extends Component
         'last_name.regex' => 'The last name must only contain letters.',
         'last_name.required' => 'Last name is required.',
         'phone.required' => 'Phone is required.',
+        'phone.regex' => 'Phone number must contain only digits.',
         'code.required' => 'Code is required.',
         'country.required' => 'Country is required.',
         'relation.required' => 'Relation is required.',
