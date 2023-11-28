@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Customer\Customer;
+use Carbon\Carbon;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
@@ -23,25 +24,39 @@ class IsUserLoggedIn
 
     public function handle(Request $request, Closure $next)
     {
-
         try {
+
             $token = $this->getToken($request);
 
+            $tk = PersonalAccessToken::findToken($token);
+
+            if (empty($tk) || $tk->status == 'f') {
+                throw new Exception('Unauthorized.');
+            }
+
             if (Redis::exists("user.auth.{$token}")) {
+
+                $last_used_at = Carbon::parse($tk->last_used_at);
+                $inactivity = $last_used_at->diffInMinutes(Carbon::now());
+
+                if ($inactivity >= 30) {
+                    throw new Exception('Timed Out.');
+                }
+
                 $login_detail = Redis::get("user.auth.{$token}");
                 $request->json()->add(json_decode($login_detail, true));
                 if (!Session::has('email')) {
                     Session::put(json_decode($login_detail, true));
                 }
 
-                $tk = PersonalAccessToken::findToken($token);
-                if (empty($tk)) {
-                    throw new Exception('Unauthorized.');
-                }
+                PersonalAccessToken::where('tokenable_id', $tk->tokenable_id)
+                    ->where('status', 't')
+                    ->update([
+                        'last_used_at' => now(),
+                    ]);
+
                 return $next($request);
             }
-
-            $tk = PersonalAccessToken::findToken($token);
 
             $login = $tk->tokenable()->first();
             $user = Customer::from('customers as c')
@@ -56,21 +71,31 @@ class IsUserLoggedIn
             $user = $user->first()->toArray();
             $details = $this->userDetails($login, $user, $token);
 
-            //if (!Session::has('email')) {
+         
             Session::flush();
             Session::put($details);
-            //}
+           
             $request->json()->add($details);
             Redis::set("user.auth.{$token}", json_encode($details), 'EX', 36000);
+
             return redirect($_SERVER['REQUEST_URI']);
-            return $next($request);
         } catch (\Exception $e) {
+
+            $user_id = $request->session()->get('user_id');
+            if (!empty($user_id)) {
+                PersonalAccessToken::where('tokenable_id', $user_id)
+                    ->where('status', 't')
+                    ->update([
+                        'status' => 'f'
+                    ]);
+            }
 
             $request->session()->flush();
             Session::flush();
             if (!empty($token)) {
-                Redis::delete("user.auth.{$token}");
+                Redis::del("user.auth.{$token}");
             }
+
             return redirect('login');
         }
     }
@@ -84,8 +109,6 @@ class IsUserLoggedIn
                 return $token[1];
             } else if (!empty($request->session()->has('token'))) {
                 return $request->session()->get('token');
-            } else if (!empty($request->token)) {
-                return $request->token;
             } else {
                 throw new Exception('Unauthorized.');
             }
