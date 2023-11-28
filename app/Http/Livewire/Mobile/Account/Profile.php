@@ -51,7 +51,7 @@ class Profile extends Component
         'dob' => 'nullable|date|date_format:d-m-Y|before:-17 years',
         'gender' => 'required|string|in:f,m',
         'phone' => 'required|regex:/^[0-9]+$/',
-        'code' => 'required|string',
+        'code' => 'required|regex:/^[0-9]+$/',
         'nationality.id' => 'required|integer',
         'occupation.id' => 'required|integer',
         'place_of_birth' => 'required|string'
