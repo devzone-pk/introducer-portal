@@ -1014,7 +1014,7 @@ class SendMoney extends Component
                 'selected_beneficiary.first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
                 'selected_beneficiary.last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
                 'selected_beneficiary.phone' => 'required|regex:/^[0-9]+$/',
-                'selected_beneficiary.code' => 'required|regex:/^[0-9]+$/',
+                'selected_beneficiary.code' => 'required|string|regex:/^[0-9+]+$/',
                 'selected_beneficiary.relationship_id' => 'required',
                 'selected_sending_reason.id' => 'required',
             ];
