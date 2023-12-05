@@ -873,6 +873,7 @@ class SendMoney extends Component
         if (empty($this->selected_beneficiary['id'])) {
 
             $duplicate = Beneficiary::where('country_id', $this->receiving_country['id'])
+                ->where('customer_id',session('customer_id'))
                 ->where(function ($q) {
                     return $q->orWhere(function ($w) {
                         return $w->where('first_name', $this->selected_beneficiary['first_name'])->where('last_name', $this->selected_beneficiary['last_name']);
@@ -919,6 +920,8 @@ class SendMoney extends Component
                 $bene_ids = $bene_ids->pluck('id')->toArray();
 
                 $duplicate = BeneficiaryBank::whereIn('beneficiary_id', $bene_ids)
+                    ->join('beneficiaries as b','b.id','=','beneficiary_banks.beneficiary_id')
+                    ->where('b.customer_id',session('customer_id'))
                     ->where(function ($q) {
                         return $q->when(!empty($this->selected_bank_beneficiary['account_no']), function ($q) {
                             $q->orWhere('account_no', $this->selected_bank_beneficiary['account_no']);
