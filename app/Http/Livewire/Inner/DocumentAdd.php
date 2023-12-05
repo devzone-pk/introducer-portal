@@ -45,8 +45,8 @@ class DocumentAdd extends Component
         'type' => 'required|integer',
         'issuance' => 'required|date|before_or_equal:today|date_format:Y-m-d',
         'expiry' => 'required|date|after:issuance|after:today|date_format:Y-m-d',
-        'front' => 'required|file|mimes:jpeg,png,bmp,pdf',
-        'back' => 'nullable|file|mimes:jpeg,png,bmp,pdf',
+        'front' => 'required|file|mimes:pdf,jpg,jpeg,png,bmp,svg,webp',
+        'back' => 'nullable|file|mimes:pdf, jpg, jpeg, png, bmp,svg,webp',
         'issuer_country_id' => 'required',
         'doc_type' => 'required'
     ];

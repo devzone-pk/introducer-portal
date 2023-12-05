@@ -1013,8 +1013,8 @@ class SendMoney extends Component
             $rules = [
                 'selected_beneficiary.first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
                 'selected_beneficiary.last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
-                'selected_beneficiary.phone' => 'required|string',
-                'selected_beneficiary.code' => 'required|string',
+                'selected_beneficiary.phone' => 'required|regex:/^[0-9]+$/',
+                'selected_beneficiary.code' => 'required|string|regex:/^[0-9+]+$/',
                 'selected_beneficiary.relationship_id' => 'required',
                 'selected_sending_reason.id' => 'required',
             ];
@@ -1040,7 +1040,7 @@ class SendMoney extends Component
                 'amounts.receive_amount' => 'required|string',
                 'selected_beneficiary.first_name' => 'required|string',
                 'selected_beneficiary.last_name' => 'required|string',
-                'selected_beneficiary.phone' => 'required|string',
+                'selected_beneficiary.phone' => 'required|regex:/^[0-9]+$/',
                 'selected_beneficiary.relationship_id' => 'required',
                 'selected_sending_method.id' => 'required',
                 'selected_sending_reason.id' => 'required',

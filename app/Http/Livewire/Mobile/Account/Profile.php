@@ -50,8 +50,8 @@ class Profile extends Component
         'last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
         'dob' => 'nullable|date|date_format:d-m-Y|before:-17 years',
         'gender' => 'required|string|in:f,m',
-        'phone' => 'required|string',
-        'code' => 'required|string',
+        'phone' => 'required|regex:/^[0-9]+$/',
+        'code' => 'required|string|regex:/^[0-9+]+$/',
         'nationality.id' => 'required|integer',
         'occupation.id' => 'required|integer',
         'place_of_birth' => 'required|string'
@@ -66,7 +66,8 @@ class Profile extends Component
 
     protected $messages = [
         'first_name.regex' => 'The first name must only contain letters.',
-        'last_name.regex' => 'The last name must only contain letters.'
+        'last_name.regex' => 'The last name must only contain letters.',
+        'phone.regex'=>'The phone number must contain only digits .'
     ];
 
     public function mount($modal = false)

@@ -209,7 +209,7 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1">{{ $customer['phonecode'] }}</span>
                                     <input type="text"
-                                           class="form-control @error('customer.phone') is-invalid @enderror"
+                                           class="form-control only-just-numbers @error('customer.phone') is-invalid @enderror"
                                            wire:model.defer="customer.phone"
                                            placeholder="Mobile number">
                                     @error('customer.phone')

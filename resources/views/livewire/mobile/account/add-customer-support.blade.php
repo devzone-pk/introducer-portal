@@ -46,7 +46,7 @@
                     <div class="input-wrapper">
 
                             <textarea
-                                    class="form-control   @error('message') is-invalid @enderror"
+                                    class="form-control only-alphanum   @error('message') is-invalid @enderror"
 
                                     wire:model.defer="message" placeholder="Message"
                                     cols="30" rows="5"></textarea>

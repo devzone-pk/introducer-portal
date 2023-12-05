@@ -72,7 +72,7 @@
                     @endif
                     <div class="mt-4">
                         <label for="message" class="form-label">Message</label>
-                        <textarea wire:model.defer="complaint.message" class="form-control"
+                        <textarea wire:model.defer="complaint.message" class="form-control only-alphanum "
                                   placeholder="Enter your message here."
                                   id="message"
                                   rows="5"></textarea>

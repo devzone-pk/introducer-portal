@@ -24,11 +24,15 @@ class AddComplaint extends Component
     public $type;
     protected $rules = [
         'complaint.complain_type' => 'required|integer',
-        'complaint.message' => 'required|string',
+        'complaint.message' => 'required|regex:/^[a-zA-Z0-9]+$/',
     ];
     protected $validationAttributes = [
         'complaint.complain_type' => 'Complain Type',
         'complaint.message' => 'Message',
+    ];
+    protected $messages=[
+        'complaint.message.regex'=>'Message must contain alphabets and numbers.',
+
     ];
 
     public function mount($type, $transfer_id = null, $category = null)

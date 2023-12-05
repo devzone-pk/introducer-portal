@@ -81,9 +81,9 @@ text-align: left;"
                                        wire:model.defer="code" placeholder="Code">
                             </div>
                             <div class="col-8">
-                                <input type="number"
+                                <input type="tel"
                                        wire:model.defer="phone"
-                                       class="form-control allow-number pe-2 @error('phone') is-invalid @enderror"
+                                       class="form-control only-just-numbers pe-2 @error('phone') is-invalid @enderror"
                                        placeholder="Phone Number">
                                 <i class="clear-input">
                                     <ion-icon name="close-circle"></ion-icon>

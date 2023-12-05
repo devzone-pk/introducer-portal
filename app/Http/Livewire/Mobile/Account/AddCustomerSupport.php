@@ -28,7 +28,7 @@ class AddCustomerSupport extends Component
 
     protected $rules = [
         'type.id' => 'required|integer',
-        'message' => 'required|string',
+        'message' => 'required|regex:/^[a-zA-Z0-9]+$/',
     ];
     protected $validationAttributes = [
         'type.id' => 'Complain Type',
@@ -37,6 +37,10 @@ class AddCustomerSupport extends Component
 
     protected $listeners = [
         'resetErrors' => 'resetErrors'
+    ];
+    protected $messages=[
+        'complaint.message.regex' => 'Message must contain only alphabets and digits',
+
     ];
 
     public function mount($transfer_id = null, $category = null)

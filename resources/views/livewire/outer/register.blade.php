@@ -118,7 +118,7 @@
                             <label class="form-label  mb-1  d-none" for="">Phone</label>
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1">{{ $code  }}</span>
-                                <input type="number" class="form-control @error('phone') is-invalid @enderror"
+                                <input type="tel" class="form-control only-just-numbers @error('phone') is-invalid @enderror"
                                        wire:model.lazy="phone"
                                        placeholder="Mobile number">
                                 @error('phone')

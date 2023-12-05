@@ -77,7 +77,7 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1">{{$code}}</span>
 
-                                <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                <input type="text" class="form-control only-just-numbers @error('phone') is-invalid @enderror"
                                        wire:model.defer="phone"
                                        placeholder="Phone number">
                                 @error('phone')
