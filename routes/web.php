@@ -220,6 +220,7 @@ Route::get('/', function () {
     $countries = \App\Models\Country\Country::select('name')->where('is_on_receiving', 't')->get();
     return view('outer.index', compact('countries'));
 })->name('index');
+Route::view('account/delete/request', 'outer.delete');
 
 Route::get('send-money-to/{iso2}', function ($iso2) {
     return view('outer.country', compact('iso2'));
