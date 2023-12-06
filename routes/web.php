@@ -220,7 +220,6 @@ Route::get('/', function () {
     $countries = \App\Models\Country\Country::select('name')->where('is_on_receiving', 't')->get();
     return view('outer.index', compact('countries'));
 })->name('index');
-Route::view('account/delete/request', 'outer.delete');
 
 Route::get('send-money-to/{iso2}', function ($iso2) {
     return view('outer.country', compact('iso2'));
@@ -232,6 +231,7 @@ Route::view('faqs', 'outer.help')->name('help');
 Route::view('contact-us', 'outer.contact-us')->name('contact-us');
 Route::view('sign-up', 'outer.sign-up')->name('register');
 Route::view('sign-in', 'outer.sign-in')->name('login');
+Route::view('account/delete/request', 'outer.delete');
 Route::get('verify/{id}/{email}', function ($id, $email) {
     return view('outer.verify', compact('id', 'email'));
 });

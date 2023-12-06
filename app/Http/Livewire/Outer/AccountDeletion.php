@@ -39,17 +39,22 @@ class AccountDeletion extends Component
                 ->select('customers.id','user_id')
                 ->first();
 
-                $email_already_exists = \App\Models\AccountDeletion::where('email',$this->email)->exists();
+            $email_already_exists = \App\Models\AccountDeletion::where('email',$this->email)->where('reason',$this->reason);
 
-                if(!$email_already_exists){
-                    \App\Models\AccountDeletion::create([
-                        'user_id' => optional($customer)->user_id,
-                        'customer_id' => optional($customer)->id,
-                        'email' => $this->email,
-                        'company_id' => config('app.company_id'),
-                        'reason' => $this->reason,
-                    ]);
-                }
+            if(!$email_already_exists->exists()){
+                \App\Models\AccountDeletion::create([
+                    'user_id' => optional($customer)->user_id,
+                    'customer_id' => optional($customer)->id,
+                    'email' => $this->email,
+                    'company_id' => config('app.company_id'),
+                    'reason' => $this->reason,
+                ]);
+            }else{
+                $email_already_exists->update([
+                    'user_id' => optional($customer)->user_id,
+                    'customer_id' => optional($customer)->id
+                ]);
+            }
 
                     $this->success = 'Your request for deletion of this account is being processed... ';
                     $this->reset('email','reason');

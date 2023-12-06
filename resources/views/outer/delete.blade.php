@@ -16,9 +16,6 @@
                     </h1>
 
                     <!-- Text -->
-                    <p class="lead text-white-75 mb-0">
-                      Easily Delete Your Account
-                    </p>
 
                 </div>
             </div> <!-- / .row -->
