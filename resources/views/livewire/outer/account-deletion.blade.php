@@ -12,7 +12,7 @@
             
 
             <p>
-                When you delete your Riz Remit account, we take this matter seriously and exert our utmost
+                When you delete your Orium Pay account, we take this matter seriously and exert our utmost
                 effort to erase the data referenced in the provided points linked to your account. Nevertheless,
                 we are obligated to retain transaction information for a minimum of 5 years due to financial
                 regulatory processes.
