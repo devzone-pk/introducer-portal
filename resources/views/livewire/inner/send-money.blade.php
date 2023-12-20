@@ -300,21 +300,52 @@
 
                                 <div class="row my-5">
                                     <div class="col-12 col-md-4">
+                                        @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0)
+                                            @php
+                                                $free_fee_check = true;
+                                            @endphp
+                                            @php
+                                                $free_fee_check = true;
+                                            @endphp
+                                            <p class="text-danger text-decoration-line-through m-0 fw-bold">
+                                                {{ $selected_payer['source_currency'] ?? '' }}
+                                                {{ number_format($free_fee_offer['save'], 2) }}
+                                            </p>
+                                            <p class="mb-0 fw-bold fs-20px text-success">
+                                                {{ $selected_payer['source_currency'] ?? '' }}
+                                                {{ number_format($amounts['fees'], 2) }}
+                                            </p>
+                                            <p class="mb-0 text-gray fs-14px">Fee Free Transfer</p>
+                                        @else
+                                            @if (!empty($coupon['receive_amount']))
+                                                &nbsp;
+                                            @endif
                                         <p class="mb-0 fw-bold fs-20px">{{ $selected_payer['source_currency'] ?? '' }} {{ number_format($amounts['fees'],2) }}</p>
                                         <p class="mb-0 text-gray fs-14px">Total Fees</p>
+                                            @endif
                                     </div>
 
                                     <div class="col-12 col-md-4">
+                                        @if (!empty($free_fee_check))
+                                            &nbsp;
+                                        @endif
                                         <p class="mb-0 fw-bold fs-20px">{{$selected_payer['source_currency'] ?? ''}} {{ number_format($amounts['total'],2) }}</p>
                                         <p class="mb-0 text-gray fs-14px">Total To Pay</p>
                                     </div>
 
                                     <div class="col-12 col-md-4">
+                                        @if (!empty($free_fee_check))
+                                            &nbsp;
+                                        @endif
                                         <p class="mb-0 fw-bold fs-20px">{{$selected_payer['currency'] ?? ''}} {{ $amounts['receive_amount'] }} </p>
                                         <p class="mb-0 text-gray fs-14px">Recipient Gets</p>
                                     </div>
                                 </div>
-
+                                @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0 && !empty($free_fee_offer['message']))
+                                    <div class="p-4 bg-success rounded mb-2">
+                                        <p class="text-white mb-0">{{ ucfirst($free_fee_offer['message']) }}</p>
+                                    </div>
+                                @endif
 
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary  shadow-none">Continue</button>
@@ -693,6 +724,11 @@
                                     <p class="text-gray fs-12px mb-0">Sending Amount</p>
                                 </div>
                                 <div class="col-6">
+                                    @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0)
+                                        <p class="m-0 fs-6">
+                                            &nbsp;
+                                        </p>
+                                    @endif
                                     <p class=" fs-16px mb-0 ">1 {{ $selected_payer['source_currency'] ?? '' }}
                                         = {{ number_format($selected_payer['rate_after_spread'] ?? 0,2) }}
                                         {{ $selected_payer['currency'] ?? '' }}</p>
@@ -702,9 +738,21 @@
 
 
                                 <div class="col-6">
+                                    @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0)
+                                        <p class="text-danger text-decoration-line-through m-0 p-0 fs-6 fw-bold">
+                                            {{ number_format($free_fee_offer['save'], 2) }}
+                                            {{ $selected_payer['source_currency'] ?? '' }}
+                                        </p>
+                                        <p class="text-success mb-0 fs-16px fw-bold">
+                                            {{ number_format($amounts['fees'], 2) }}
+                                            {{ $selected_payer['source_currency'] ?? '' }}
+                                        </p>
+                                        <p class="text-gray fs-12px mb-0">Fee Free Transfer</p>
+                                    @else
                                     <p class=" fs-16px mb-0 ">{{ number_format($amounts['fees'] ?? 0,2) }}
                                         {{ $selected_payer['source_currency'] ?? '' }}</p>
                                     <p class="text-gray fs-12px mb-0">Transaction Fee</p>
+                                        @endif
                                 </div>
                                 <div class="col-6">
                                     <p class=" fs-16px mb-0 ">{{  $amounts['receive_amount']  }}

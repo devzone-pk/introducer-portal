@@ -34,6 +34,7 @@ use App\Traits\Modals\SendingMethods;
 use App\Traits\Modals\SendingReasons;
 use App\Traits\Validation\UserDocumentValidation;
 use App\Traits\Validation\UserProfileValidation;
+use App\Traits\Validation\ValidateFreeFeeOffer;
 use Devzone\Rms\AdminFee;
 use Devzone\Rms\AllRates;
 use Devzone\Rms\Source;
@@ -60,7 +61,7 @@ class SendMoney extends Component
         BeneficiaryList, Relationship, SendingReasons,
 
         BeneficiaryBankList, SearchBanks,
-        UserProfileValidation, UserDocumentValidation;
+        UserProfileValidation, UserDocumentValidation,ValidateFreeFeeOffer;
 
     public $receiving_country_id;
     public $receiving_country = [];  // Detail of country where customer will send money
@@ -447,6 +448,13 @@ class SendMoney extends Component
 
             $rates = new AdminFee($source);
             $fees = $rates->apply();
+
+            $this->validateFreeFeeOffer();
+            if ($this->free_fee_offer['status'] && !empty($this->free_fee_offer['id']) && $fees > 0) {
+                $this->free_fee_offer['save'] = $fees;
+                $fees = 0;
+            }
+
             $this->amounts['fees'] = round($fees, 2);
             $this->amounts['total'] = $fees + $this->amounts['sending_amount'];
 
@@ -664,6 +672,7 @@ class SendMoney extends Component
             TransferDetail::create([
                 'transfer_id' => $transfer->id,
                 'created_on' => 'w',
+                'fee_free_transfer_id' => $this->free_fee_offer['id'],
                 'source_of_fund' => $this->source_of_funds
             ]);
 
@@ -782,6 +791,13 @@ class SendMoney extends Component
         //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
         $rates = new AdminFee($source);
         $fees = $rates->apply();
+
+        $this->validateFreeFeeOffer();
+        if ($this->free_fee_offer['status'] && !empty($this->free_fee_offer['id']) && $fees > 0) {
+            $this->free_fee_offer['save'] = $fees;
+            $fees = 0;
+        }
+
         if (round($this->amounts['fees'], 2) != round($fees, 2)) {
             throw new \Exception('New fees has been updated against your sending amount. Please try again');
         }

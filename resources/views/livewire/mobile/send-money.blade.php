@@ -335,9 +335,22 @@
                                             <a href="#" class="item">
                                                 <div class="in">
                                                     <div>
+                                                        @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0)
+                                                            <p class="text-danger text-decoration-line-through m-0">
+                                                                {{ $selected_payer['source_currency'] ?? '' }}
+                                                                {{ number_format($free_fee_offer['save'], 2) }}
+                                                            </p>
+                                                            <p class="text-success fs-16px mb-0 fw-bold">
+                                                                {{ $selected_payer['source_currency'] ?? '' }}
+                                                                {{ number_format($amounts['fees'], 2) }}
+                                                            </p>
+                                                            <p class="fs-16px m-0 text-muted">Fee Free Transfer</p>
+                                                            <span
+                                                                    class="text-success fw-bold">{{ ucfirst($free_fee_offer['message']) }}</span>
+                                                        @else
                                                         <p class="fs-16px mb-0">{{ $selected_payer['source_currency'] ?? '' }} {{ number_format($amounts['fees'],2) }}</p>
                                                         <p class="fs-16px m-0 text-muted">Total Fees</p>
-
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </a>
@@ -768,8 +781,23 @@
 
                                 <tr>
                                     <td>Fee</td>
+                                    @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0)
+                                        <th>
+                                             <span class="text-success fs-15px mb-1 fw-bold" style="line-height: 7px">
+                                                {{ number_format($amounts['fees'], 2) }}
+                                                 {{ $selected_payer['source_currency'] ?? '' }}
+                                            </span>
+                                             <span class="text-danger text-decoration-line-through m-0 p-0"
+                                                   style="font-size: 14px;">
+                                            {{ number_format($free_fee_offer['save'], 2) }}
+                                                 {{ $selected_payer['source_currency'] ?? '' }}
+                                        </span>
+
+                                        </th>
+                                    @else
                                     <th>{{ number_format($amounts['fees'] ?? 0,2) }}
                                         {{ $selected_payer['source_currency'] ?? '' }}</th>
+                                        @endif
                                 </tr>
                                 <tr>
                                     <td>Total Amount</td>
