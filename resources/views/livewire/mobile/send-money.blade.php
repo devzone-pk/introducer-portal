@@ -344,7 +344,7 @@
                                                                 {{ $selected_payer['source_currency'] ?? '' }}
                                                                 {{ number_format($amounts['fees'], 2) }}
                                                             </p>
-                                                            <p class="fs-16px m-0 text-muted">Fee Free Transfer</p>
+                                                            <p class="fs-16px m-0 text-muted">Total Fees</p>
                                                             <span
                                                                     class="text-success fw-bold">{{ ucfirst($free_fee_offer['message']) }}</span>
                                                         @else
@@ -811,6 +811,13 @@
                                         {{ $selected_payer['currency'] ?? '' }}</th>
                                 </tr>
                             </table>
+
+                            @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0 && !empty($free_fee_offer['message']))
+                                <div class="p-2 bg-success rounded mt-2">
+                                    <p class="text-white mb-0">{{ ucfirst($free_fee_offer['message']) }}</p>
+                                </div>
+                            @endif
+
                             <div class="row  ">
 
 
