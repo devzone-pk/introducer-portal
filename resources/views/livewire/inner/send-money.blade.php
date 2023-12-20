@@ -304,9 +304,6 @@
                                             @php
                                                 $free_fee_check = true;
                                             @endphp
-                                            @php
-                                                $free_fee_check = true;
-                                            @endphp
                                             <p class="text-danger text-decoration-line-through m-0 fw-bold">
                                                 {{ $selected_payer['source_currency'] ?? '' }}
                                                 {{ number_format($free_fee_offer['save'], 2) }}
@@ -315,14 +312,14 @@
                                                 {{ $selected_payer['source_currency'] ?? '' }}
                                                 {{ number_format($amounts['fees'], 2) }}
                                             </p>
-                                            <p class="mb-0 text-gray fs-14px">Fee Free Transfer</p>
                                         @else
                                             @if (!empty($coupon['receive_amount']))
                                                 &nbsp;
                                             @endif
                                         <p class="mb-0 fw-bold fs-20px">{{ $selected_payer['source_currency'] ?? '' }} {{ number_format($amounts['fees'],2) }}</p>
-                                        <p class="mb-0 text-gray fs-14px">Total Fees</p>
                                             @endif
+                                            <p class="mb-0 text-gray fs-14px">Total Fees</p>
+
                                     </div>
 
                                     <div class="col-12 col-md-4">
@@ -747,12 +744,11 @@
                                             {{ number_format($amounts['fees'], 2) }}
                                             {{ $selected_payer['source_currency'] ?? '' }}
                                         </p>
-                                        <p class="text-gray fs-12px mb-0">Fee Free Transfer</p>
                                     @else
                                     <p class=" fs-16px mb-0 ">{{ number_format($amounts['fees'] ?? 0,2) }}
                                         {{ $selected_payer['source_currency'] ?? '' }}</p>
-                                    <p class="text-gray fs-12px mb-0">Transaction Fee</p>
                                         @endif
+                                        <p class="text-gray fs-12px mb-0">Transaction Fee</p>
                                 </div>
                                 <div class="col-6">
                                     <p class=" fs-16px mb-0 ">{{  $amounts['receive_amount']  }}
@@ -764,6 +760,11 @@
                                         {{ $selected_payer['source_currency'] ?? '' }}</p>
                                     <p class="text-gray fs-12px mb-0">Total Amount to Pay</p>
                                 </div>
+                                @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0 && !empty($free_fee_offer['message']))
+                                    <div class="p-4 bg-success rounded mb-2">
+                                        <p class="text-white mb-0">{{ ucfirst($free_fee_offer['message']) }}</p>
+                                    </div>
+                                @endif
                                 <div class="col-xs-12  ">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Payment Method</label>

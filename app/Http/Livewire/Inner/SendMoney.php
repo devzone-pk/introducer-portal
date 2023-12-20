@@ -974,6 +974,7 @@ class SendMoney extends Component
             }
         })->validate();
         //  $this->dispatchBrowserEvent('goUp');
+        if (empty($this->selected_bank_beneficiary['id']) && (!empty($this->selected_bank_beneficiary['iban']) || !empty($this->selected_bank_beneficiary['account_no']))) {
 
         $bene_ids = Beneficiary::where('customer_id', session('customer_id'))
             ->select('id')->get();
@@ -1000,6 +1001,7 @@ class SendMoney extends Component
                 $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
                 $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
                 return;
+            }
             }
         }
         $this->selected_window = 'confirm';

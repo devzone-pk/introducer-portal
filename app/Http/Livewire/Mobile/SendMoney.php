@@ -943,6 +943,7 @@ class SendMoney extends Component
                             $q->orWhere('iban', $this->selected_bank_beneficiary['iban']);
                         });
                     })->select('beneficiary_id')->first();
+                dump($duplicate);
 
                 if (!empty($duplicate)) {
 

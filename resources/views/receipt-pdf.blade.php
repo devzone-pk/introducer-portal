@@ -12,7 +12,7 @@
 
         <div class="d-flex justify-content-between  align-items-center">
             <div>
-                <img src="{{ env('COMPANY_LOGO') }}" class="navbar-brand-img" alt="">
+                <img src="{{ env('COMPANY_LOGO') }}"  style="width: 90px;" class="navbar-brand-img" alt="">
             </div>
             <div class="text-center">
                 <p class="mb-0">Transfer Date & Time</p>
