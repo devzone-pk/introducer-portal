@@ -341,7 +341,7 @@
                                         <p class="mb-0 text-gray fs-14px">Recipient Gets</p>
                                     </div>
                                 </div>
-                                @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0)
+                                @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0 && !empty($free_fee_offer['message']))
                                     <div class="p-4 bg-success rounded mb-2">
                                         <p class="text-white mb-0">{{ ucfirst($free_fee_offer['message']) }}</p>
                                     </div>
