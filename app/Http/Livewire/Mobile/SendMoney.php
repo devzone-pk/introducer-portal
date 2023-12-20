@@ -386,7 +386,12 @@ class SendMoney extends Component
             $this->validateFreeFeeOffer();
             if ($this->free_fee_offer['status'] && !empty($this->free_fee_offer['id']) && $fees > 0) {
                 $this->free_fee_offer['save'] = $fees;
-                $fees = 0;
+                if (!empty($this->free_fee_offer['percentage'])) {
+                    $dis = round(($fees * ($this->free_fee_offer['percentage'] / 100)), 2);
+                    $fees = $fees - $dis;
+                } else {
+                    $fees = 0;
+                }
             }
             $this->amounts['fees'] = round($fees, 2);
             $this->amounts['total'] = $fees + $this->amounts['sending_amount'];
@@ -755,7 +760,12 @@ class SendMoney extends Component
         $this->validateFreeFeeOffer();
         if ($this->free_fee_offer['status'] && !empty($this->free_fee_offer['id']) && $fees > 0) {
             $this->free_fee_offer['save'] = $fees;
-            $fees = 0;
+            if (!empty($this->free_fee_offer['percentage'])) {
+                $dis = round(($fees * ($this->free_fee_offer['percentage'] / 100)), 2);
+                $fees = $fees - $dis;
+            } else {
+                $fees = 0;
+            }
         }
 
         if (round($this->amounts['fees'], 2) != round($fees, 2)) {
