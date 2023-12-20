@@ -316,9 +316,9 @@
                                             @if (!empty($coupon['receive_amount']))
                                                 &nbsp;
                                             @endif
-                                        <p class="mb-0 fw-bold fs-20px">{{ $selected_payer['source_currency'] ?? '' }} {{ number_format($amounts['fees'],2) }}</p>
-                                            @endif
-                                            <p class="mb-0 text-gray fs-14px">Total Fees</p>
+                                            <p class="mb-0 fw-bold fs-20px">{{ $selected_payer['source_currency'] ?? '' }} {{ number_format($amounts['fees'],2) }}</p>
+                                        @endif
+                                        <p class="mb-0 text-gray fs-14px">Total Fees</p>
 
                                     </div>
 
@@ -339,7 +339,7 @@
                                     </div>
                                 </div>
                                 @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0 && !empty($free_fee_offer['message']))
-                                    <div class="p-4 bg-success rounded mb-2">
+                                    <div class="p-4 bg-success rounded mb-4">
                                         <p class="text-white mb-0">{{ ucfirst($free_fee_offer['message']) }}</p>
                                     </div>
                                 @endif
@@ -514,7 +514,8 @@
                                     <div class="col-xs-12">
                                         <div class="mb-3">
                                             <label class="form-label mb-1">Bank</label>
-                                            <select name="" onchange="myFunction()" wire:model="selected_bank_beneficiary.bank_id"
+                                            <select name="" onchange="myFunction()"
+                                                    wire:model="selected_bank_beneficiary.bank_id"
                                                     class="form-select fs-16px @error('selected_bank_beneficiary.bank_id') is-invalid @enderror">
                                                 <option value="">Select</option>
                                                 @foreach(collect($sb_data)->sortBy('name')->toArray() as $s)
@@ -535,14 +536,15 @@
                                         <div class="col-xs-12">
                                             <div class="mb-3">
                                                 <label class="form-label mb-1">Branch Name</label>
-                                                <select name="" wire:model="selected_bank_beneficiary.branch_name" id="select2_dropdown" onchange="branchChange()"
+                                                <select name="" wire:model="selected_bank_beneficiary.branch_name"
+                                                        id="select2_dropdown" onchange="branchChange()"
                                                         class="form-select fs-16px select2_dropdown  @error('selected_bank_beneficiary.branch_name') is-invalid @enderror">
                                                     <option value="">Select</option>
                                                     @foreach($branches as $dist=>$ss)
                                                         <optgroup label="{{$dist}}"></optgroup>
- 
+
                                                         @foreach(collect($ss)->sortBy('branch_name')->toArray() as $s)
- 
+
                                                             <option value="{{ $s['branch_name'] }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $s['branch_name'] }}</option>
                                                         @endforeach
                                                     @endforeach
@@ -701,7 +703,6 @@
                                         </div>
                                     @endif
 
-
                                 @endif
                                 @if(strtolower($receiving_method) == 'cash')
                                     <div class="col-6">
@@ -745,10 +746,10 @@
                                             {{ $selected_payer['source_currency'] ?? '' }}
                                         </p>
                                     @else
-                                    <p class=" fs-16px mb-0 ">{{ number_format($amounts['fees'] ?? 0,2) }}
-                                        {{ $selected_payer['source_currency'] ?? '' }}</p>
-                                        @endif
-                                        <p class="text-gray fs-12px mb-0">Transaction Fee</p>
+                                        <p class=" fs-16px mb-0 ">{{ number_format($amounts['fees'] ?? 0,2) }}
+                                            {{ $selected_payer['source_currency'] ?? '' }}</p>
+                                    @endif
+                                    <p class="text-gray fs-12px mb-0">Transaction Fee</p>
                                 </div>
                                 <div class="col-6">
                                     <p class=" fs-16px mb-0 ">{{  $amounts['receive_amount']  }}
@@ -761,8 +762,10 @@
                                     <p class="text-gray fs-12px mb-0">Total Amount to Pay</p>
                                 </div>
                                 @if (!empty($free_fee_offer['status']) && !empty($free_fee_offer['id']) && $free_fee_offer['save'] > 0 && !empty($free_fee_offer['message']))
-                                    <div class="p-4 bg-success rounded mb-2">
-                                        <p class="text-white mb-0">{{ ucfirst($free_fee_offer['message']) }}</p>
+                                    <div class=" col-12 ">
+                                        <div class=" p-4 bg-success rounded">
+                                            <p class="text-white mb-0">{{ ucfirst($free_fee_offer['message']) }}</p>
+                                        </div>
                                     </div>
                                 @endif
                                 <div class="col-xs-12  ">
@@ -883,7 +886,7 @@
             set('selected_bank_beneficiary.branch_name', data);
         });
 
-        window.addEventListener('existingBranch', function(event) {
+        window.addEventListener('existingBranch', function (event) {
 
             // console.log('existingBranch event triggered');
             // console.log('Selected value:', event.detail);
@@ -895,14 +898,14 @@
 
     });
 
-    function myFunction(){
+    function myFunction() {
         setTimeout(function () {
             $('#select2_dropdown').select2();
         }, 400);
     }
 
 
-    function branchChange(){
+    function branchChange() {
         var data = $('#select2_dropdown').select2("val");
 
         @this.

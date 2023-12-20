@@ -70,6 +70,7 @@ trait ValidateFreeFeeOffer
                 $this->free_fee_offer['id'] = $offer['id'];
                 $this->free_fee_offer['status'] = true;
                 $this->free_fee_offer['percentage'] = $offer['percentage'];
+                $this->free_fee_offer['message'] = $offer['description'];
             }
         }
     }
