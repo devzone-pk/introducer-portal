@@ -41,6 +41,7 @@ use Devzone\Rms\AllRates;
 use Devzone\Rms\Source;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
@@ -296,10 +297,7 @@ class SendMoney extends Component
 
     public function updatedAmountsCouponCode($value)
     {
-
         $this->validateCouponCode($value);
-
-
     }
 
 //sorted.
@@ -660,6 +658,7 @@ class SendMoney extends Component
                 'date' => date('Y-m-d'),
                 'added_by' => session('user_id')
             ]);
+
             if ($this->coupon['receive_amount'] > 0) {
                 Ledger::create([
                     'user_id' => session('user_id'),
@@ -1128,55 +1127,77 @@ class SendMoney extends Component
 
     private function validateCouponCode($value)
     {
-
         $this->reset('coupon');
         $this->calculateRate();
+        $sending_amount = preg_replace("/[^0-9.]/", "", $this->amounts['sending_amount']); //filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+
+        Log::error('coupon ' . $value, [
+            'amount' => $sending_amount,
+            'receiving_c' => $this->receiving_country['id'],
+            'session' => session()->all(),
+            // 'sen_me' => $this->selected_sending_method['sending_method_id'],
+            'rec_me' => $this->receiving_method_id
+        ]);
+
         $coupon = Coupon::where('company_id', config('app.company_id'))
             ->where('coupon_code', $value)
-            ->where('start_at', '>=', date('Y-m-d'))
-            ->where('expire_at', '<=', date('Y-m-d'))
+            ->where('expire_at', '>=', date('Y-m-d'))
+            ->where('start_at', '<=', date('Y-m-d'))
             ->whereNull('deleted_at')
-            ->where('min_sending_amount', '<=', $this->amounts['sending_amount'])
+            ->where('min_sending_amount', '<=', $sending_amount)
             ->where(function ($q) {
-                return $q->where('customer_id', session('customer_id'))
+                return $q->orWhere('customer_id', session('customer_id'))
                     ->orWhereNull('customer_id');
             })
             ->where(function ($q) {
-                return $q->where('sending_country_id', session('country_id'))
-                    ->orWhereNull('sending_country_id');
+                return $q->orWhere('sending_country_id', session('country_id'))
+                    ->orWhere('sending_country_id', '0');
             })
             ->where(function ($q) {
-                return $q->where('receiving_country_id', $this->receiving_country['id'])
-                    ->orWhereNull('receiving_country_id');
+                return $q->orWhere('receiving_country_id', $this->receiving_country['id'])
+                    ->orWhere('receiving_country_id', '0');
             })
+            // ->where(function ($q) {
+            //     return $q->orWhere('sending_method_id', $this->selected_sending_method['sending_method_id'])
+            //         ->orWhere('sending_method_id', '0');
+            // })
             ->where(function ($q) {
-                return $q->where('sending_method_id', $this->selected_sending_method['sending_method_id'])
-                    ->orWhereNull('sending_method_id');
+                return $q->orWhere('receiving_method_id', $this->receiving_method_id)
+                    ->orWhere('receiving_method_id', '0');
             })
-            ->where(function ($q) {
-                return $q->where('receiving_method_id', $this->receiving_method_id)
-                    ->orWhereNull('receiving_method_id');
-            })->select('coupon_code', 'id', 'disc_type', 'value')->get();
+            ->select(
+                'coupon_code',
+                'id',
+                'disc_type',
+                'value'
+            )
+            ->get();
+
+
         if ($coupon->isEmpty()) {
             $this->addError('error', 'Invalid coupon code.');
             $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
             $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
             return false;
-
         }
 
         $coupon = $coupon->first()->toArray();
+
         $old = Transfer::from('transfers as t')
             ->join('transfer_details as td', 'td.transfer_id', '=', 't.id')
             ->where('t.customer_id', session('customer_id'))
-            ->where('td.coupon_id', $this->coupon['id'])->get();
-        if ($old->isNotEmpty()) {
+            ->where('td.coupon_id', $coupon['id'])
+            ->exists();
+
+        if ($old) {
             $this->addError('error', 'You have already redeemed this coupon.');
             $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
             $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
             return false;
         }
+
         $this->coupon = $coupon;
+
         if ($coupon['disc_type'] == 'flat') {
             $receiving_amount = $this->selected_payer['rate_after_spread'] * $coupon['value'];
             $this->coupon['receive_amount'] = $receiving_amount;
@@ -1185,7 +1206,7 @@ class SendMoney extends Component
             $this->coupon['receive_amount'] = $receiving_amount;
         }
 
-
+        return true;
     }
 
     private function feeLimitBreech()

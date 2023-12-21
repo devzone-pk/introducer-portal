@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Inner;
 use App\Jobs\EmailIncompleteTransfer;
 use App\Mail\BeneficiaryCreated;
 use App\Mail\BeneficiaryNameChanged;
+use App\Models\Transfer\Coupon;
 use App\Mail\IncompleteTransfer;
 use App\Mail\RegisterDone;
 use App\Mail\TransferCreated;
@@ -185,6 +186,12 @@ class SendMoney extends Component
     public $color_confirm;
     public $color_profile;
     public $color_address;
+
+    public $show_coupon_input = false;
+    public $coupon = [
+        'receive_amount' => 0,
+        'id' => null
+    ];
 
 
     public function documentDone()
@@ -505,6 +512,11 @@ class SendMoney extends Component
     {
         $this->reset(['error']);
 
+        if (!empty($this->amounts['coupon_code'])) {
+            if (!$this->validateCouponCode($this->amounts['coupon_code'])) {
+                return false;
+            }
+        }
 
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
@@ -553,6 +565,13 @@ class SendMoney extends Component
             $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
             return false;
         }
+
+        if (!empty($this->amounts['coupon_code'])) {
+            if (!$this->validateCouponCode($this->amounts['coupon_code'])) {
+                return false;
+            }
+        }
+
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
                 $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
@@ -643,7 +662,7 @@ class SendMoney extends Component
                 'agent_rate' => $this->selected_payer['rate_before_spread'],
                 'main_agent_rate' => $this->selected_payer['main_agent_rate'],
                 'sending_amount' => $this->amounts['sending_amount'],
-                'receiving_amount' => $this->amounts['receive_amount'],
+                'receiving_amount' => $this->amounts['receive_amount'] + $this->coupon['receive_amount'],
                 'agent_charges' => 0,
                 'company_charges' => $this->amounts['fees'],
                 'sending_method_id' => $this->selected_sending_method['sending_method_id'],
@@ -675,6 +694,8 @@ class SendMoney extends Component
 
             TransferDetail::create([
                 'transfer_id' => $transfer->id,
+                'coupon_id' => $this->coupon['id'],
+                'coupon_amount' => $this->coupon['receive_amount'],
                 'created_on' => 'w',
                 'fee_free_transfer_id' => $this->free_fee_offer['id'],
                 'source_of_fund' => $this->source_of_funds
@@ -704,6 +725,19 @@ class SendMoney extends Component
                 'date' => date('Y-m-d'),
                 'added_by' => session('user_id')
             ]);
+
+            if ($this->coupon['receive_amount'] > 0) {
+                Ledger::create([
+                    'user_id' => session('user_id'),
+                    'debit' => $this->coupon['receive_amount'],
+                    'credit' => 0,
+                    'description' => 'INV ' . $transfer->id . '; Payment # ' . $code . '; Coupon Code ' . $this->coupon['coupon_code'] . '; Type ' . $this->coupon['disc_type'] . '; Value ' . $this->coupon['value'],
+                    'admin_charges' => 0,
+                    'agent_charges' => 0,
+                    'date' => date('Y-m-d'),
+                    'added_by' => session('user_id')
+                ]);
+            }
 
             $this->dumpBeneficiary($transfer);
             $this->dumpCustomer($transfer, $customer);
@@ -1163,5 +1197,99 @@ class SendMoney extends Component
             $this->reset('error');
             $this->resetErrorBag('error');
         }
+    }
+
+
+    public function updatedAmountsCouponCode($value)
+    {
+        $this->validateCouponCode($value);
+    }
+
+    public function couponShowInput()
+    {
+        $this->reset('show_coupon_input');
+        $this->show_coupon_input = true;
+    }
+
+    private function validateCouponCode($value)
+    {
+
+        $this->reset('coupon');
+        $this->calculateRate();
+        $sending_amount = preg_replace("/[^0-9.]/", "", $this->amounts['sending_amount']); //filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+
+        Log::error('coupon ' . $value, [
+            'amount' => $sending_amount,
+            'receiving_c' => $this->receiving_country['id'],
+            'session' => session()->all(),
+            // 'sen_me' => $this->selected_sending_method['sending_method_id'],
+            'rec_me' => $this->receiving_method_id
+
+        ]);
+
+
+        $coupon = Coupon::where('company_id', config('app.company_id'))
+            ->where('coupon_code', $value)
+            ->where('expire_at', '>=', date('Y-m-d'))
+            ->where('start_at', '<=', date('Y-m-d'))
+            ->whereNull('deleted_at')
+            ->where('min_sending_amount', '<=', $sending_amount)
+            ->where(function ($q) {
+                return $q->orWhere('customer_id', session('customer_id'))
+                    ->orWhereNull('customer_id');
+            })
+            ->where(function ($q) {
+                return $q->orWhere('sending_country_id', session('country_id'))
+                    ->orWhere('sending_country_id', '0');
+            })
+            ->where(function ($q) {
+                return $q->orWhere('receiving_country_id', $this->receiving_country['id'])
+                    ->orWhere('receiving_country_id', '0');
+            })
+            // ->where(function ($q) {
+            //     return $q->orWhere('sending_method_id', $this->selected_sending_method['sending_method_id'])
+            //         ->orWhere('sending_method_id', '0');
+            // })
+            ->where(function ($q) {
+                return $q->orWhere('receiving_method_id', $this->receiving_method_id)
+                    ->orWhere('receiving_method_id', '0');
+            })
+            ->select('coupon_code', 'id', 'disc_type', 'value')
+            ->get();
+
+        if ($coupon->isEmpty()) {
+            unset($this->amounts['coupon_code']);
+            $this->addError('error', 'Invalid coupon code.');
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+            return false;
+        }
+
+        $coupon = $coupon->first()->toArray();
+
+        $old = Transfer::from('transfers as t')
+            ->join('transfer_details as td', 'td.transfer_id', '=', 't.id')
+            ->where('t.customer_id', session('customer_id'))
+            ->where('td.coupon_id', $coupon['id'])
+            ->exists();
+
+        if ($old) {
+            $this->addError('error', 'You have already redeemed this coupon.');
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+            return false;
+        }
+
+        $this->coupon = $coupon;
+
+        if ($coupon['disc_type'] == 'flat') {
+            $receiving_amount = $this->selected_payer['rate_after_spread'] * $coupon['value'];
+            $this->coupon['receive_amount'] = $receiving_amount;
+        } else {
+            $receiving_amount = $this->selected_payer['rate_after_spread'] * ($this->amounts['sending_amount'] * ($coupon['value'] / 100));
+            $this->coupon['receive_amount'] = $receiving_amount;
+        }
+
+        return true;
     }
 }
