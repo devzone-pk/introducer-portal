@@ -69,6 +69,7 @@ trait ValidateFreeFeeOffer
             if ($count < $offer['fee_free_counter']) {
                 $this->free_fee_offer['id'] = $offer['id'];
                 $this->free_fee_offer['status'] = true;
+                $this->free_fee_offer['message'] = $offer['description'];
                 $this->free_fee_offer['percentage'] = $offer['percentage'];
             }
         }

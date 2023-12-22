@@ -154,6 +154,10 @@
                         <td>{{ $transfer->receiving_currency }} {{ number_format($transfer->receiving_amount,2) }}</td>
                     </tr>
                 </table>
+                @if(!empty(optional($transfer->transferDetails)->fee_free_transfer_id))
+                    <p class="text-center text-success fw-bold"> This transaction benefits from a Fee Free Transfer offer.
+                    </p>
+                @endif
             </div>
         </div>
 
