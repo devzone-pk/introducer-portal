@@ -49,15 +49,15 @@ class Register extends Component
     public $show_referral = false;
     public $coupon_code = false;
 
-   
+
     protected function rules()
     {
         $rules = [
             'first_name' => ['required', 'string', 'regex:/^[a-zA-Z\s]*$/'],
             'last_name' => ['required', 'string', 'regex:/^[a-zA-Z\s]*$/'],
             'email' => ['required', 'email'],
-            'show_referral'=>'nullable|boolean',
-            'coupon_code'=>'nullable|boolean',
+            'show_referral' => 'nullable|boolean',
+            'coupon_code' => 'nullable|boolean',
             'password' => ['required', Password::min(8)->mixedCase()->numbers()],
             'phone' => 'required|regex:/^[0-9]+$/',
             'sending_country' => ['required', 'integer', 'exists:countries,id'],
@@ -66,10 +66,10 @@ class Register extends Component
             'agree' => 'accepted'
         ];
 
-        if(!empty($this->show_referral)){
+        if (!empty($this->show_referral)) {
             $rules['referral_code'] = 'required|string';
         }
-        if(!empty($this->coupon_code)){
+        if (!empty($this->coupon_code)) {
             $rules['sign_up_coupon_code'] = 'required|string';
         }
 
@@ -82,8 +82,8 @@ class Register extends Component
         'last_name.required' => 'Last name field is required.',
         'email.required' => 'Email field is required.',
         'email.email' => 'Email must be of a valid email address.',
-        'referral_code.required'=>'Referral code is required',
-        'sign_up_coupon_code.required'=>'Coupon code is required.',
+        'referral_code.required' => 'Referral code is required',
+        'sign_up_coupon_code.required' => 'Coupon code is required.',
         'password.required' => 'Password field is required.',
         'receiving_country.required' => 'Sending To field is required.',
         'sending_country.required' => 'Sending From field is required.',
@@ -117,7 +117,7 @@ class Register extends Component
 
 
     }
-  
+
     public function signup()
     {
         $this->success = false;
@@ -160,14 +160,16 @@ class Register extends Component
             }
 
             $customer_coupon_matched = false;
-            if (env('SIGNUP_COUPON_CODE') != $this->sign_up_coupon_code) {
-                $this->addError('sign_up_coupon_code', 'Coupon does not match.');
-                return;
-            }else{
-                $customer_coupon_matched = true;
+            if (!empty($this->coupon_code)) {
+                if (env('SIGNUP_COUPON_CODE') != $this->sign_up_coupon_code) {
+                    $this->addError('sign_up_coupon_code', 'Coupon does not match.');
+                    return;
+                } else {
+                    $customer_coupon_matched = true;
+                }
             }
-              
-               
+
+
             DB::beginTransaction();
             $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
             $number = $phoneUtil->parse($this->code . $this->phone, $sending_country['iso2']);
@@ -230,30 +232,26 @@ class Register extends Component
 
             if ($customer_coupon_matched) {
                 FeeFreeTransfer::create([
-                    'company_id' =>$this->company_id,
-                    'sending_country_id' =>$this->sending_country,
-                    'receiving_country_id' =>$this->receiving_country,
+                    'company_id' => $this->company_id,
                     'customer_id' => $customer->id,
-                    'description'=>'Coupon codes are alphanumeric strings used to provide discounts',
-                    'percentage'=>'100',
-                    'fee_free_counter'=>'200',
-                    'start_at' =>\Carbon\Carbon::now()->toDateString(),
-                    'expire_at' => \Carbon\Carbon::now()->addMonth()->toDateString()
-
-
+                    'description' => 'You have been selected for special fee free discount.',
+                    'percentage' => '100',
+                    'fee_free_counter' => '20',
+                    'start_at' => \Carbon\Carbon::now()->toDateString(),
+                    'expire_at' => \Carbon\Carbon::now()->addMonth(6)->toDateString()
                 ]);
-            } 
-           
+            }
+
 
             $device = \Jenssegers\Agent\Facades\Agent::device();
-            $platform =\Jenssegers\Agent\Facades\Agent::platform();
+            $platform = \Jenssegers\Agent\Facades\Agent::platform();
             $browser = \Jenssegers\Agent\Facades\Agent::browser();
             $version = \Jenssegers\Agent\Facades\Agent::version($platform);
             CustomerDetail::create([
                 'customer_id' => $customer->id,
                 'ip' => $ip,
                 'registration_device' => $device,
-                'device_details' => $device . ',' .$platform . ' (' .$version . '),' .$browser,
+                'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
             ]);
 
             if ($this->promotion) {
@@ -275,7 +273,7 @@ class Register extends Component
             DB::commit();
 
 
-            $this->reset(['receiving_country', 'referral_code','sign_up_coupon_code', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
+            $this->reset(['receiving_country', 'referral_code', 'sign_up_coupon_code', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
             $this->success = 'Registration Successful! Please login.';
             $this->dispatchBrowserEvent('open-modal', ['model' => 'success-register']);
         } catch (Exception $exception) {
