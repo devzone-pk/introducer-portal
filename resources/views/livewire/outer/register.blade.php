@@ -147,14 +147,13 @@
                         @if($show_referral)
                         <div class="form-group text-start">
                             <input @if(!empty(request('referral'))) readonly @endif type="text"
-                                   class="form-control only-just-numbers @error('referral_code') is-invalid @enderror"
+                                   class="form-control @error('referral_code') is-invalid @enderror"
                                    placeholder="Referral Code " wire:model.lazy="referral_code">
-                              
                                    @error('referral_code')
                                    <div class="invalid-feedback">
                                        {{ $message }}
                                    </div>
-                                   @endif   
+                                   @enderror
                         </div>
                         @endif
                         <div class="form-check text-start mb-3">
@@ -177,12 +176,9 @@
                                    <div class="invalid-feedback">
                                        {{ $message }}
                                    </div>
-                                   @endif   
+                                   @enderror
                         </div>
                         @endif
-
-
-
 
                         <div class="form-check text-start mb-3">
                             <input wire:model="agree" type="checkbox"

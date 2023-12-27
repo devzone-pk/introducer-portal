@@ -271,7 +271,7 @@ class Register extends Component
             DB::commit();
 
 
-            $this->reset(['receiving_country', 'referral_code', 'sign_up_coupon_code', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
+            $this->reset(['receiving_country', 'referral_code', 'sign_up_coupon_code', 'show_referral','coupon_code', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
             $this->success = 'Registration Successful! Please login.';
             $this->dispatchBrowserEvent('open-modal', ['model' => 'success-register']);
         } catch (Exception $exception) {
