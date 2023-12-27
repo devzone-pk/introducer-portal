@@ -133,7 +133,7 @@
                         <div class="form-check text-start mb-3">
                             <input wire:model="show_referral" type="checkbox"
                                    class="form-check-input @error('show_referral') is-invalid @enderror"
-                                   value="" id="flexCheckDefault">
+                                   value="" id="flexCheckDefaultt">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Do you have any Referral code?
                                
