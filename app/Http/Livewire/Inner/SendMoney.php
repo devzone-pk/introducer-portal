@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Inner;
 use App\Jobs\EmailIncompleteTransfer;
 use App\Mail\BeneficiaryCreated;
 use App\Mail\BeneficiaryNameChanged;
+use App\Models\Transfer\Coupon;
 use App\Mail\IncompleteTransfer;
 use App\Mail\RegisterDone;
 use App\Mail\TransferCreated;
@@ -57,11 +58,20 @@ class SendMoney extends Component
         return view('livewire.inner.send-money');
     }
 
-    use ReceivingCountries, SendingMethods, ReceivingMethods, PayerList, SearchDestination,
-        BeneficiaryList, Relationship, SendingReasons,
+    use ReceivingCountries,
+        SendingMethods,
+        ReceivingMethods,
+        PayerList,
+        SearchDestination,
+        BeneficiaryList,
+        Relationship,
+        SendingReasons,
 
-        BeneficiaryBankList, SearchBanks,
-        UserProfileValidation, UserDocumentValidation,ValidateFreeFeeOffer;
+        BeneficiaryBankList,
+        SearchBanks,
+        UserProfileValidation,
+        UserDocumentValidation,
+        ValidateFreeFeeOffer;
 
     public $receiving_country_id;
     public $receiving_country = [];  // Detail of country where customer will send money
@@ -177,11 +187,16 @@ class SendMoney extends Component
     public $color_profile;
     public $color_address;
 
+    public $show_coupon_input = false;
+    public $coupon = [
+        'receive_amount' => 0,
+        'id' => null
+    ];
+
 
     public function documentDone()
     {
         $this->documents = false;
-
     }
 
     public function addressDone()
@@ -230,7 +245,6 @@ class SendMoney extends Component
             $this->receiving_country_id = $query['receiving_country_id'];
             $this->updatedReceivingCountryId($query['receiving_country_id']);
         }
-
     }
 
 
@@ -252,7 +266,6 @@ class SendMoney extends Component
             $rates = collect($rates);
             $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
-
         } catch (\Exception $e) {
             $this->reset('amounts');
             $this->error = $e->getMessage();
@@ -350,7 +363,6 @@ class SendMoney extends Component
         } else {
             $this->reset(['selected_payer']);
         }
-
     }
 
     public function updatedBeneficiaryId($id)
@@ -365,8 +377,8 @@ class SendMoney extends Component
     {
         if (!empty($id)) {
             $this->selected_bank_beneficiary = collect($this->bb_data)->firstWhere('id', $id);
-            $this->branches = Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->select('branch_name','dist_name')->orderBy('dist_name')->get()->groupBy('dist_name')->toArray();
-            $this->dispatchBrowserEvent('existingBranch',$this->selected_bank_beneficiary['branch_name']);
+            $this->branches = Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->select('branch_name', 'dist_name')->orderBy('dist_name')->get()->groupBy('dist_name')->toArray();
+            $this->dispatchBrowserEvent('existingBranch', $this->selected_bank_beneficiary['branch_name']);
             $this->show_beneficiary_bank = true;
         }
     }
@@ -379,7 +391,7 @@ class SendMoney extends Component
         if (!empty($bank)) {
             $this->selected_bank_beneficiary['bank_id'] = $bank['id'];
             $this->selected_bank_beneficiary['name'] = $bank['name'];
-            $this->branches = Routing::where('bank_name', $bank['name'])->select('branch_name','dist_name')->orderBy('dist_name')->get()->groupBy('dist_name')->toArray();
+            $this->branches = Routing::where('bank_name', $bank['name'])->select('branch_name', 'dist_name')->orderBy('dist_name')->get()->groupBy('dist_name')->toArray();
         }
     }
 
@@ -389,21 +401,21 @@ class SendMoney extends Component
 
         $this->selected_bank_beneficiary['branch_code'] = null;
         if ($name == 'branch_name' && !empty($value)) {
-//            $this->routings = Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->where('branch_name', $value)->select('code')->get()->toArray();
+            //            $this->routings = Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->where('branch_name', $value)->select('code')->get()->toArray();
             $this->selected_bank_beneficiary['branch_code'] = optional(Routing::where('bank_name', $this->selected_bank_beneficiary['name'])->where('branch_name', $value)->select('code')->first())->code;
         }
 
-//        $this->withValidator(function (Validator $validator) {
-//            if ($validator->fails()) {
-//                $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
-//                $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
-//                $this->color_beneficiary = '';
-//                $this->color_confirm = '';
-//            } else {
-//                $this->color_beneficiary = 'success-tab';
-//                $this->color_confirm = '';
-//            }
-//        })->validate();
+        //        $this->withValidator(function (Validator $validator) {
+        //            if ($validator->fails()) {
+        //                $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+        //                $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+        //                $this->color_beneficiary = '';
+        //                $this->color_confirm = '';
+        //            } else {
+        //                $this->color_beneficiary = 'success-tab';
+        //                $this->color_confirm = '';
+        //            }
+        //        })->validate();
     }
 
     private function calculateRate()
@@ -411,8 +423,8 @@ class SendMoney extends Component
         $this->reset(['error']);
         $this->resetErrorBag();
 
-        $this->amounts['sending_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['sending_amount']);//filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
-        $this->amounts['receive_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']);//filter_var($this->amounts['receive_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $this->amounts['sending_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['sending_amount']); //filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $this->amounts['receive_amount'] = preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']); //filter_var($this->amounts['receive_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
 
 
         try {
@@ -432,9 +444,9 @@ class SendMoney extends Component
                 $this->amounts['sending_amount'] = round($this->amounts['receive_amount'] / $this->selected_payer['rate_after_spread'], 2);
             }
 
-//            $this->validate([
-//                'amounts.sending_amount' => 'required|numeric|gte:1',
-//            ]);
+            //            $this->validate([
+            //                'amounts.sending_amount' => 'required|numeric|gte:1',
+            //            ]);
 
             $source = new Source();
             $source->userAgentId = session('user_agent_id');
@@ -452,7 +464,12 @@ class SendMoney extends Component
             $this->validateFreeFeeOffer();
             if ($this->free_fee_offer['status'] && !empty($this->free_fee_offer['id']) && $fees > 0) {
                 $this->free_fee_offer['save'] = $fees;
-                $fees = 0;
+                if (!empty($this->free_fee_offer['percentage'])) {
+                    $dis = round(($fees * ($this->free_fee_offer['percentage'] / 100)), 2);
+                    $fees = $fees - $dis;
+                } else {
+                    $fees = 0;
+                }
             }
 
             $this->amounts['fees'] = round($fees, 2);
@@ -470,15 +487,11 @@ class SendMoney extends Component
                 $this->reset('amounts');
                 return false;
             }
-
-
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             $this->addError('error', $e->getMessage());
             $this->feeLimitBreech();
             $this->reset('amounts');
-
-
         }
     }
 
@@ -499,6 +512,11 @@ class SendMoney extends Component
     {
         $this->reset(['error']);
 
+        if (!empty($this->amounts['coupon_code'])) {
+            if (!$this->validateCouponCode($this->amounts['coupon_code'])) {
+                return false;
+            }
+        }
 
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
@@ -520,7 +538,6 @@ class SendMoney extends Component
         $this->benefetchData();
         $this->dispatchBrowserEvent('close-modal', ['model' => 'exchangeActionSheet']);
         $this->selected_window = 'beneficiary';
-
     }
 
     public function addNewBeneficiary()
@@ -548,6 +565,13 @@ class SendMoney extends Component
             $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
             return false;
         }
+
+        if (!empty($this->amounts['coupon_code'])) {
+            if (!$this->validateCouponCode($this->amounts['coupon_code'])) {
+                return false;
+            }
+        }
+
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
                 $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
@@ -561,21 +585,21 @@ class SendMoney extends Component
             DB::beginTransaction();
             $customer = Customer::where('id', session('customer_id'))->where('type', 'on')->first();
 
-//            $this->validateUserProfile($customer);
-//            $this->validateUserDocuments($customer);
+            //            $this->validateUserProfile($customer);
+            //            $this->validateUserDocuments($customer);
 
             if ($this->documents || $this->profile || $this->address) {
 
-//                if ($this->profile == true) {
-//                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
-//                }
-//                if ($this->profile == false && $this->address == true) {
-//                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
-//                }
-//                if ($this->profile == false && $this->address == false && $this->documents == true) {
-//
-//                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
-//                }
+                //                if ($this->profile == true) {
+                //                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
+                //                }
+                //                if ($this->profile == false && $this->address == true) {
+                //                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
+                //                }
+                //                if ($this->profile == false && $this->address == false && $this->documents == true) {
+                //
+                //                    $this->dispatchBrowserEvent('open-modal', ['model' => 'show-alert-profile']);
+                //                }
 
 
                 //  return;
@@ -601,7 +625,6 @@ class SendMoney extends Component
                     //$mail = (new BeneficiaryNameChanged($old_bene, $this->beneficiaryMapping()))->onQueue('portal_' . config('app.company_id'))->afterCommit();
                     //Mail::to(session('email'))->queue($mail);
                 }
-
             }
 
 
@@ -639,7 +662,7 @@ class SendMoney extends Component
                 'agent_rate' => $this->selected_payer['rate_before_spread'],
                 'main_agent_rate' => $this->selected_payer['main_agent_rate'],
                 'sending_amount' => $this->amounts['sending_amount'],
-                'receiving_amount' => $this->amounts['receive_amount'],
+                'receiving_amount' => $this->amounts['receive_amount'] + $this->coupon['receive_amount'],
                 'agent_charges' => 0,
                 'company_charges' => $this->amounts['fees'],
                 'sending_method_id' => $this->selected_sending_method['sending_method_id'],
@@ -671,6 +694,8 @@ class SendMoney extends Component
 
             TransferDetail::create([
                 'transfer_id' => $transfer->id,
+                'coupon_id' => $this->coupon['id'],
+                'coupon_amount' => $this->coupon['receive_amount'],
                 'created_on' => 'w',
                 'fee_free_transfer_id' => $this->free_fee_offer['id'],
                 'source_of_fund' => $this->source_of_funds
@@ -701,6 +726,19 @@ class SendMoney extends Component
                 'added_by' => session('user_id')
             ]);
 
+            if ($this->coupon['receive_amount'] > 0) {
+                Ledger::create([
+                    'user_id' => session('user_id'),
+                    'debit' => $this->coupon['receive_amount'],
+                    'credit' => 0,
+                    'description' => 'INV ' . $transfer->id . '; Payment # ' . $code . '; Coupon Code ' . $this->coupon['coupon_code'] . '; Type ' . $this->coupon['disc_type'] . '; Value ' . $this->coupon['value'],
+                    'admin_charges' => 0,
+                    'agent_charges' => 0,
+                    'date' => date('Y-m-d'),
+                    'added_by' => session('user_id')
+                ]);
+            }
+
             $this->dumpBeneficiary($transfer);
             $this->dumpCustomer($transfer, $customer);
             EmailIncompleteTransfer::dispatch(session('name'), $transfer->id, session('email'))
@@ -728,7 +766,7 @@ class SendMoney extends Component
                 return $this->redirect('/transfer/success?transfer_code=' . $code);
             }
 
-//
+            //
 
 
         } catch (\Exception $e) {
@@ -795,7 +833,12 @@ class SendMoney extends Component
         $this->validateFreeFeeOffer();
         if ($this->free_fee_offer['status'] && !empty($this->free_fee_offer['id']) && $fees > 0) {
             $this->free_fee_offer['save'] = $fees;
-            $fees = 0;
+            if (!empty($this->free_fee_offer['percentage'])) {
+                $dis = round(($fees * ($this->free_fee_offer['percentage'] / 100)), 2);
+                $fees = $fees - $dis;
+            } else {
+                $fees = 0;
+            }
         }
 
         if (round($this->amounts['fees'], 2) != round($fees, 2)) {
@@ -806,8 +849,6 @@ class SendMoney extends Component
         if (round($this->amounts['total'], 2) != round($sending_amount + $fees, 2)) {
             throw new \Exception("Rates has been updated. Please try again.");
         }
-
-
     }
 
     private function beneficiaryMapping()
@@ -889,7 +930,6 @@ class SendMoney extends Component
     {
         $this->reset(['selected_bank_beneficiary']);
         $this->show_beneficiary_bank = true;
-
     }
 
     public function validateBeneficiaryDetail()
@@ -927,13 +967,13 @@ class SendMoney extends Component
         if (empty($this->selected_beneficiary['id'])) {
 
             $duplicate = Beneficiary::where('country_id', $this->receiving_country['id'])
-                ->where('customer_id',session('customer_id'))
+                ->where('customer_id', session('customer_id'))
                 ->where(function ($q) {
                     return $q->orWhere(function ($w) {
                         return $w->where('first_name', $this->selected_beneficiary['first_name'])->where('last_name', $this->selected_beneficiary['last_name']);
                     })
                         ->orWhere('phone', $this->selected_beneficiary['phone']);
-                })->where('customer_id',session('customer_id'))->exists();
+                })->where('customer_id', session('customer_id'))->exists();
 
             if ($duplicate) {
                 $this->addError('error', 'Duplication Alert! The beneficiary already exists. Please choose from the existing receiver list.');
@@ -976,32 +1016,32 @@ class SendMoney extends Component
         //  $this->dispatchBrowserEvent('goUp');
         if (empty($this->selected_bank_beneficiary['id']) && (!empty($this->selected_bank_beneficiary['iban']) || !empty($this->selected_bank_beneficiary['account_no']))) {
 
-        $bene_ids = Beneficiary::where('customer_id', session('customer_id'))
-            ->select('id')->get();
+            $bene_ids = Beneficiary::where('customer_id', session('customer_id'))
+                ->select('id')->get();
 
-        if ($bene_ids->isNotEmpty()) {
-            $bene_ids = $bene_ids->pluck('id')->toArray();
+            if ($bene_ids->isNotEmpty()) {
+                $bene_ids = $bene_ids->pluck('id')->toArray();
 
-            $duplicate = BeneficiaryBank::whereIn('beneficiary_id', $bene_ids)
-                ->join('beneficiaries as b','b.id','=','beneficiary_banks.beneficiary_id')
-                ->where('b.customer_id',session('customer_id'))
-                ->where(function ($q) {
-                    return $q->when(!empty($this->selected_bank_beneficiary['account_no']), function ($q) {
-                        $q->orWhere('account_no', $this->selected_bank_beneficiary['account_no']);
-                    })->when(!empty($this->selected_bank_beneficiary['iban']), function ($q) {
-                        $q->orWhere('iban', $this->selected_bank_beneficiary['iban']);
-                    });
-                })->select('beneficiary_id')->first();
+                $duplicate = BeneficiaryBank::whereIn('beneficiary_id', $bene_ids)
+                    ->join('beneficiaries as b', 'b.id', '=', 'beneficiary_banks.beneficiary_id')
+                    ->where('b.customer_id', session('customer_id'))
+                    ->where(function ($q) {
+                        return $q->when(!empty($this->selected_bank_beneficiary['account_no']), function ($q) {
+                            $q->orWhere('account_no', $this->selected_bank_beneficiary['account_no']);
+                        })->when(!empty($this->selected_bank_beneficiary['iban']), function ($q) {
+                            $q->orWhere('iban', $this->selected_bank_beneficiary['iban']);
+                        });
+                    })->select('beneficiary_id')->first();
 
-            if (!empty($duplicate)) {
+                if (!empty($duplicate)) {
 
-                $bene = Beneficiary::find($duplicate['beneficiary_id']);
+                    $bene = Beneficiary::find($duplicate['beneficiary_id']);
 
-                $this->addError('error', 'Duplication Alert! The bank details for the beneficiary named "' . $bene['first_name'] . ' ' . $bene['last_name'] . '" already exist. Please select from the existing options.');
-                $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
-                $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
-                return;
-            }
+                    $this->addError('error', 'Duplication Alert! The bank details for the beneficiary named "' . $bene['first_name'] . ' ' . $bene['last_name'] . '" already exist. Please select from the existing options.');
+                    $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
+                    $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
+                    return;
+                }
             }
         }
         $this->selected_window = 'confirm';
@@ -1018,7 +1058,6 @@ class SendMoney extends Component
         } else {
             $this->selected_window = $window;
         }
-
     }
 
     public function handleBackNavigation()
@@ -1046,10 +1085,7 @@ class SendMoney extends Component
             } elseif ($this->selected_window == 'transfer') {
                 return $this->redirect('/mobile/dashboard');
             }
-
         }
-
-
     }
 
     protected function rules()
@@ -1087,7 +1123,6 @@ class SendMoney extends Component
             foreach ($this->validation as $r) {
                 $rules['selected_bank_beneficiary.' . $r['name']] = $r['validation'];
             }
-
         }
         if ($this->selected_window == 'confirm') {
             $rules = [
@@ -1135,7 +1170,7 @@ class SendMoney extends Component
         if (empty($this->selected_payer['id'])) {
             return true;
         }
-        $receive_amount = preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']);//filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $receive_amount = preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']); //filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
         $payer = Payer::find($this->selected_payer['id']);
         $error_message = "You cannot send less than " . $payer['currency'] . ' ' . number_format($payer['min']) . ' or more than ' . $payer['currency'] . ' ' . number_format($payer['max']);
 
@@ -1151,8 +1186,6 @@ class SendMoney extends Component
         }
 
         return true;
-
-
     }
 
     private function feeLimitBreech()
@@ -1164,5 +1197,99 @@ class SendMoney extends Component
             $this->reset('error');
             $this->resetErrorBag('error');
         }
+    }
+
+
+    public function updatedAmountsCouponCode($value)
+    {
+        $this->validateCouponCode($value);
+    }
+
+    public function couponShowInput()
+    {
+        $this->reset('show_coupon_input');
+        $this->show_coupon_input = true;
+    }
+
+    private function validateCouponCode($value)
+    {
+
+        $this->reset('coupon');
+        $this->calculateRate();
+        $sending_amount = preg_replace("/[^0-9.]/", "", $this->amounts['sending_amount']); //filter_var($this->amounts['sending_amount'], FILTER_SANITIZE_NUMBER_FLOAT);
+
+        Log::error('coupon ' . $value, [
+            'amount' => $sending_amount,
+            'receiving_c' => $this->receiving_country['id'],
+            'session' => session()->all(),
+            // 'sen_me' => $this->selected_sending_method['sending_method_id'],
+            'rec_me' => $this->receiving_method_id
+
+        ]);
+
+
+        $coupon = Coupon::where('company_id', config('app.company_id'))
+            ->where('coupon_code', $value)
+            ->where('expire_at', '>=', date('Y-m-d'))
+            ->where('start_at', '<=', date('Y-m-d'))
+            ->whereNull('deleted_at')
+            ->where('min_sending_amount', '<=', $sending_amount)
+            ->where(function ($q) {
+                return $q->orWhere('customer_id', session('customer_id'))
+                    ->orWhereNull('customer_id');
+            })
+            ->where(function ($q) {
+                return $q->orWhere('sending_country_id', session('country_id'))
+                    ->orWhere('sending_country_id', '0');
+            })
+            ->where(function ($q) {
+                return $q->orWhere('receiving_country_id', $this->receiving_country['id'])
+                    ->orWhere('receiving_country_id', '0');
+            })
+            // ->where(function ($q) {
+            //     return $q->orWhere('sending_method_id', $this->selected_sending_method['sending_method_id'])
+            //         ->orWhere('sending_method_id', '0');
+            // })
+            ->where(function ($q) {
+                return $q->orWhere('receiving_method_id', $this->receiving_method_id)
+                    ->orWhere('receiving_method_id', '0');
+            })
+            ->select('coupon_code', 'id', 'disc_type', 'value')
+            ->get();
+
+        if ($coupon->isEmpty()) {
+            unset($this->amounts['coupon_code']);
+            $this->addError('error', 'Invalid coupon code.');
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+            return false;
+        }
+
+        $coupon = $coupon->first()->toArray();
+
+        $old = Transfer::from('transfers as t')
+            ->join('transfer_details as td', 'td.transfer_id', '=', 't.id')
+            ->where('t.customer_id', session('customer_id'))
+            ->where('td.coupon_id', $coupon['id'])
+            ->exists();
+
+        if ($old) {
+            $this->addError('error', 'You have already redeemed this coupon.');
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
+            return false;
+        }
+
+        $this->coupon = $coupon;
+
+        if ($coupon['disc_type'] == 'flat') {
+            $receiving_amount = $this->selected_payer['rate_after_spread'] * $coupon['value'];
+            $this->coupon['receive_amount'] = $receiving_amount;
+        } else {
+            $receiving_amount = $this->selected_payer['rate_after_spread'] * ($this->amounts['sending_amount'] * ($coupon['value'] / 100));
+            $this->coupon['receive_amount'] = $receiving_amount;
+        }
+
+        return true;
     }
 }

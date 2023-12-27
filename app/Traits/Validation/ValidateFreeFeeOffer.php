@@ -1,16 +1,21 @@
 <?php
+
 namespace App\Traits\Validation;
+
 use App\Models\FeeFreeTransfer;
 use App\Models\Transfer\Transfer;
 use App\Models\Transfer\TransferDetail;
 
-trait ValidateFreeFeeOffer{
+trait ValidateFreeFeeOffer
+{
 
 
     public $free_fee_offer = [
         'status' => false,
         'id' => null,
-        'save' => 0
+        'save' => 0,
+        'message' => null,
+        'percentage' => null,
     ];
 
     private function validateFreeFeeOffer()
@@ -35,7 +40,15 @@ trait ValidateFreeFeeOffer{
                 return $q->orWhere('receiving_country_id', $this->receiving_country['id'])
                     ->orWhereNull('receiving_country_id');
             })
-            ->select('fee_free_counter', 'id', 'customer_id','description')->orderBy('customer_id', 'desc')->get();
+            ->select(
+                'fee_free_counter',
+                'id',
+                'customer_id',
+                'description',
+                'percentage'
+            )
+            ->orderBy('customer_id', 'desc')
+            ->get();
 
 
         if ($offer->isEmpty()) {
@@ -49,6 +62,7 @@ trait ValidateFreeFeeOffer{
                 $this->free_fee_offer['id'] = $offer['id'];
                 $this->free_fee_offer['status'] = true;
                 $this->free_fee_offer['message'] = $offer['description'];
+                $this->free_fee_offer['percentage'] = $offer['percentage'];
             }
         } else {
             $count = Transfer::where('customer_id', session('customer_id'))->count();
@@ -56,6 +70,7 @@ trait ValidateFreeFeeOffer{
                 $this->free_fee_offer['id'] = $offer['id'];
                 $this->free_fee_offer['status'] = true;
                 $this->free_fee_offer['message'] = $offer['description'];
+                $this->free_fee_offer['percentage'] = $offer['percentage'];
             }
         }
     }
