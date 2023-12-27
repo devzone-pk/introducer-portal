@@ -114,8 +114,6 @@ class Register extends Component
         if (!empty($input['coupon'])) {
             $this->sign_up_coupon_code = $input['coupon'];
         }
-
-
     }
 
     public function signup()
@@ -277,7 +275,6 @@ class Register extends Component
             $this->success = 'Registration Successful! Please login.';
             $this->dispatchBrowserEvent('open-modal', ['model' => 'success-register']);
         } catch (Exception $exception) {
-            dd($exception->getMessage());
             DB::rollBack();
             $this->addError('email', $exception->getMessage());
         }
