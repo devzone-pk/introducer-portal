@@ -130,13 +130,58 @@
 
 
                         </div>
-                        <div class="form-group text-start">
-                            <label class="form-label  mb-1  d-none" for="">Referral Code (optional)</label>
-                            <input @if(!empty(request('referral'))) readonly @endif type="text"
-                                   class="form-control @error('referral_code') is-invalid @enderror"
-                                   placeholder="Referral Code (optional)" wire:model.lazy="referral_code">
-
+                        <div class="form-check text-start mb-3">
+                            <input wire:model="show_referral" type="checkbox"
+                                   class="form-check-input @error('show_referral') is-invalid @enderror"
+                                   value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Do you have any Referral code?
+                               
+                            </label>
+                            {{-- @error('referral_code')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @endif --}}
                         </div>
+                        @if($show_referral)
+                        <div class="form-group text-start">
+                            <input @if(!empty(request('referral'))) readonly @endif type="text"
+                                   class="form-control only-just-numbers @error('referral_code') is-invalid @enderror"
+                                   placeholder="Referral Code " wire:model.lazy="referral_code">
+                              
+                                   @error('referral_code')
+                                   <div class="invalid-feedback">
+                                       {{ $message }}
+                                   </div>
+                                   @endif   
+                        </div>
+                        @endif
+                        <div class="form-check text-start mb-3">
+                            <input wire:model="coupon_code" type="checkbox"
+                                   class="form-check-input @error('coupon_code') is-invalid @enderror"
+                                   value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Do you have any coupon code?
+                               
+                            </label>
+                         
+                        </div>
+                        @if($coupon_code)
+                        <div class="form-group text-start">
+                            <input @if(!empty(request('coupon'))) readonly @endif type="text"
+                                   class="form-control @error('sign_up_coupon_code') is-invalid @enderror"
+                                   placeholder="Coupon Code " wire:model.lazy="sign_up_coupon_code">
+                              
+                                   @error('sign_up_coupon_code')
+                                   <div class="invalid-feedback">
+                                       {{ $message }}
+                                   </div>
+                                   @endif   
+                        </div>
+                        @endif
+
+
 
 
                         <div class="form-check text-start mb-3">
