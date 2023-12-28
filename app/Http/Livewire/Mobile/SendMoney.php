@@ -1151,26 +1151,26 @@ class SendMoney extends Component
             })
             ->where(function ($q) {
                 return $q->orWhere('sending_country_id', session('country_id'))
-                    ->orWhere('sending_country_id', '0');
+                    ->orWhere('sending_country_id', '0')->orWhereNull('sending_country_id');
             })
             ->where(function ($q) {
                 return $q->orWhere('receiving_country_id', $this->receiving_country['id'])
-                    ->orWhere('receiving_country_id', '0');
+                    ->orWhere('receiving_country_id', '0')->orWhereNull('receiving_country_id');
             })
             // ->where(function ($q) {
             //     return $q->orWhere('sending_method_id', $this->selected_sending_method['sending_method_id'])
-            //         ->orWhere('sending_method_id', '0');
+            //         ->orWhere('sending_method_id', '0')->orWhereNull('sending_method_id');
             // })
             ->where(function ($q) {
                 return $q->orWhere('receiving_method_id', $this->receiving_method_id)
-                    ->orWhere('receiving_method_id', '0');
+                    ->orWhere('receiving_method_id', '0')->orWhereNull('receiving_method_id');
             })
             ->select(
-                'coupon_code',
-                'id',
-                'disc_type',
+                'coupon_code', 
+                'id', 
+                'disc_type', 
                 'value'
-            )
+                )
             ->get();
 
 
