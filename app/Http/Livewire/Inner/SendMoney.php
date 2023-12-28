@@ -1261,6 +1261,7 @@ class SendMoney extends Component
                 'value'
                 )
             ->get();
+            
 
         if ($coupon->isEmpty()) {
             unset($this->amounts['coupon_code']);
