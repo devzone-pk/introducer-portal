@@ -127,16 +127,14 @@
                                 </div>
                                 @endif
                             </div>
-
-
                         </div>
+
                         <div class="form-check text-start mb-3">
                             <input wire:model="show_referral" type="checkbox"
                                    class="form-check-input @error('show_referral') is-invalid @enderror"
-                                   value="" id="flexCheckDefaultt">
-                            <label class="form-check-label" for="flexCheckDefault">
+                                   value="" id="flexCheckDefault2">
+                            <label class="form-check-label" for="flexCheckDefault2">
                                 Do you have any Referral code?
-                               
                             </label>
                             {{-- @error('referral_code')
                             <div class="invalid-feedback">
@@ -144,6 +142,7 @@
                             </div>
                             @endif --}}
                         </div>
+
                         @if($show_referral)
                         <div class="form-group text-start">
                             <input @if(!empty(request('referral'))) readonly @endif type="text"
@@ -156,16 +155,16 @@
                                    @enderror
                         </div>
                         @endif
+
                         <div class="form-check text-start mb-3">
                             <input wire:model="coupon_code" type="checkbox"
                                    class="form-check-input @error('coupon_code') is-invalid @enderror"
-                                   value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
+                                   value="" id="flexCheckDefault3">
+                            <label class="form-check-label" for="flexCheckDefault3">
                                 Do you have any coupon code?
-                               
                             </label>
-                         
                         </div>
+
                         @if($coupon_code)
                         <div class="form-group text-start">
                             <input @if(!empty(request('coupon'))) readonly @endif type="text"
