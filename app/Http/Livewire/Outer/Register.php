@@ -159,7 +159,7 @@ class Register extends Component
 
             $customer_coupon_matched = false;
             if (!empty($this->coupon_code)) {
-                if (env('SIGNUP_COUPON_CODE') != $this->sign_up_coupon_code) {
+                if (strtolower(env('SIGNUP_COUPON_CODE')) != strtolower($this->sign_up_coupon_code)) {
                     $this->addError('sign_up_coupon_code', 'Coupon does not match.');
                     return;
                 } else {
