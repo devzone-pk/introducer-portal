@@ -26,11 +26,8 @@ use Livewire\Component;
 class Register extends Component
 {
     use ReceivingCountries;
-
-    public $sending_countries = [];
+   public $sending_countries = [];
     public $sending_country;
-
-
     public $receiving_country;
 
     public $first_name;
@@ -40,16 +37,13 @@ class Register extends Component
     public $phone;
     public $code;
     public $referral_code;
-    public $sign_up_coupon_code;
     public $agree = false;
     public $promotion = false;
     public $company_id;
     public $uuid;
 
     public $show_referral = false;
-    public $coupon_code = false;
-
-
+    
     protected function rules()
     {
         $rules = [
@@ -57,7 +51,6 @@ class Register extends Component
             'last_name' => ['required', 'string', 'regex:/^[a-zA-Z\s]*$/'],
             'email' => ['required', 'email'],
             'show_referral' => 'nullable|boolean',
-            'coupon_code' => 'nullable|boolean',
             'password' => ['required', Password::min(8)->mixedCase()->numbers()],
             'phone' => 'required|regex:/^[0-9]+$/',
             'sending_country' => ['required', 'integer', 'exists:countries,id'],
@@ -69,11 +62,7 @@ class Register extends Component
         if (!empty($this->show_referral)) {
             $rules['referral_code'] = 'required|string';
         }
-        if (!empty($this->coupon_code)) {
-            $rules['sign_up_coupon_code'] = 'required|string';
-        }
-
-
+       
         return $rules;
     }
 
@@ -111,9 +100,7 @@ class Register extends Component
         if (!empty($input['referral'])) {
             $this->referral_code = $input['referral'];
         }
-        if (!empty($input['coupon'])) {
-            $this->sign_up_coupon_code = $input['coupon'];
-        }
+       
     }
 
     public function signup()
@@ -157,17 +144,6 @@ class Register extends Component
                 }
             }
 
-            $customer_coupon_matched = false;
-            if (!empty($this->coupon_code)) {
-                if (strtolower(env('SIGNUP_COUPON_CODE')) != strtolower($this->sign_up_coupon_code)) {
-                    $this->addError('sign_up_coupon_code', 'Coupon does not match.');
-                    return;
-                } else {
-                    $customer_coupon_matched = true;
-                }
-            }
-
-
             DB::beginTransaction();
             $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
             $number = $phoneUtil->parse($this->code . $this->phone, $sending_country['iso2']);
@@ -186,7 +162,6 @@ class Register extends Component
             if ($main_agent->isEmpty()) {
                 throw new  Exception('This country is not configured for sending money.');
             }
-
 
             if (User::where('email', $this->email)->where('company_id', $this->company_id)->exists()) {
                 $this->addError('email', 'Email address already exists.');
@@ -211,7 +186,6 @@ class Register extends Component
                 'company_id' => $this->company_id
             ]);
 
-
             $customer = Customer::create([
                 'first_name' => $this->first_name,
                 'last_name' => $this->last_name,
@@ -228,7 +202,6 @@ class Register extends Component
                 'referral_code' => $this->referral_code
             ]);
 
-            if ($customer_coupon_matched) {
                 FeeFreeTransfer::create([
                     'company_id' => $this->company_id,
                     'customer_id' => $customer->id,
@@ -238,9 +211,6 @@ class Register extends Component
                     'start_at' => \Carbon\Carbon::now()->toDateString(),
                     'expire_at' => \Carbon\Carbon::now()->addMonth(6)->toDateString()
                 ]);
-            }
-
-
             $device = \Jenssegers\Agent\Facades\Agent::device();
             $platform = \Jenssegers\Agent\Facades\Agent::platform();
             $browser = \Jenssegers\Agent\Facades\Agent::browser();
@@ -265,13 +235,8 @@ class Register extends Component
                     ]);
             }
 
-            //$mail = (new RegisterDone())->onQueue('portal_' . config('app.company_id'));
-            //Mail::to($this->email)->queue($mail);
-
             DB::commit();
-
-
-            $this->reset(['receiving_country', 'referral_code', 'sign_up_coupon_code', 'show_referral','coupon_code', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
+            $this->reset(['receiving_country', 'referral_code',  'show_referral', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
             $this->success = 'Registration Successful! Please login.';
             $this->dispatchBrowserEvent('open-modal', ['model' => 'success-register']);
         } catch (Exception $exception) {
