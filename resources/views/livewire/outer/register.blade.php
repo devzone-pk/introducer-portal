@@ -157,29 +157,6 @@
                         @endif
 
                         <div class="form-check text-start mb-3">
-                            <input wire:model="coupon_code" type="checkbox"
-                                   class="form-check-input @error('coupon_code') is-invalid @enderror"
-                                   value="" id="flexCheckDefault3">
-                            <label class="form-check-label" for="flexCheckDefault3">
-                                Do you have any coupon code?
-                            </label>
-                        </div>
-
-                        @if($coupon_code)
-                        <div class="form-group text-start">
-                            <input @if(!empty(request('coupon'))) readonly @endif type="text"
-                                   class="form-control @error('sign_up_coupon_code') is-invalid @enderror"
-                                   placeholder="Coupon Code " wire:model.lazy="sign_up_coupon_code">
-                              
-                                   @error('sign_up_coupon_code')
-                                   <div class="invalid-feedback">
-                                       {{ $message }}
-                                   </div>
-                                   @enderror
-                        </div>
-                        @endif
-
-                        <div class="form-check text-start mb-3">
                             <input wire:model="agree" type="checkbox"
                                    class="form-check-input @error('agree') is-invalid @enderror"
                                    value="" id="flexCheckDefault">
