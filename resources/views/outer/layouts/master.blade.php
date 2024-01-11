@@ -32,7 +32,7 @@
 
 <body>
 
-    <div id="preloader1">
+    {{-- <div id="preloader1">
         <div class="d-flex justify-content-center  align-items-center" style="height: 100%;">
 
             <img src="{{ asset('assets/img/ogr-loading.gif') }}" alt="icon" class="loading-icon"
@@ -40,7 +40,7 @@
 
 
         </div>
-    </div>
+    </div> --}}
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
