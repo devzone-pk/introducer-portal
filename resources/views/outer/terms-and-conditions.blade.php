@@ -5,8 +5,8 @@
 @endsection
 @section('content')
 
-    <section class="py-10 py-md-14 overlay bg-black  overlay-60 bg-cover"
-             style="background-image: url(assets/img/pattern.png);">
+    <section class="py-10 py-md-14 overlay  overlay-60 bg-cover"
+             style="background-image: url(assets/img/pattern-blue.webp);">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8 text-center" data-aos="fade-up">
