@@ -32,7 +32,7 @@
 
 <body>
 
-    <div id="preloader">
+    <div id="preloader1">
         <div class="d-flex justify-content-center  align-items-center" style="height: 100%;">
 
             <img src="{{ asset('assets/img/ogr-loading.gif') }}" alt="icon" class="loading-icon"
