@@ -159,7 +159,7 @@
     </div>
     <!-- End of Cookie Banner -->
 
-    <section class="py-8 py-md-11 bg-gray-200" style="background-image: url(/assets/img/pattern.png);">
+    <section class="py-8 py-md-11 " style="background-image: url(/assets/img/pattern.webp);">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8 text-center">
