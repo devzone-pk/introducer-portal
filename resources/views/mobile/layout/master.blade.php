@@ -25,12 +25,12 @@
 
 
 <!-- loader -->
-<div id="loader">
-    <div class="d-flex justify-content-center  align-items-center" style=" height: 100%;">
-        <img style="width: 180px;" src="{{ asset('assets/img/ogr-loading.gif') }}" alt="icon"
-             class="loading-icon">
-    </div>
-</div>
+{{--<div id="loader">--}}
+{{--    <div class="d-flex justify-content-center  align-items-center" style=" height: 100%;">--}}
+{{--        <img style="width: 180px;" src="{{ asset('assets/img/ogr-loading.gif') }}" alt="icon"--}}
+{{--             class="loading-icon">--}}
+{{--    </div>--}}
+{{--</div>--}}
 <!-- * loader -->
 
 

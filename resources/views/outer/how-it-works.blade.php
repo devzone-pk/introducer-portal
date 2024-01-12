@@ -164,17 +164,4 @@
     </section>
     <!-- How it works end -->
 
-    <!-- Can't find
-    ============================================= -->
-    <section class="section py-4 my-4 py-sm-5 my-sm-5 d-none">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    @include('outer.includes.cannot-find')
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Can't find end -->
-
 @endsection
