@@ -109,8 +109,8 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">Account Name</p>
-                                <p class="fs-16px m-0 text-muted">Account Name</p>
+                                <p class="fs-16px mb-0">Bank Name</p>
+                                <p class="fs-16px m-0 text-muted">Leatherback Ltd</p>
                             </div>
                         </div>
                     </a>
@@ -119,7 +119,17 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">00-00-00</p>
+                                <p class="fs-16px mb-0">Account Name</p>
+                                <p class="fs-16px m-0 text-muted">ORIUM GLOBAL RESOURCES LIMITED</p>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="profile-list">
+                    <a href="#" class="item">
+                        <div class="in">
+                            <div>
+                                <p class="fs-16px mb-0">040691</p>
                                 <p class="fs-16px m-0 text-muted">Sort Code</p>
                             </div>
                         </div>
@@ -129,7 +139,7 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">00000000</p>
+                                <p class="fs-16px mb-0">00027862</p>
                                 <p class="fs-16px m-0 text-muted">Account Number</p>
                             </div>
                         </div>

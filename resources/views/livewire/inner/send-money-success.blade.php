@@ -109,19 +109,23 @@
                             <ul class="list mt-3">
 
                                 <li>
-                                    <span>Account Name </span>
-                                    <strong>- </strong>
+                                    <span>Bank Name: </span>
+                                    <strong>Leatherback Ltd</strong>
                                 </li>
                                 <li>
-                                    <span>Sort Code</span>
-                                    <strong>-</strong>
+                                    <span>Account Name: </span>
+                                    <strong>ORIUM GLOBAL RESOURCES LIMITED </strong>
                                 </li>
                                 <li>
-                                    <span>Account Number</span>
-                                    <strong>-</strong>
+                                    <span>Sort Code: </span>
+                                    <strong>040691</strong>
                                 </li>
                                 <li>
-                                    <span>Reference</span>
+                                    <span>Account Number: </span>
+                                    <strong>00027862</strong>
+                                </li>
+                                <li>
+                                    <span>Reference: </span>
                                     <strong>{{ ($transfer->transfer_code) }}</strong>
                                 </li>
                             </ul>
