@@ -403,7 +403,7 @@ class SendMoney extends Component
             }
 
             if (!$this->payerLimits()) {
-                $this->reset('amounts');
+              //  $this->reset('amounts');
                 return false;
             }
 
@@ -440,7 +440,7 @@ class SendMoney extends Component
         if (!$this->payerLimits()) {
             $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
             $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
-            $this->reset('amounts');
+            //$this->reset('amounts');
             return false;
         }
         if (!empty($this->amounts['coupon_code'])) {
@@ -495,7 +495,7 @@ class SendMoney extends Component
         if (!$this->payerLimits()) {
             $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
             $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
-            $this->reset('amounts');
+           // $this->reset('amounts');
             return false;
         }
         if (!empty($this->amounts['coupon_code'])) {
@@ -1166,9 +1166,9 @@ class SendMoney extends Component
                     ->orWhere('receiving_method_id', '0')->orWhereNull('receiving_method_id');
             })
             ->select(
-                'coupon_code', 
-                'id', 
-                'disc_type', 
+                'coupon_code',
+                'id',
+                'disc_type',
                 'value'
                 )
             ->get();

@@ -484,14 +484,14 @@ class SendMoney extends Component
             }
 
             if (!$this->payerLimits()) {
-                $this->reset('amounts');
+                //$this->reset('amounts');
                 return false;
             }
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             $this->addError('error', $e->getMessage());
             $this->feeLimitBreech();
-            $this->reset('amounts');
+            //$this->reset('amounts');
         }
     }
 
@@ -532,7 +532,7 @@ class SendMoney extends Component
             }
         })->validate();
         if (!$this->payerLimits()) {
-            $this->reset('amounts');
+            //$this->reset('amounts');
             return false;
         }
         $this->benefetchData();
@@ -1255,13 +1255,13 @@ class SendMoney extends Component
                     ->orWhere('receiving_method_id', '0')->orWhereNull('receiving_method_id');
             })
             ->select(
-                'coupon_code', 
-                'id', 
-                'disc_type', 
+                'coupon_code',
+                'id',
+                'disc_type',
                 'value'
                 )
             ->get();
-            
+
 
         if ($coupon->isEmpty()) {
             unset($this->amounts['coupon_code']);
