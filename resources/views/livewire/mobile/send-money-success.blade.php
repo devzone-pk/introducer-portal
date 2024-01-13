@@ -129,8 +129,8 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">040691</p>
                                 <p class="fs-16px m-0 text-muted">Sort Code</p>
+                                <p class="fs-16px mb-0">040691</p>
                             </div>
                         </div>
                     </a>
@@ -139,8 +139,8 @@
                     <a href="#" class="item">
                         <div class="in">
                             <div>
-                                <p class="fs-16px mb-0">00027862</p>
                                 <p class="fs-16px m-0 text-muted">Account Number</p>
+                                <p class="fs-16px mb-0">00027862</p>
                             </div>
                         </div>
                     </a>
