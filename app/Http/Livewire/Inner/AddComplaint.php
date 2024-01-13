@@ -24,7 +24,7 @@ class AddComplaint extends Component
     public $type;
     protected $rules = [
         'complaint.complain_type' => 'required|integer',
-        'complaint.message' => 'required|regex:/^[a-zA-Z0-9]+$/',
+        'complaint.message' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
     ];
     protected $validationAttributes = [
         'complaint.complain_type' => 'Complain Type',

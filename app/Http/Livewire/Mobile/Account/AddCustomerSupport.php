@@ -28,7 +28,7 @@ class AddCustomerSupport extends Component
 
     protected $rules = [
         'type.id' => 'required|integer',
-        'message' => 'required|regex:/^[a-zA-Z0-9]+$/',
+        'message' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
     ];
     protected $validationAttributes = [
         'type.id' => 'Complain Type',
@@ -39,7 +39,7 @@ class AddCustomerSupport extends Component
         'resetErrors' => 'resetErrors'
     ];
     protected $messages=[
-        'complaint.message.regex' => 'Message must contain only alphabets and digits',
+        'message.regex' => 'Message must contain only alphabets and digits',
 
     ];
 
