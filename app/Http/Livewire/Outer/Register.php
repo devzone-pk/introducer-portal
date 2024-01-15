@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Outer;
 
 use App\Mail\RegisterDone;
 use App\Models\Agent;
+use App\Models\AgentReferralCode;
 use App\Models\Country\Country;
 use App\Models\Customer\Customer;
 use App\Models\Customer\CustomerDetail;
@@ -26,7 +27,8 @@ use Livewire\Component;
 class Register extends Component
 {
     use ReceivingCountries;
-   public $sending_countries = [];
+
+    public $sending_countries = [];
     public $sending_country;
     public $receiving_country;
 
@@ -43,7 +45,7 @@ class Register extends Component
     public $uuid;
 
     public $show_referral = false;
-    
+
     protected function rules()
     {
         $rules = [
@@ -62,7 +64,7 @@ class Register extends Component
         if (!empty($this->show_referral)) {
             $rules['referral_code'] = 'required|string';
         }
-       
+
         return $rules;
     }
 
@@ -100,7 +102,7 @@ class Register extends Component
         if (!empty($input['referral'])) {
             $this->referral_code = $input['referral'];
         }
-       
+
     }
 
     public function signup()
@@ -202,15 +204,30 @@ class Register extends Component
                 'referral_code' => $this->referral_code
             ]);
 
+            $referral_code = !empty($this->referral_code) ? $this->referral_code : env('REFERRAL_FEE_FREE','ORIUM');
+
+            $fee_free_policy = AgentReferralCode::where('fee_free_transfers', 't')
+                ->where('referral_code', $referral_code)
+                ->select('number_of_transactions', 'number_of_days')
+                ->first();
+
+
+            if (!empty($fee_free_policy)) {
+                $no_of_days = $fee_free_policy['number_of_transactions'];
+                $no_of_trans = $fee_free_policy['number_of_days'];
+
                 FeeFreeTransfer::create([
                     'company_id' => $this->company_id,
                     'customer_id' => $customer->id,
                     'description' => 'You have been selected for special fee free discount.',
                     'percentage' => '100',
-                    'fee_free_counter' => '20',
+                    'fee_free_counter' => $no_of_days,
                     'start_at' => \Carbon\Carbon::now()->toDateString(),
-                    'expire_at' => \Carbon\Carbon::now()->addMonth(6)->toDateString()
+                    'expire_at' => \Carbon\Carbon::now()->addDays($no_of_trans)->toDateString()
                 ]);
+            }
+
+
             $device = \Jenssegers\Agent\Facades\Agent::device();
             $platform = \Jenssegers\Agent\Facades\Agent::platform();
             $browser = \Jenssegers\Agent\Facades\Agent::browser();
@@ -236,7 +253,7 @@ class Register extends Component
             }
 
             DB::commit();
-            $this->reset(['receiving_country', 'referral_code',  'show_referral', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
+            $this->reset(['receiving_country', 'referral_code', 'show_referral', 'first_name', 'last_name', 'agree', 'email', 'password', 'phone']);
             $this->success = 'Registration Successful! Please login.';
             $this->dispatchBrowserEvent('open-modal', ['model' => 'success-register']);
         } catch (Exception $exception) {

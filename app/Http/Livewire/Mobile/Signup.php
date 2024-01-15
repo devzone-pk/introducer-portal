@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Mobile;
 
 use App\Mail\RegisterDone;
 use App\Models\Agent;
+use App\Models\AgentReferralCode;
 use App\Models\Country\Country;
 use App\Models\Customer\Customer;
 use App\Models\Customer\CustomerDetail;
+use App\Models\FeeFreeTransfer;
 use App\Models\Notifications\PushNotificationChannel;
 use App\Models\Notifications\PushNotificationDetail;
 use App\Models\User\Leeds;
@@ -214,6 +216,30 @@ class Signup extends Component
                 'send_money_to' => $this->receiving_country['id'],
                 'referral_code' => $this->referral_code
             ]);
+
+            $referral_code = !empty($this->referral_code) ? $this->referral_code : env('REFERRAL_FEE_FREE','ORIUM');
+
+            $fee_free_policy = AgentReferralCode::where('fee_free_transfers', 't')
+                ->where('referral_code', $referral_code)
+                ->select('number_of_transactions', 'number_of_days')
+                ->first();
+
+
+            if (!empty($fee_free_policy)) {
+                $no_of_days = $fee_free_policy['number_of_transactions'];
+                $no_of_trans = $fee_free_policy['number_of_days'];
+
+                FeeFreeTransfer::create([
+                    'company_id' => $this->company_id,
+                    'customer_id' => $customer->id,
+                    'description' => 'You have been selected for special fee free discount.',
+                    'percentage' => '100',
+                    'fee_free_counter' => $no_of_days,
+                    'start_at' => \Carbon\Carbon::now()->toDateString(),
+                    'expire_at' => \Carbon\Carbon::now()->addDays($no_of_trans)->toDateString()
+                ]);
+            }
+
 
 
             $device = \Jenssegers\Agent\Facades\Agent::device();
