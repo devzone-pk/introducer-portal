@@ -226,17 +226,17 @@ class Signup extends Component
 
 
             if (!empty($fee_free_policy)) {
-                $no_of_days = $fee_free_policy['number_of_transaction'];
-                $no_of_trans = $fee_free_policy['number_of_days'];
+                $no_of_trans = $fee_free_policy['number_of_transaction'];
+                $no_of_days = $fee_free_policy['number_of_days'];
 
                 FeeFreeTransfer::create([
                     'company_id' => $this->company_id,
                     'customer_id' => $customer->id,
                     'description' => 'You have been selected for special fee free discount.',
                     'percentage' => '100',
-                    'fee_free_counter' => $no_of_days,
+                    'fee_free_counter' => $no_of_trans,
                     'start_at' => \Carbon\Carbon::now()->toDateString(),
-                    'expire_at' => \Carbon\Carbon::now()->addDays($no_of_trans)->toDateString()
+                    'expire_at' => \Carbon\Carbon::now()->addDays($no_of_days)->toDateString()
                 ]);
             }
 
