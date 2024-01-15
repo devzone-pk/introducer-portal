@@ -1,31 +1,12 @@
 <div class="container">
     <style>
-        .select2-container .select2-selection--single {
-            height: 48px !important;
-        }
 
-        .country-calculator {
-            padding: 10px !important;
-        }
-
-        .select2-container--bootstrap-5 .select2-selection--single {
-            padding: 1px 10px;
-        }
-
-        .select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option {
-            font-size: 16px;
-        }
 
     </style>
     <div class="row">
-        <div class="col-12      ">
-            <!-- Heading -->
-            <h1 class="display-3 fw-bold my-3  text-center text-white  ">
-                Send Money to {{ $receiving_country['name'] }}
-            </h1>
-        </div>
+
         <div class="col-12  ">
-            <div class="card country-page-margin">
+            <div class="card  ">
                 {{--                <div class="card-header border-0 text-uppercase bg-red rad p-2">--}}
                 {{--                    <p class="m-0 text-white text-center fw-light letter-spacing-lg">--}}
                 {{--                        Today's rate--}}
@@ -38,20 +19,20 @@
                 {{--                    </h2>--}}
                 {{--                </div>--}}
 
-                <div class="card-body p-4 calculator-bg rounded">
+                <div class="card-body bg-white rounded p-5 border shadow">
                     <form wire:submit.prevent="proceed">
 
                         <div class="row g-4">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12">
                                 <div class="form-group country-page" wire:ignore>
-                                    <label class="form-label mb-1 text-color-calculator" for="">You Send</label>
+                                    <label class="form-label mb-1 " for="">You Send</label>
                                     <div class="input-group   mb-3">
                                         <input
                                                 onclick="this.select()" type="text" autocomplete="off"
                                                 wire:model.debounce.500ms="amounts.sending_amount"
                                                 class="form-control country-calculator  only-numbers leading-zero @error('amounts.sending_amount') is-invalid @enderror"
                                                 id="youSend"
-                                                style="border: 0;"
+                                                style="border: 1px solid #ced4da;"
                                                 value="" placeholder="" autocorrect="off"
                                                 autocapitalize="off">
 
@@ -70,8 +51,8 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" wire:ignore>
-                                    <label class="form-label mb-1  text-color-calculator" for="">Receiving
+                                <div class="form-group d-none" wire:ignore>
+                                    <label class="form-label mb-1  " for="">Receiving
                                         Method</label>
                                     <select class="form-select   select-dropdown-simple" id="receiving_method"
                                             data-placeholder="Select" wire:model="receiving_method">
@@ -82,17 +63,16 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-4">
+
                                 <div class="form-group country-page" wire:ignore>
-                                    <label class="form-label  mb-1 text-color-calculator" for="">Recipient Gets</label>
+                                    <label class="form-label  mb-1 " for="">Recipient Gets</label>
                                     <div class="input-group mb-3">
                                         <input
                                                 onclick="this.select()" type="text" autocomplete="off"
                                                 wire:model.debounce.500ms="amounts.receive_amount"
                                                 class="form-control  country-calculator only-numbers leading-zero "
                                                 id="recipient_gets"
-                                                style="border: 0;"
+                                                style="border: 1px solid #ced4da;"
                                                 value="" placeholder="" autocorrect="off"
                                                 autocapitalize="off" maxlength="10">
 
@@ -108,8 +88,8 @@
                                     </div>
                                 </div>
                                 <div wire:key="select-field-model-version-{{ $iteration }}">
-                                    <div class="form-group rate-select" wire:ignore>
-                                        <label class="form-label mb-1  text-color-calculator" for="">Payout
+                                    <div class="form-group rate-select d-none" wire:ignore>
+                                        <label class="form-label mb-1  " for="">Payout
                                             Using</label>
                                         <select class="form-select   select-dropdown-rate" id="payout"
                                                 data-placeholder="Select" wire:model="payer_id">
@@ -122,10 +102,9 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-4 ">
+
                                 @if(!empty($selected_payer))
-                                    <div class="row  text-white">
+                                    <div class="row   ">
                                         <div class="col-12 mt-2">
 
                                             <div class="d-flex my-2 justify-content-between">

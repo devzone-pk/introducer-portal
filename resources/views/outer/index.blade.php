@@ -24,7 +24,7 @@
 
         <div class="container mt-5">
             <div class="d-lg-flex justify-content-between align-items-center">
-                <div class=" col-12 col-lg-8  d-lg-flex align-items-end ">
+                <div class=" col-12 col-lg-7  d-lg-flex align-items-end ">
 
                     <!-- Heading -->
                     <div style="text-shadow: 2px 2px 3px #00000030; z-index: -1!important;">
@@ -60,8 +60,9 @@
                     <!-- Form -->
 
                 </div>
-                <div class="col-12 col-lg-4 col-md-12 px-lg-0 px-md-10 px-sm-0">
-                    @livewire('outer.send-money')
+                <div class="col-12 col-lg-5 col-md-12 px-lg-0 px-md-10 px-sm-0">
+
+                    @livewire('outer.country-page',['iso' =>'NG'])
                 </div>
             </div> <!-- / .row -->
 
