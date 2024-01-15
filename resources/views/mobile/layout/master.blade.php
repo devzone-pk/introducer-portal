@@ -32,8 +32,8 @@
 {{--    </div>--}}
 {{--</div>--}}
 <!-- * loader -->
-
-
+ 
+   
 @yield('content')
 
 @include('mobile.include.sidebar')

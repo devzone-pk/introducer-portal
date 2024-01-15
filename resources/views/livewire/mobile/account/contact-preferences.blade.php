@@ -1,5 +1,5 @@
 <div id="appCapsule">
-
+    @include('mobile.include.work-time-alert',['margin' => true])
     <div class=" px-3 mt-4">
 
         <p class="fs-20px text-full-black fw-bold">Customer Preferences</p>

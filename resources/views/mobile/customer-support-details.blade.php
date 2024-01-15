@@ -29,6 +29,8 @@
     </div>
 
     <div id="appCapsule" class=" ">
+        @include('mobile.include.work-time-alert',['margin' => true])
+
         @livewire('mobile.account.customer-support-details',['complain_id'=>$id])
     </div>
     @include('inner.partials.bottom-menu')

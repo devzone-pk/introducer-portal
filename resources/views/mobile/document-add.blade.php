@@ -68,6 +68,8 @@
         </div>
     </div>
     <div id="appCapsule">
+      @include('mobile.include.work-time-alert',['margin' => true])
+
         @livewire('mobile.account.upload-document',['primary_id' => session('customer_id')])
 
     </div>

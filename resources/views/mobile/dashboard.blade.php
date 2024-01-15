@@ -23,6 +23,7 @@
         </div>
     </div>
     <div  id="appCapsule" class="mt-2">
+        @include('mobile.include.work-time-alert',['margin' => false])
         @livewire('mobile.dashboard')
 
         @livewire('mobile.today-rates')
