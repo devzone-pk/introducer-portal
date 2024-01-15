@@ -1,4 +1,5 @@
 <div id="appCapsule">
+
     <div class="px-3 mt-4">
         <p class="fs-20px text-full-black fw-bold">Personal Details</p>
         <ul class="listview profile-listview image-listview">

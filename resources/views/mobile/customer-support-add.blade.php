@@ -31,6 +31,7 @@
     </div>
 
     <div id="appCapsule">
+        @include('mobile.include.work-time-alert',['margin' => true])
             @livewire('mobile.account.add-customer-support',['transfer_id'=>request('transfer_id'),'category'=>request('type')])
     </div>
 

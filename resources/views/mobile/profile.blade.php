@@ -28,6 +28,8 @@
         </div>
     </div>
     <div id="appCapsule">
+        @include('mobile.include.work-time-alert',['margin' =>true])
+
         @livewire('mobile.account.profile')
     </div>
 

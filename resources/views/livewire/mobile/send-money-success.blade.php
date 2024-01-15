@@ -1,5 +1,7 @@
 <div id="appCapsule">
 
+    @include('mobile.include.work-time-alert',['margin' => true])
+
     <div class="section  ">
         <ul class="nav nav-tabs capsuled" role="tablist">
             <li class="nav-item">

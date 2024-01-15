@@ -36,7 +36,7 @@
         </div>
     </div>
     <div id="appCapsule">
-
+        @include('mobile.include.work-time-alert',['margin' => true])
 
         <div class=" @if ($profile == false && $address == false && $documents == false) d-block @else d-none @endif">
             <div class="section mt-2">

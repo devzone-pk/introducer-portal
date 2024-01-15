@@ -30,6 +30,8 @@
 
 
     <div id="appCapsule">
+        @include('mobile.include.work-time-alert',['margin' => true])
+
         @livewire('mobile.account.customer-support')
     </div>
 
