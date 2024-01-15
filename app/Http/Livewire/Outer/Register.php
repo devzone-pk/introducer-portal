@@ -208,12 +208,12 @@ class Register extends Component
 
             $fee_free_policy = AgentReferralCode::where('fee_free_transfers', 't')
                 ->where('referral_code', $referral_code)
-                ->select('number_of_transactions', 'number_of_days')
+                ->select('number_of_transaction', 'number_of_days')
                 ->first();
 
 
             if (!empty($fee_free_policy)) {
-                $no_of_days = $fee_free_policy['number_of_transactions'];
+                $no_of_days = $fee_free_policy['number_of_transaction'];
                 $no_of_trans = $fee_free_policy['number_of_days'];
 
                 FeeFreeTransfer::create([
