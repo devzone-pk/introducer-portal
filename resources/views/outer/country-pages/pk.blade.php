@@ -1,5 +1,5 @@
 <section class="pt-4  pt-md-11 bg-cover  size-100"
-         style="background-image: url(/assets/img/covers/pk/pakistan.png);
+         style="background-image: url(/assets/img/covers/pk/pakistan.webp);
          background-position: top;
 "  >
     <div data-aos="fade-up">

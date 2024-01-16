@@ -1,5 +1,5 @@
 <section class="pt-4  pt-md-11 bg-cover  size-100"
-         style="background-image: url(/assets/img/covers/default.png);
+         style="background-image: url(/assets/img/covers/default.webp);
          background-position: top;
 "  >
     <div data-aos="fade-up">

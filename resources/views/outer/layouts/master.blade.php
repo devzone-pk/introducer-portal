@@ -32,7 +32,7 @@
 
 <body>
 
-    {{-- <div id="preloader1">
+    {{-- <div id="preloader">
         <div class="d-flex justify-content-center  align-items-center" style="height: 100%;">
 
             <img src="{{ asset('assets/img/ogr-loading.gif') }}" alt="icon" class="loading-icon"
@@ -372,13 +372,13 @@
 
                         <li class="list-inline-item list-social-item">
                             <a href="#!" class="text-reset d-inline-block">
-                                <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."
+                                <img src="assets/img/buttons/button-play.webp" class="img-fluid" alt="..."
                                     style="max-width: 97px;">
                             </a>
                         </li>
                         <li class="list-inline-item list-social-item me-3">
                             <a href="#!" class="text-reset d-inline-block me-1">
-                                <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."
+                                <img src="assets/img/buttons/button-app.webp" class="img-fluid" alt="..."
                                     style="max-width: 97px;">
                             </a>
                         </li>

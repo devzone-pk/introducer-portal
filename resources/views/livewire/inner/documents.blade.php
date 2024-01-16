@@ -17,10 +17,10 @@
                 </div>
             </div>
         </div>
-        <div class="card-body px-4">
+        <div class="card-body px-4 ">
             <div class="row">
                 @foreach($documents as $d)
-                    <div class="col-12 col-sm-6">
+                    <div class="col-12 col-sm-6 mb-1">
                         <div class="card bg-info text-center" >
                             <a class="text-white text-decoration-none" href="{{ url('user/document/view') }}/{{$d->id}}">
 
