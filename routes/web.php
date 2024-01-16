@@ -222,7 +222,8 @@ Route::get('/', function () {
 })->name('index');
 
 Route::get('send-money-to/{iso2}', function ($iso2) {
-    return view('outer.country', compact('iso2'));
+    return redirect('/');
+   // return view('outer.country', compact('iso2'));
 });
 
 Route::view('about', 'outer.about-us')->name('about-us');
@@ -259,7 +260,3 @@ Route::view('privacy-policy', 'outer.privacy-policy')->name('privacy-policy');
 Route::view('anti-fraud-policy', 'outer.anti-fraud-policy')->name('anti-fraud-policy');
 Route::view('gdpr-policy', 'outer.gdpr-policy')->name('gdpr-policy');
 Route::view('refer-friend', 'outer.refer-friend')->name('refer-friend');
-
-
-
-
