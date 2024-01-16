@@ -120,7 +120,11 @@
                                                     <h5 class="fw-bold m-0">Fee</h5>
                                                 </div>
                                                 <div>
+                                                    @if(empty($amounts['fees']))
+                                                    <span class="badge bg-success">No Fee</span>
+                                                    @else
                                                     <h5 class="fw-bold m-0"> {{ $selected_payer['source_currency'] ?? '' }} {{ number_format($amounts['fees'],2) }}</h5>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <hr>
