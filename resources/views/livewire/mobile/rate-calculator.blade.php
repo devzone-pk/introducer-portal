@@ -104,7 +104,8 @@
                                     style="padding-right: 16px; {{ !empty($selected_payer['name']) ? 'height: 58px;':'' }}"
                                     class="d-flex form-control mobile-input align-items-center  justify-content-between  @error('selected_payer.id') is-invalid @enderror"
                                     role="button"
-                                    wire:click.prevent="payerOpenModel('selected_payer','0')">
+
+                            >
                                 <div class="d-flex flex-column ">
                                     @if(empty($selected_payer['name']))
                                         <div class="text-placeholder">Select Payout</div>
