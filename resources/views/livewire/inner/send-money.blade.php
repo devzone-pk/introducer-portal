@@ -113,7 +113,7 @@
                     <div class="card-body">
                         <form wire:submit.prevent="validateSendingDetails">
                             <div class="row g-4">
-                                <div class="col-xs-12 col-sm-6">
+                                <div class="col-xs-12 col-sm-6 d-none">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Sending from</label>
                                         <div readonly class="d-flex bg-light  fs-16px form-control align-items-center">
@@ -121,11 +121,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-6">
+                                <div class="col-xs-12 col-sm-6 {{ count($rc_data) == 1 ? 'd-none':'' }}">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Sending to</label>
                                         <select name="" wire:model="receiving_country_id"
-                                            class="form-select fs-16px  @error('receiving_country.iso2') is-invalid @enderror">
+                                                class="form-select fs-16px  @error('receiving_country.iso2') is-invalid @enderror">
                                             <option value="">Select</option>
                                             @foreach ($rc_data as $s)
                                                 <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
@@ -133,7 +133,7 @@
                                         </select>
 
                                         @error('receiving_country.iso2')
-                                            <span class="invalid-feedback fs-14px" role="alert">
+                                        <span class="invalid-feedback fs-14px" role="alert">
                                                 {{ $message }}
                                             </span>
                                         @enderror
@@ -143,18 +143,18 @@
                                 </div>
 
 
-                                <div class="col-xs-12  ">
+                                <div class="col-xs-12   col-sm-6  {{ count($receiving_methods) == 1 ? 'd-none':'' }}">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Receiving Method</label>
                                         <select name="" wire:model="receiving_method"
-                                            class="form-select fs-16px  @error('receiving_method') is-invalid @enderror">
+                                                class="form-select fs-16px  @error('receiving_method') is-invalid @enderror">
                                             <option value="">Select</option>
                                             @foreach ($receiving_methods as $s)
                                                 <option value="{{ $s }}">{{ ucwords($s) }}</option>
                                             @endforeach
                                         </select>
                                         @error('receiving_method')
-                                            <span class="invalid-feedback fs-14px" role="alert">
+                                        <span class="invalid-feedback fs-14px" role="alert">
                                                 {{ $message }}
                                             </span>
                                         @enderror
@@ -164,7 +164,7 @@
                                 </div>
 
 
-                                <div class="col-xs-12">
+                                <div class="col-xs-12   {{ count($payers) == 1 ? 'd-none':'' }}">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Payout Using</label>
 
@@ -285,12 +285,12 @@
                             </div>
                             @if (!empty($selected_payer))
 
-                                <p class="text-muted text-center">The current exchange rate is
+                                <p class="  text-center">The current exchange rate is
                                     <span class="fw-500">{{ $selected_payer['source_currency'] ?? '' }} 1 =
                                         {{ round($selected_payer['rate_after_spread'], 2) }}
                                         {{ $selected_payer['currency'] ?? '' }}</span>
                                 </p>
-                                @if (!$show_coupon_input)
+                                @if (!$show_coupon_input  && false)
                                     <div class="col-12 {{ !empty($amounts['coupon_code']) ? 'd-none' : '' }}"
                                         style="color: #002f6c" id="have-coupon">
                                         <a wire:click.prevent="couponShowInput()" style="cursor: pointer">
@@ -377,9 +377,43 @@
                                     </div>
                                 @endif
 
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary  shadow-none">Continue</button>
+                                <div class="form-check text-danger ">
+                                    <input class="form-check-input" wire:model="payment_done" type="checkbox" value=""
+                                           id="payment">
+                                    <label class="form-check-label" for="payment">
+                                        <strong>
+                                            The payment has been deposited into the following account details.
+                                        </strong>
+                                    </label>
                                 </div>
+
+                                <div class=" my-2 alert alert-warning">
+
+                                    <p class="m-0">
+                                        <span>Bank Name: </span>
+                                        <strong>Leatherback Ltd</strong>
+                                    </p>
+                                    <p class="m-0">
+                                        <span>Account Name: </span>
+                                        <strong>ORIUM GLOBAL RESOURCES LIMITED </strong>
+                                    </p>
+                                    <p class="m-0">
+                                        <span>Sort Code: </span>
+                                        <strong>040691</strong>
+                                    </p>
+                                    <p class="m-0">
+                                        <span>Account Number: </span>
+                                        <strong>00027862</strong>
+                                    </p>
+
+                                </div>
+
+                                @if($payment_done)
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary  shadow-none">Continue</button>
+                                    </div>
+                                @endif
 
                             @endif
 
