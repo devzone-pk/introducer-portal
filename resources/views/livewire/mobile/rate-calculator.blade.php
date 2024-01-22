@@ -49,8 +49,8 @@
 
 
                 </div>
-                @if(!empty($receiving_country['iso2']))
-                    <div class="form-group boxed">
+
+                    <div class="form-group boxed d-none">
                         <div class="input-wrapper">
 
                             <div
@@ -64,9 +64,9 @@
                             </div>
                         </div>
                     </div>
-                @endif
-                @if(!empty($selected_sending_method['id']))
-                    <div class="form-group boxed">
+
+
+                    <div class="form-group boxed d-none">
                         <div class="input-wrapper">
 
                             <div
@@ -94,9 +94,9 @@
                             </div>
                         </div>
                     </div>
-                @endif
 
-                @if(!empty($receiving_method))
+
+
                     <div class="form-group boxed">
                         <div class="input-wrapper">
 
@@ -125,7 +125,7 @@
                             </div>
                         </div>
                     </div>
-                @endif
+
 
 
 
