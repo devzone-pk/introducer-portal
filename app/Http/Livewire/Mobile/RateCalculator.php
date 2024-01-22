@@ -91,12 +91,20 @@ class RateCalculator extends Component
     public function mount()
     {
         $agent = Agent::where('status', 't')
+            ->where('company_id', config('app.company_id'))
             ->where('country_id', '232')
             ->select('user_id', 'country_id')
             ->where('type', 'ma')->where('channel', 'on')->first();
 
         $this->main_agent = $agent['user_id'];
         $this->country = Country::find($agent['country_id']);
+
+        $this->receiving_country = Country::find(161);
+        $this->getReceivingMethods();
+
+        $this->amounts['sending_amount'] = 100;
+        $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'], 2);
+        $this->calculateRate();
     }
 
     public function render()
@@ -140,9 +148,9 @@ class RateCalculator extends Component
             $source->payerId = $this->selected_payer['id'];
             $source->sourceAmount = $this->amounts['sending_amount'];
             $source->sourceCurrency = $this->selected_payer['source_currency'];
-            $source->receiving_method_id = $this->receiving_method_id;
+            //$source->receiving_method_id = $this->receiving_method_id;
             //  dd($this->selected_sending_method);
-            $source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+            //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
 
             $rates = new AdminFee($source);
             $fees = $rates->apply();
@@ -151,10 +159,10 @@ class RateCalculator extends Component
 
             if ($this->amounts['calculation_mode'] == 'S') {
                 $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'], 2);
-                $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'], 2);
+                $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount']);
             } else {
                 $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'], 2);
-                $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'], 2);
+                $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount']);
             }
 
             if (!$this->payerLimits()) {
@@ -244,7 +252,13 @@ class RateCalculator extends Component
 
             $rates = collect($rates);
             $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
-
+            $rate = 0;
+            foreach ($this->rates as $key => $r) {
+                if ($rate < $r['main_agent_rate']) {
+                    $this->selected_payer = $this->rates[$key];
+                    $this->receiving_method_id = $this->selected_payer['method_id'];
+                }
+            }
 
         } catch (\Exception $e) {
 
@@ -281,6 +295,8 @@ class RateCalculator extends Component
             $this->rates = json_decode(json_encode($rates), true);
 
             $this->payers = collect($this->rates)->where('method', $this->receiving_method)->toArray();
+
+
         }
     }
 
@@ -297,7 +313,7 @@ class RateCalculator extends Component
 
     public function setSendingMethod()
     {
-        $this->reset(['receiving_method', 'selected_payer']);
+        // $this->reset(['receiving_method', 'selected_payer']);
     }
 
     public function updatedAmountsSendingAmount($value)
