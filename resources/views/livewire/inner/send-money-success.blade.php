@@ -87,7 +87,7 @@
 
 
                         <p class="fs-20px mt-3 fw-bold">
-                            Your transaction has been placed successfully
+                            Your transaction is being processed.
                         </p>
                         <p class="   text-gray fw-bold">
                             Transfer Code: {{ $transfer->transfer_code }}
@@ -98,39 +98,7 @@
                         </p>
 
 
-                        @if($transfer->status == 'PEN' && $transfer->sending_method_id =='91' )
-                            <div class="alert  alert-warning mt-5">
-                                <strong>Attention!</strong> <br>
-                                Your funds have not yet been received. Please send
-                                <strong>
-                                    {{ $transfer->sending_currency }} {{ number_format($transfer->sending_amount+$transfer->company_charges,2) }}</strong>
-                                on following details
-                            </div>
-                            <ul class="list mt-3">
 
-                                <li>
-                                    <span>Bank Name: </span>
-                                    <strong>Leatherback Ltd</strong>
-                                </li>
-                                <li>
-                                    <span>Account Name: </span>
-                                    <strong>ORIUM GLOBAL RESOURCES LIMITED </strong>
-                                </li>
-                                <li>
-                                    <span>Sort Code: </span>
-                                    <strong>040691</strong>
-                                </li>
-                                <li>
-                                    <span>Account Number: </span>
-                                    <strong>00027862</strong>
-                                </li>
-                                <li>
-                                    <span>Reference: </span>
-                                    <strong>{{ ($transfer->transfer_code) }}</strong>
-                                </li>
-                            </ul>
-
-                        @endif
 
 
                         <a class="btn btn-info px-5 py-1" href="{{ url('receipt') }}?transfer_id={{ ($transfer->id) }}"

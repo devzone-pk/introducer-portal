@@ -3,16 +3,11 @@
 namespace App\Http\Livewire\Inner;
 
 use App\Jobs\EmailIncompleteTransfer;
-use App\Mail\BeneficiaryCreated;
-use App\Mail\BeneficiaryNameChanged;
-use App\Models\Transfer\Coupon;
-use App\Mail\IncompleteTransfer;
-use App\Mail\RegisterDone;
-use App\Mail\TransferCreated;
 use App\Models\Customer\Customer;
 use App\Models\Partner\Payer;
 use App\Models\Partner\PayerValidation;
 use App\Models\Partner\Routing;
+use App\Models\Transfer\Coupon;
 use App\Models\Transfer\Ledger;
 use App\Models\Transfer\StatusTracker;
 use App\Models\Transfer\Transfer;
@@ -39,11 +34,8 @@ use App\Traits\Validation\ValidateFreeFeeOffer;
 use Devzone\Rms\AdminFee;
 use Devzone\Rms\AllRates;
 use Devzone\Rms\Source;
-
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
 
@@ -175,6 +167,7 @@ class SendMoney extends Component
     ];
 
 
+    public $payment_done = false;
     public $profile = false;
     public $address = false;
     public $documents = false;
@@ -245,6 +238,16 @@ class SendMoney extends Component
             $this->receiving_country_id = $query['receiving_country_id'];
             $this->updatedReceivingCountryId($query['receiving_country_id']);
         }
+
+        if (count($this->rc_data) == 1) {
+            $this->receiving_country_id = $this->rc_data[0]['id'];
+            $this->updatedReceivingCountryId($this->receiving_country_id);
+        }
+        if (count($this->sm_data) == 1) {
+            $this->selected_sending_method = $this->sm_data[0];
+            $this->sending_method_id = $this->selected_sending_method['id'];
+
+        }
     }
 
 
@@ -266,6 +269,12 @@ class SendMoney extends Component
             $rates = collect($rates);
             $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
+
+            if (count($this->receiving_methods) == 1) {
+                $this->receiving_method = $this->receiving_methods[0];
+                $this->getPayers();
+
+            }
         } catch (\Exception $e) {
             $this->reset('amounts');
             $this->error = $e->getMessage();
@@ -306,6 +315,12 @@ class SendMoney extends Component
             $rates = $rates->rate();
             $this->rates = json_decode(json_encode($rates), true);
             $this->payers = collect($this->rates)->where('method', $this->receiving_method)->toArray();
+            if (count($this->payers) == 1) {
+
+                $this->selected_payer = $this->payers[0];
+                $this->setPayer();
+                $this->payer_id = $this->selected_payer['id'];
+            }
         }
     }
 
