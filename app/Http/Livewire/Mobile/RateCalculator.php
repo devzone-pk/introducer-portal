@@ -342,7 +342,7 @@ class RateCalculator extends Component
     }
 
     private function payerLimits()
-    {
+    {return true;
         $this->resetErrorBag();
         if (empty($this->selected_payer['id'])) {
             return true;
