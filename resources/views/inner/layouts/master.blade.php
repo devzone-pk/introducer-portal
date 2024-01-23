@@ -266,7 +266,7 @@
     <div class="container-md">
     <div class="alert  alert-danger mt-5 mb-0">
         <strong>Attention!</strong> <br>
-        We are now closed.   @if (!$is_sunday) Our opening hours are 9 am - 7 pm. Thank you. @endif
+        We are now closed.   @if (!$is_sunday) Our opening hours are 9am-19.00pm. Thank you. @endif
     </div>   
 </div>
 
