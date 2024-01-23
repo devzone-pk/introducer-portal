@@ -357,6 +357,30 @@
                 input.select();
             });
 
+            $('.select-dropdown').select2({
+                theme: "bootstrap-5",
+
+                templateResult: function(value) {
+                    if (value.element) {
+                        return $(
+                            "<div class='d-flex   align-items-center align-self-center'><img class='rounded-1' style='width:50px;' src='{{ url('assets/flags') }}/" +
+                            $(value.element).attr("data-iso2") +
+                            ".svg'/>  <div style='font-size:20px;' class='ps-2'>" + value.text +
+                            "</div></div>");
+                    }
+                    return 'Choose';
+                },
+                templateSelection: function(value) {
+                    if (value.element) {
+                        return $(
+                            "<div class='d-flex  align-items-center align-self-center'><img class='rounded-1' style='width:50px;' src='{{ url('assets/flags') }}/" +
+                            $(value.element).attr("data-iso2") +
+                            ".svg'/>  <div style='font-size:20px;font-weight:600;' class='ps-2'>" +
+                            value.text + "</div></div>");
+                    }
+                    return 'Choose';
+                }
+            });
 
         });
     </script>
