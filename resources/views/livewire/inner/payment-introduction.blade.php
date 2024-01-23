@@ -877,26 +877,26 @@
                                             {{--                                            <div class="col-sm-6 col-xs-12 d-grid">--}}
                                             {{--                                                <button type="submit" class="btn btn-primary shadow-none">Continue</button>--}}
                                             {{--                                            </div>--}}
+                                            <hr>
                                         </div>
-                                    <hr>
-                                        @foreach ($validation as $v)
-                                            <div class="col-xs-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label fs-16px mb-1">{{ $v['label'] }}</label>
-                                                    <input type="{{ $v['type'] }}"
-                                                           placeholder="{{ $v['placeholder'] }}"
-                                                           wire:model.lazy="selected_bank_beneficiary.{{ $v['name'] }}"
-                                                           autocomplete="false" autocorrect="off" autocapitalize="off"
-                                                           class="form-control fs-16px {{ $v['class'] }} pe-2 @error('selected_bank_beneficiary.' . $v['name']) is-invalid @enderror">
-                                                    @error('selected_bank_beneficiary.' . $v['name'])
-                                                    <span class="invalid-feedback fs-14px" role="alert">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
-                                                    <small class="form-text text-muted">{!! $v['help_message'] !!}</small>
-                                                </div>
-                                            </div>
-                                        @endforeach
+{{--                                        @foreach ($validation as $v)--}}
+{{--                                            <div class="col-xs-12">--}}
+{{--                                                <div class="mb-3">--}}
+{{--                                                    <label class="form-label fs-16px mb-1">{{ $v['label'] }}</label>--}}
+{{--                                                    <input type="{{ $v['type'] }}"--}}
+{{--                                                           placeholder="{{ $v['placeholder'] }}"--}}
+{{--                                                           wire:model.lazy="selected_bank_beneficiary.{{ $v['name'] }}"--}}
+{{--                                                           autocomplete="false" autocorrect="off" autocapitalize="off"--}}
+{{--                                                           class="form-control fs-16px {{ $v['class'] }} pe-2 @error('selected_bank_beneficiary.' . $v['name']) is-invalid @enderror">--}}
+{{--                                                    @error('selected_bank_beneficiary.' . $v['name'])--}}
+{{--                                                    <span class="invalid-feedback fs-14px" role="alert">--}}
+{{--                                                            {{ $message }}--}}
+{{--                                                        </span>--}}
+{{--                                                    @enderror--}}
+{{--                                                    <small class="form-text text-muted">{!! $v['help_message'] !!}</small>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        @endforeach--}}
                                         <br>
                                     @endforeach
                                     <div class="d-flex align-items-center mt-2 fs-14px">
