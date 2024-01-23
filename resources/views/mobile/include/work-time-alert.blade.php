@@ -5,17 +5,18 @@
     $margin = '';
 @endphp
 
-@if (!$is_closed)
-
-
+@if (!$is_closed && !$is_sunday)
     <div class="section">
         <div class="alert alert-danger @if ($margin) mt-2 @endif mb-2">
             <strong>Attention!</strong> <br>
-
-            We are now closed. @if (!$is_sunday)
-                Our opening hours is 9am-19.00pm. Thank you.
-            @endif
-
+            We are now closed. Our opening hours is 9am-19.00pm. Thank you.
+        </div>
+    </div>
+@elseif($is_sunday)
+    <div class="section">
+        <div class="alert alert-danger @if ($margin) mt-2 @endif mb-2">
+            <strong>Attention!</strong> <br>
+            We are now closed.
         </div>
     </div>
 @endif
