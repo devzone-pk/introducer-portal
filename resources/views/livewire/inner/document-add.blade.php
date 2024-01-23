@@ -47,7 +47,7 @@
                                     class="text-danger">*</span></label>
                         <div class="col-sm-6">
 
-                            <select wire:model="doc_type"
+                            <select wire:model="doc_type" id="DocType"
                                     class="form-select  fs-16px  @error('doc_type') is-invalid @enderror">
                                 <option value=""></option>
                                 @foreach ($document_types as $dt)
@@ -67,7 +67,7 @@
                                     class="text-danger">*</span></label>
                         <div class="col-sm-6">
 
-                            <select wire:model.defer="type"
+                            <select wire:model.defer="type"  id="DocName"
                                     class="form-select  fs-16px  @error('type') is-invalid @enderror">
                                 <option value=""></option>
                                 @if(!empty($doc_type))
@@ -87,7 +87,7 @@
                     <div class="form-group mb-3 row">
                         <label for="" class="col-sm-3  fs-16px  col-form-label">Document No</label>
                         <div class="col-sm-6">
-                            <input type="text" wire:model.defer="document_no"
+                            <input type="text" wire:model.defer="document_no" id="DocNo"
                                    class="form-control  fs-16px  only-alphanum  @error('document_no') is-invalid @enderror">
                             @error('document_no')
                             <span class="invalid-feedback" role="alert">
@@ -103,7 +103,7 @@
                                     class="text-danger">*</span></label>
                         <div class="col-sm-6  ">
                             <input type="date" class="form-control  fs-16px    @error('issuance') is-invalid @enderror"
-                                   wire:model.defer="issuance"
+                                   wire:model.defer="issuance" id="IssuanceDate"
                                    placeholder="Issuance Date">
                             @error('issuance')
                             <span class="invalid-feedback" role="alert">
@@ -118,7 +118,7 @@
                                     class="text-danger">*</span></label>
                         <div class="col-sm-6  ">
                             <input type="date" class="form-control  fs-16px   @error('expiry') is-invalid @enderror"
-                                   wire:model.defer="expiry"
+                                   wire:model.defer="expiry" id="ExpiryDate"
                                    placeholder="Expiry Date">
                             @error('expiry')
                             <span class="invalid-feedback" role="alert">
@@ -137,7 +137,7 @@
                             <div class="mb-3">
 
                                 <input class="form-control  @error('front') is-invalid @enderror" type="file"
-                                       id="formFilefront" wire:model="front" wire:loading.remove
+                                       id="formFilefront" wire:model="front" wire:loading.remove 
                                        accept=".pdf, .jpg, .jpeg, .png, .bmp, .svg, .webp"
                                        capture
                                        @change="setImage">
@@ -177,7 +177,7 @@
 
                                 <input class="form-control  @error('back') is-invalid @enderror" type="file"
                                        id="formFilefront" wire:model="back" wire:loading.remove
-                                       accept=".pdf, .jpg, .jpeg, .png, .bmp, .svg, .webp"
+                                       accept=".pdf, .jpg, .jpeg, .png, .bmp, .svg, .webp" id="5"
                                        capture
                                        @change="setImage"
                                 >
@@ -208,7 +208,7 @@
                         <label for=""
                                class="col-sm-3 fs-16px col-form-label">Issuer Authority</label>
                         <div class="col-sm-6">
-                            <input type="text" wire:model.defer="issuer_authority"
+                            <input type="text" wire:model.defer="issuer_authority" id="IssuerAuthority"
                                    class="form-control  fs-16px    @error('issuer_authority') is-invalid @enderror">
                             @error('issuer_authority')
                             <span class="invalid-feedback" role="alert">
@@ -225,7 +225,7 @@
                                     class="text-danger">*</span></label>
                         <div class="col-sm-6">
 
-                            <select wire:model.defer="issuer_country_id"
+                            <select wire:model.defer="issuer_country_id" id="IssuerCountry"
                                     class="form-select fs-16px   @error('issuer_country_id') is-invalid @enderror">
                                 <option value=""></option>
                                 @foreach ($countries as $o)
