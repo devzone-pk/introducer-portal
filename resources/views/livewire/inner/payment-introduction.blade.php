@@ -779,6 +779,7 @@
                                     @foreach($selected_beneficiary as $key => $sb)
                                         <div class="row g-4" style="border: 1px solid #00000010;border-radius: 10px;background-color: #f5f5f530">
                                             <p class="fw-bold">Beneficiary # {{$loop->iteration}}</p>
+                                            <p class="fw-bold fs-14px">Personal Details:</p>
                                             <div class="col-xs-12 col-sm-4">
                                                 <div class="mb-3">
                                                     <label class="form-label fs-16px  mb-1">First Name</label>
@@ -877,7 +878,7 @@
                                             {{--                                            <div class="col-sm-6 col-xs-12 d-grid">--}}
                                             {{--                                                <button type="submit" class="btn btn-primary shadow-none">Continue</button>--}}
                                             {{--                                            </div>--}}
-                                            <hr>
+                                            <p class="fw-bold fs-14px">Bank Details:</p>
                                         </div>
 {{--                                        @foreach ($validation as $v)--}}
 {{--                                            <div class="col-xs-12">--}}
