@@ -13,7 +13,7 @@
             <strong>Attention!</strong> <br>
 
             We are now closed. @if (!$is_sunday)
-                Our opening hours are 9am-19.00pm. Thank you.
+                Our opening hours is 9am-19.00pm. Thank you.
             @endif
 
         </div>
