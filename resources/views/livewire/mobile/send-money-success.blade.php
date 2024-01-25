@@ -74,7 +74,7 @@
 
 
             <p class="fs-20px mt-3 fw-bold">
-                Your transaction has been placed successfully
+                Your transaction is being processed
             </p>
             <p class="   text-gray fw-bold">
                 Transaction Code: {{ $transfer->transfer_code }}
@@ -91,66 +91,7 @@
         </div>
 
 
-        @if($transfer->status == 'PEN' && $transfer->sending_method_id =='91' )
-            <div class="alert  alert-danger mb-2 mt-2">
-                <strong>Attention!</strong> <br>
-                Your funds have not yet been received. Please send
 
-                <span class="fw-bold fs-18px">
-
-                    {{ $transfer->sending_currency }} {{ number_format($transfer->sending_amount+$transfer->company_charges,2) }}
-                    </span> to following details
-            </div>
-
-
-
-
-            <ul class="listview mb-4 profile-listview image-listview">
-
-                <li class="profile-list">
-                    <a href="#" class="item">
-                        <div class="in">
-                            <div>
-                                <p class="fs-16px mb-0">Bank Name</p>
-                                <p class="fs-16px m-0 text-muted">Leatherback Ltd</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li class="profile-list">
-                    <a href="#" class="item">
-                        <div class="in">
-                            <div>
-                                <p class="fs-16px mb-0">Account Name</p>
-                                <p class="fs-16px m-0 text-muted">ORIUM GLOBAL RESOURCES LIMITED</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li class="profile-list">
-                    <a href="#" class="item">
-                        <div class="in">
-                            <div>
-                                <p class="fs-16px m-0 text-muted">Sort Code</p>
-                                <p class="fs-16px mb-0">040691</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li class="profile-list">
-                    <a href="#" class="item">
-                        <div class="in">
-                            <div>
-                                <p class="fs-16px m-0 text-muted">Account Number</p>
-                                <p class="fs-16px mb-0">00027862</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-
-
-            </ul>
-        @endif
 
 
     </div>
