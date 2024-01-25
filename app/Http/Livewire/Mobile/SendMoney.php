@@ -2,11 +2,6 @@
 
 namespace App\Http\Livewire\Mobile;
 
-use App\Jobs\EmailIncompleteTransfer;
-use App\Mail\BeneficiaryCreated;
-use App\Mail\BeneficiaryNameChanged;
-use App\Mail\IncompleteTransfer;
-use App\Mail\TransferCreated;
 use App\Models\Customer\Customer;
 use App\Models\Partner\Payer;
 use App\Models\Partner\PayerValidation;
@@ -42,7 +37,6 @@ use Devzone\Rms\Source;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
 
@@ -132,6 +126,7 @@ class SendMoney extends Component
         'selected_bank_beneficiary.branch_code' => 'branch code',
         'selected_cash_destination.id' => 'Cash Pickup Location'
     ];
+    public $payment_done = 0;
 
     public $profile = false;
     public $address = false;
@@ -191,6 +186,17 @@ class SendMoney extends Component
 
         if (!$this->validateUserMobileProfile($customer)) {
             $this->redirectTo = url('mobile/profile') . '?incomplete=true';
+        }
+        $this->rcFetchData();
+
+        if (count($this->rc_data) == 1) {
+            $this->receiving_country = $this->rc_data[0];
+            $this->getReceivingMethods();
+        }
+
+        $this->smfetchData();
+        if (count($this->sm_data) == 1) {
+            $this->selected_sending_method = $this->sm_data[0];
         }
 
     }

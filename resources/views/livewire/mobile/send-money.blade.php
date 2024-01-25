@@ -115,15 +115,15 @@
                 <div class="rounded bg-white shadow-c form-padding mb-4">
                     <form wire:submit.prevent="validateSendingDetails">
 
-                        <div class="form-group boxed">
+                        <div class="form-group boxed d-none">
                             <div class="input-wrapper">
 
                                 <div style="background: rgb(204 204 204 / 31%);" role="button"
-                                    class="form-control mobile-input d-flex align-items-center">
+                                     class="form-control mobile-input d-flex align-items-center">
 
                                     <img class="imaged rounded w24 me-1"
-                                        src="{{ url('images/flags') }}/{{ strtolower(strtolower(session('iso2'))) }}.svg"
-                                        alt="">
+                                         src="{{ url('images/flags') }}/{{ strtolower(strtolower(session('iso2'))) }}.svg"
+                                         alt="">
 
                                     <span>{{ session('country_name') }}</span>
 
@@ -131,17 +131,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group boxed">
+                        <div class="form-group boxed {{ (count($this->rc_data) == 1) ? 'd-none' :'' }}">
                             <div class="input-wrapper">
 
                                 <div role="button"
-                                    class="form-control mobile-input d-flex justify-content-between align-items-center  pe-2  @error('receiving_country.iso2') is-invalid @enderror"
-                                    wire:click.prevent="rcOpenModel('receiving_country','0')">
+                                     class="form-control mobile-input d-flex justify-content-between align-items-center  pe-2  @error('receiving_country.iso2') is-invalid @enderror"
+                                     wire:click.prevent="rcOpenModel('receiving_country','0')">
                                     <div>
                                         @if (!empty($receiving_country['iso2']))
                                             <img class="imaged rounded w24 me-1"
-                                                src="{{ url('images/flags') }}/{{ strtolower($receiving_country['iso2']) }}.svg"
-                                                alt="">
+                                                 src="{{ url('images/flags') }}/{{ strtolower($receiving_country['iso2']) }}.svg"
+                                                 alt="">
                                             <span>
                                                 {{ $receiving_country['name'] }}
                                             </span>
@@ -166,11 +166,11 @@
                         </div>
 
                         @if (!empty($receiving_country['iso2']))
-                            <div class="form-group boxed">
+                            <div class="form-group boxed {{ (count($receiving_methods) == 1) ? 'd-none' :'' }}">
                                 <div class="input-wrapper">
 
                                     <div class="d-flex form-control mobile-input align-items-center  pe-2 justify-content-between @error('receiving_method') is-invalid @enderror"
-                                        role="button" wire:click.prevent="rmOpenModel('receiving_method','0')">
+                                         role="button" wire:click.prevent="rmOpenModel('receiving_method','0')">
 
                                         <span class="{{ empty($receiving_method) ? 'text-placeholder' : '' }} ">
 
@@ -411,13 +411,52 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary mt-2  btn-block btn-lg">
+                            <div class=" my-2 alert alert-warning">
+
+                                <p class="m-0">
+                                    <span>Bank Name: </span>
+                                    <strong>Leatherback Ltd</strong>
+                                </p>
+                                <p class="m-0">
+                                    <span>Account Name: </span>
+                                    <strong>ORIUM GLOBAL RESOURCES LIMITED </strong>
+                                </p>
+                                <p class="m-0">
+                                    <span>Sort Code: </span>
+                                    <strong>040691</strong>
+                                </p>
+                                <p class="m-0">
+                                    <span>Account Number: </span>
+                                    <strong>00027862</strong>
+                                </p>
+
+                            </div>
+                            <div class="  ">
+
+                                <label class="form-check-label" for="payment">
+                                    <strong>
+                                        Has payment been deposited into the account stated above?
+                                    </strong>
+                                </label>
+                            </div>
+                            <select name="" wire:model="payment_done"
+                                    class="form-select mb-2 fs-16px  @error('selected_cash_destination') is-invalid @enderror">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+
+                            </select>
+
+
+                            @if($payment_done)
+                                <button type="submit" class="btn btn-primary mt-2  btn-block btn-lg">
                                 <span wire:loading wire:target="validateSendingDetails">
                                     <span class="spinner-grow spinner-grow-sm me-05" role="status"
-                                        aria-hidden="true"></span>
+                                          aria-hidden="true"></span>
                                 </span>
-                                Continue
-                            </button>
+                                    Continue
+                                </button>
+                            @endif
+
                         @endif
 
                     </form>
