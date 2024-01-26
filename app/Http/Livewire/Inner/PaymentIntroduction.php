@@ -6,13 +6,21 @@ use App\Models\Agent;
 use App\Models\Country\Country;
 use App\Models\Country\SendingReceivingCountry;
 use App\Models\Customer\Customer;
+use App\Models\Customer\CustomerDocument;
 use App\Models\Options\Option;
 use App\Models\Partner\Payer;
+use App\Models\Transfer\Transfer;
+use App\Models\Transfer\TransferBeneficiary;
+use App\Models\Transfer\TransferCustomer;
 use App\Models\User\Beneficiary;
+use App\Models\User\BeneficiaryBank;
 use App\Models\User\User;
+use App\Traits\Modals\BeneficiaryList;
 use App\Traits\Modals\Nationality;
 use App\Traits\Modals\Occupation;
 use App\Traits\Modals\Relationship;
+use App\Traits\Modals\SearchBanks;
+use App\Traits\Modals\SendingReasons;
 use App\Traits\Validation\UserDocumentValidation;
 use Devzone\Rms\AdminFee;
 use Devzone\Rms\AllRates;
@@ -25,11 +33,28 @@ use Livewire\WithFileUploads;
 class PaymentIntroduction extends Component
 {
     use WithFileUploads;
-    use Nationality, Occupation, UserDocumentValidation,Relationship;
+    use Nationality,
+        Occupation,
+        UserDocumentValidation,
+        Relationship,
+        SearchBanks,
+        SendingReasons,
+        BeneficiaryList;
 
     public $customer = [];
+    public $customer_check = false;
+    public $customer_id = null;
+    public $customer_user_id = null;
     public $customer_documents = [];
     public $selected_beneficiary = [];
+    public $existing_beneficiary_id = null;
+    public $details_completed = [
+        'customer_info' => false,
+        'customer_docs' => false,
+        'docs_found' => false,
+        'payments' => false,
+        'beneficiary' => false,
+    ];
     public $payments = [];
     public $amounts = [
         'sending_amount' => 0,
@@ -50,22 +75,83 @@ class PaymentIntroduction extends Component
     public $receiving_iso2;
     public $sending_iso2;
     public $receiving_country;
-    public $receiving;
+    public $receiving = [];
     public $sending_country;
-    public $sending;
+    public $sending = [];
     public $receiving_method_id;
-    public $receiving_methods;
+    public $receiving_methods = [];
     public $receiving_method;
-    public $payers;
+    public $payers = [];
     public $payer_id;
     public $selected_payer;
     public $rates;
+
     public $high_rate = [
         'rate_after_spread' => 0
     ];
     public $agent_user_id;
     public $error;
-    public $selected_window = 'beneficiary';
+    public $selected_window = 'customer_info';
+    protected $validationAttributes = [
+        'receiving_country.iso2' => 'sending to',
+        'receiving_method' => 'receiving method',
+        'selected_payer.id' => 'payer',
+        'amounts.total' => 'total amount',
+        'amounts.sending_amount' => 'sending amount',
+        'selected_beneficiary.*.first_name' => 'beneficiary first name',
+        'selected_beneficiary.*.last_name' => 'beneficiary last name',
+        'selected_beneficiary.*.phone' => 'beneficiary phone',
+        'selected_beneficiary.*.code' => 'beneficiary phone code',
+        'selected_beneficiary.*.relationship_id' => 'beneficiary relationship',
+        'selected_beneficiary.*.selected_sending_reason' => 'sending reason',
+        'selected_beneficiary.*.account_no' => 'account #',
+        'selected_beneficiary.*.bank_id' => 'bank',
+        'selected_beneficiary.*.name' => 'bank name',
+        'selected_beneficiary.*.ifsc' => 'ifsc code',
+        'customer_documents.type' => 'type',
+        'customer_documents.document_no' => 'issuer_country',
+        'customer_documents.issuance' => 'issuance',
+        'customer_documents.expiry' => 'issuance',
+        'customer_documents.issuer_country_id' => 'issuer country',
+        'customer.occupation_id' => 'occupation',
+        'customer.nationality_country_id' => 'nationality',
+        'customer.first_name' => 'first name',
+        'customer.last_name' => 'last name',
+        'customer.email' => 'email',
+        'customer.dob' => 'dob',
+        'customer.gender' => 'gender',
+        'customer.phone' => 'phone',
+        'customer.phone_code' => 'code',
+        'customer.place_of_birth' => 'place of birth',
+        'customer.house_no' => 'house no',
+        'customer.street_name' => 'street name',
+        'customer.postal_code' => 'post code',
+        'customer.city_name' => 'city',
+        'selected_beneficiary.*.receiving_amount' => 'receiving amount',
+
+
+    ];
+
+    protected $messages = [
+        'selected_cash_destination.required' => 'Cash pick-up location is required.',
+        'selected_beneficiary.*.first_name.required' => 'Beneficiary first name is required.',
+        'selected_beneficiary.*.first_name.regex' => 'Beneficiary first name format is invalid.',
+        'selected_beneficiary.*.last_name.required' => 'Beneficiary last name is required.',
+        'selected_beneficiary.*.last_name.regex' => 'Beneficiary last name format is invalid.',
+        'selected_beneficiary.*.phone.required' => 'Beneficiary phone is required.',
+        'selected_beneficiary.*.relationship_id.required' => 'Beneficiary relationship is required.',
+        'selected_beneficiary.*.selected_sending_reason.required' => 'Sending reason is required.',
+        'selected_beneficiary.*.bank_id.required' => 'Bank is required.',
+        'selected_beneficiary.*.account_no.required' => 'Account # is required.',
+        'selected_beneficiary.*.receiving_amount.required' => 'Receiving Amount is required.',
+        'selected_sending_method.id.required' => 'Sending method is required.',
+        'selected_beneficiary.code.required' => 'Beneficiary phone code is required.',
+        'amounts.sending_amount.required' => 'Sending amount is required.',
+        'amounts.total.required' => 'Total amount is required.',
+        'selected_payer.id.required' => 'Payer is required.',
+        'receiving_method.required' => 'Receiving method is required.',
+        'receiving_country.iso2.required' => 'Sending to is required.',
+    ];
 
     protected function rules()
     {
@@ -74,12 +160,13 @@ class PaymentIntroduction extends Component
             $rules = [
                 'customer.first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
                 'customer.last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+                'customer.email' => 'required|string',
                 'customer.dob' => 'required|date|date_format:Y-m-d|before:-17 years',
                 'customer.gender' => 'required|string|in:f,m',
-                'customer.phone' => 'required|regex:/^[0-9]+$/',
-                'customer.code' => 'required|string',
+                'customer.phone_code' => 'required|regex:/^[0-9]+$/',
+                'customer.phone_code' => 'required|string',
                 'customer.nationality_country_id' => 'required|integer',
-                'occupation_id' => 'required|integer',
+                'customer.occupation_id' => 'required|integer',
                 'customer.place_of_birth' => 'required|string',
                 'customer.house_no' => 'required|string',
                 'customer.street_name' => 'required|string',
@@ -95,9 +182,34 @@ class PaymentIntroduction extends Component
                 'customer_documents.issuance' => 'required|date|before_or_equal:today|date_format:Y-m-d',
                 'customer_documents.expiry' => 'required|date|after:issuance|after:today|date_format:Y-m-d',
                 'front' => 'required|file|mimes:pdf,jpg,jpeg,png,bmp,svg,webp',
-                'back' => 'nullable|file|mimes:pdf, jpg, jpeg, png, bmp,svg,webp',
+                'back' => 'nullable|file|mimes:pdf,jpg,jpeg,png,bmp,svg,webp',
                 'customer_documents.issuer_country_id' => 'required',
-                'customer_documents.doc_type' => 'required'
+            ];
+        }
+
+        if ($this->selected_window == 'payments') {
+            $rules = [
+                'receiving_country.iso2' => 'required|string',
+                'receiving_method' => 'required|string',
+                'selected_payer.id' => 'required',
+                'amounts.total' => 'required',
+                'amounts.sending_amount' => 'required|string',
+                'amounts.receive_amount' => 'required|string',
+                //'selected_sending_method.id' => 'required'
+            ];
+        }
+
+        if ($this->selected_window == 'beneficiary') {
+            $rules = [
+                'selected_beneficiary.*.first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+                'selected_beneficiary.*.last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+                'selected_beneficiary.*.phone' => 'required|regex:/^[0-9]+$/',
+                'selected_beneficiary.*.code' => 'required|string',
+                'selected_beneficiary.*.relationship_id' => 'required',
+                'selected_beneficiary.*.selected_sending_reason' => 'required',
+                'selected_beneficiary.*.bank_id' => 'required',
+                'selected_beneficiary.*.account_no' => 'required|string',
+                'selected_beneficiary.*.receiving_amount' => 'required',
             ];
         }
 
@@ -117,23 +229,24 @@ class PaymentIntroduction extends Component
                 'selected_sending_reason' => 'required',
                 'source_of_funds' => 'required'
             ];
-            return $rules;
         }
+        return $rules;
     }
 
 
     public function mount()
     {
         $this->countries = Country::whereNull('deleted_at')->get()->toArray();
-        $this->customer['code'] = optional(collect($this->countries)->where('iso2', 'GB')->first())['phonecode'];
+        $uk_data = collect($this->countries)->where('iso2', 'GB')->first();
+        $this->customer['phone_code'] = optional($uk_data)['phonecode'];
+        $this->customer['country_name'] = optional($uk_data)['name'];
+        $this->customer['iso2'] = optional($uk_data)['iso2'];
         $this->options = Option::where('option_type_id', '2')
             ->where('secondary_name', 'Identification Documents')
             ->orderBy('additional_info')->get();
         $this->ocfetchData();
         $this->nFetchData();
         $this->getPaymentsData();
-        $this->addBeneficiaryCard();
-
     }
 
     public function getPaymentsData($iso = 'NG')
@@ -196,6 +309,20 @@ class PaymentIntroduction extends Component
 
     }
 
+
+    public function updatedExistingBeneficiaryId($val,$key){
+
+
+        $bene_found = Beneficiary::find($val);
+        if (!empty($bene_found)){
+//            $bene_bank = BeneficiaryBank::
+            $this->selected_beneficiary[$key]['first_name']= $bene_found->first_name;
+            $this->selected_beneficiary[$key]['last_name']= $bene_found->last_name;
+            $this->selected_beneficiary[$key]['phone']= $bene_found->phone;
+            $this->selected_beneficiary[$key]['relationship_id']= $bene_found->relationship_id;
+        }
+
+    }
     public function getRates()
     {
         try {
@@ -259,13 +386,6 @@ class PaymentIntroduction extends Component
         }
 
     }
-
-    public function updatedReceivingMethod($val)
-    {
-
-        $this->selectMethod($val);
-    }
-
 
     public function updatedReceivingIso2($value)
     {
@@ -369,6 +489,57 @@ class PaymentIntroduction extends Component
         }
     }
 
+    public function customerExistsCheck()
+    {
+
+        $this->validate(['customer.email' => 'required', 'customer.phone' => 'required'], [], ['customer.email' => 'email', 'customer.phone' => 'phone']);
+        try {
+
+            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+            $number = $phoneUtil->parse($this->customer['phone_code'] . $this->customer['phone'], $this->customer['iso2']);
+            $isValid = $phoneUtil->isValidNumber($number);
+            if (!$isValid) {
+                $this->addError('customer.phone', 'Please enter valid phone number.');
+                return;
+            }
+
+            $customer_found = Customer::join('users as u', 'u.id', '=', 'customers.user_id')
+                ->join('countries as co', 'co.id', '=', 'customers.country_id')
+                ->where('customers.email', $this->customer['email'])
+                ->where('customers.phone_code', $this->customer['phone_code'])
+                ->where('customers.phone', $this->customer['phone'])
+                ->where('u.company_id', env('COMPANY_ID'))
+                ->select('customers.id', 'customers.user_id', 'customers.first_name', 'customers.last_name', 'customers.email', 'customers.dob',
+                    'customers.phone_code', 'customers.phone', 'customers.gender', 'customers.house_no', 'customers.street_name',
+                    'customers.postal_code', 'customers.city_name', 'co.name as country_name')
+                ->get()->first();
+
+            if (!empty($customer_found)) {
+                $customer_found = $customer_found->toArray();
+                $this->customer_id = $customer_found['id'];
+                $this->customer_user_id = $customer_found['user_id'];
+                $this->customer = $customer_found;
+                $this->details_completed['customer_info'] = true;
+                $docs_found = CustomerDocument::where('customer_id', $this->customer_id)->where('is_primary', 't')->where('issuance', '<=', date('Y-m-d'))
+                    ->where('expiry', '>=', date('Y-m-d'))->whereNull('deleted_at')->first();
+                if ($docs_found) {
+                    $this->customer_documents['type'] = $docs_found['type'];
+                    $this->details_completed['customer_docs'] = true;
+                    $this->details_completed['docs_found'] = true;
+                    $this->benefetchData();
+                    $this->selected_window = 'payments';
+                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
+                } else {
+                    $this->selected_window = 'cus_docs';
+                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseTwo']);
+                }
+            }
+            $this->customer_check = true;
+
+        } catch (Exception $e) {
+            $this->addError('cus_check', $e->getMessage());
+        }
+    }
 
     public function validateCustomerDetails()
     {
@@ -379,11 +550,10 @@ class PaymentIntroduction extends Component
                 $this->dispatchBrowserEvent('open-modal', ['model' => 'error-dialog']);
             }
         })->validate();
-
         try {
 
             $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-            $number = $phoneUtil->parse($this->customer['code'] . $this->customer['phone'], $this->customer['iso2']);
+            $number = $phoneUtil->parse($this->customer['phone_code'] . $this->customer['phone'], $this->customer['iso2']);
             $isValid = $phoneUtil->isValidNumber($number);
             if (!$isValid) {
                 $this->addError('customer.phone', 'Please enter valid phone number.');
@@ -391,7 +561,7 @@ class PaymentIntroduction extends Component
             }
 
             $customer_user_ids = Customer::where('phone', $this->customer['phone'])
-                ->where('phone_code', $this->customer['code'])->whereNotNull('user_id')->pluck('user_id')->toArray();
+                ->where('phone_code', $this->customer['phone_code'])->whereNotNull('user_id')->pluck('user_id')->toArray();
 
             if (!empty($customer_user_ids)) {
                 if (User::whereIn('id', $customer_user_ids)->where('company_id', env('COMPANY_ID'))->exists()) {
@@ -405,8 +575,11 @@ class PaymentIntroduction extends Component
 
             $this->selected_window = 'cus_docs';
 
+            $this->details_completed['customer_info'] = true;
+            $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseTwo']);
+
         } catch (\Exception $e) {
-            $this->addError('error', $e->getMessage());
+            $this->addError('cus_info', $e->getMessage());
         }
 
     }
@@ -437,10 +610,14 @@ class PaymentIntroduction extends Component
 
             $this->selected_window = 'payments';
 
+            $this->details_completed['customer_docs'] = true;
+
+            $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
         } catch (\Exception $e) {
             $this->addError('error', $e->getMessage());
         }
     }
+
 
     public function validateSendingDetails()
     {
@@ -456,9 +633,16 @@ class PaymentIntroduction extends Component
             //$this->reset('amounts');
             return false;
         }
+
         $this->selected_window = 'beneficiary';
-        $this->addBeneficiaryCard();
-//        $this->benefetchData();
+        $this->details_completed['payments'] = true;
+        $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseFour']);
+        if (empty($this->selected_beneficiary)) {
+            $this->addBeneficiaryCard();
+        }
+        $this->sbfetchData();
+        $this->srfetchData();
+        $this->rlfetchData();
     }
 
     public function addBeneficiaryCard()
@@ -470,12 +654,34 @@ class PaymentIntroduction extends Component
             'phone' => null,
             'relationship_id' => null,
             'selected_sending_reason' => null,
+            'receiving_amount' => 0,
         ];
     }
 
-    public function validateBeneficiaryDetail()
+    public function deleteBeneficiaryCard($key)
+    {
+        unset($this->selected_beneficiary[$key]);
+    }
+
+
+    public function newBeneCard()
+    {
+
+        $previous_bene = last($this->selected_beneficiary);
+        if (empty($previous_bene)) {
+            $this->addBeneficiaryCard();
+            return;
+        }
+        if ($this->validateBeneficiaryDetail($previous_bene)) {
+            $this->addBeneficiaryCard();
+        }
+    }
+
+    public function validateBeneficiaryDetail($previous_bene)
     {
         $this->reset(['error']);
+        $this->resetErrorBag();
+
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
                 $this->dispatchBrowserEvent('close-modal', ['model' => 'error-dialog']);
@@ -485,50 +691,53 @@ class PaymentIntroduction extends Component
 
         try {
             $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-            $number = $phoneUtil->parse($this->selected_beneficiary['code'] . $this->selected_beneficiary['phone'], $this->receiving_country['iso2']);
+            $number = $phoneUtil->parse($previous_bene['code'] . $previous_bene['phone'], $this->receiving_country['iso2']);
             $isValid = $phoneUtil->isValidNumber($number);
             if (!$isValid) {
-                $this->addError('selected_beneficiary.phone', 'Please enter valid phone number.');
-                return;
+                $this->addError('error', 'Please enter valid phone number.');
+                return false;
             }
         } catch (Exception $exception) {
             $this->addError('selected_beneficiary.phone', 'Please enter valid phone number.');
-            return;
+            return false;
         }
 
-        if (empty($this->selected_beneficiary['id'])) {
+        $duplicate = Beneficiary::where('country_id', $this->receiving_country['id'])
+            ->where(function ($q) use ($previous_bene) {
+                return $q->orWhere(function ($w) use ($previous_bene) {
+                    return $w->where('first_name', $previous_bene['first_name'])->where('last_name', $previous_bene['last_name']);
+                })->orWhere('phone', $previous_bene['phone']);
+            })->exists();
 
-            $duplicate = Beneficiary::where('country_id', $this->receiving_country['id'])
-                ->where(function ($q) {
-                    return $q->orWhere(function ($w) {
-                        return $w->where('first_name', $this->selected_beneficiary['first_name'])->where('last_name', $this->selected_beneficiary['last_name']);
-                    })
-                        ->orWhere('phone', $this->selected_beneficiary['phone']);
-                })->where('customer_id', session('customer_id'))->exists();
-
-            if ($duplicate) {
-                $this->addError('error', 'Duplication Alert! The beneficiary already exists. Please choose from the existing receiver list.');
-                $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
-                $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
-                return;
-            }
+        if ($duplicate) {
+            $this->addError('error', 'Duplication Alert! The beneficiary already exists. Please choose from the existing receiver list.');
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
+            return false;
         }
 
-        $name = collect($this->rl_data)->firstWhere('id', $this->selected_beneficiary['relationship_id']);
-        if (!empty($name)) {
-            $this->selected_beneficiary['relationship_name'] = $name['name'];
-        }
+        $duplicate = BeneficiaryBank::join('beneficiaries as b', 'b.id', '=', 'beneficiary_banks.beneficiary_id')
+            ->where('b.customer_id', session('customer_id'))
+            ->where(function ($q) use ($previous_bene) {
+                return $q->when(!empty($previous_bene['account_no']), function ($q) use ($previous_bene) {
+                    $q->orWhere('account_no', $previous_bene['account_no']);
+                })->when(!empty($previous_bene['iban']), function ($q) use ($previous_bene) {
+                    $q->orWhere('iban', $previous_bene['iban']);
+                });
+            })->select('beneficiary_id')->first();
 
+        if (!empty($duplicate)) {
 
-        //$this->dispatchBrowserEvent('goUp');
-        if (strtolower($this->receiving_method) == 'bank') {
-            $this->bbfetchData();
-            $this->sbfetchData();
-            $this->selected_window = 'bank';
-        } else {
-            $this->selected_window = 'confirm';
+            $bene = Beneficiary::find($duplicate['beneficiary_id']);
+
+            $this->addError('error', 'Duplication Alert! The bank details for the beneficiary named "' . $bene['first_name'] . ' ' . $bene['last_name'] . '" already exist. Please select from the existing options.');
+            $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
+            $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
+            return false;
         }
+        return true;
     }
+
     public function getReceivingMethods()
     {
 
@@ -576,6 +785,132 @@ class PaymentIntroduction extends Component
         }
 
         return true;
+    }
+
+    public function updatedSelectedBeneficiary($value, $name)
+    {
+
+        $name = explode('.', $name);
+        if ($name[1] == 'bank_id') {
+            $this->selected_beneficiary[$name[0]]['account_number'] = null;
+        }
+    }
+
+    public function saveRequestForm()
+    {
+
+        foreach ($this->selected_beneficiary as $s){
+            if (!$this->validateBeneficiaryDetail($s)){
+                $this->addError('request_form','Invalid Beneficiary record found.');
+            }
+        }
+        $this->details_completed['beneficiary'] = true;
+        $this->success = null;
+        $this->resetErrorBag();
+        try {
+
+
+            $details = $this->details_completed;
+            unset($details['docs_found']);
+            if (in_array(false, $details)) {
+                throw new Exception('Please fill the form first');
+            }
+            $this->amounts['receive_amount'] = floatval(preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']));
+            if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
+                throw new Exception('Sending amount must be equal to beneficiary receiving amount');
+            }
+
+            if (empty($this->customer_id)) {
+                $customer = $this->customer;
+                $customer['occupation'] = $this->customer['occupation_id'];
+                unset($customer['country_name'], $customer['iso2'], $customer['occupation_id']);
+                $customer_details = Customer::create($customer);
+                $this->customer_id = $customer_details->id;
+            }
+
+            if (!$this->details_completed['docs_found']) {
+                $this->customer_documents['customer_id'] = $this->customer_id;
+                CustomerDocument::create($this->customer_documents);
+            }
+
+            foreach ($this->selected_beneficiary as $key => $bene) {
+                $bene['customer_id'] = $this->customer_id;
+                $bene_id = Beneficiary::create($bene);
+//                BeneficiaryBank::create($bene);
+                $this->payments['status'] = 'PEN';
+                $this->payments['customer_id'] = $this->customer_id;
+                $this->payments['beneficiary_id'] = $bene_id;
+
+                $transfer = Transfer::create([
+                    'status' => $this->payments['status'],
+                    'channel' => 'on',
+                    'customer_id' =>  $this->customer_id,
+                    'beneficiary_id' => $bene_id,
+                    'beneficiary_bank_id' =>  $this->customer_id,
+                    'payer_id' => $this->selected_payer['id'],
+                    'user_agent_id' => session('user_agent_id'),
+                    'sending_currency' => $this->selected_payer['source_currency'],
+                    'receiving_currency' => $this->selected_payer['currency'],
+                    'sending_country_id' => session('country_id'),
+                    'sending_country' => session('country_name'),
+                    'receiving_country_id' => $this->receiving_country['id'],
+                    'receiving_country' => $this->receiving_country['name'],
+                    'customer_rate' => $this->selected_payer['rate_after_spread'],
+                    'agent_rate' => $this->selected_payer['rate_before_spread'],
+                    'main_agent_rate' => $this->selected_payer['main_agent_rate'],
+                    'sending_amount' => $this->amounts['sending_amount'],
+                    'receiving_amount' => $this->amounts['receive_amount'],
+                    'agent_charges' => 0,
+                    'company_charges' => $this->amounts['fees'],
+                    'sending_method_id' => 91,
+                    'gateway_id' => 3,
+                    'sending_reason' => $bene['selected_sending_reason'],
+                    'receiving_method_id' => $this->selected_payer['method_id'],
+                    'user_id' => $this->customer_user_id,
+                    'company_id' => config('app.company_id'),
+                    'payout_location_id' => $this->selected_cash_destination ?? null
+                ]);
+            }
+
+            redirect()->to('/paymentrequest');
+
+        } catch (Exception $e) {
+            $this->addError('request_form', $e->getMessage());
+        }
+    }
+
+    private function dumpBeneficiary($transfer)
+    {
+        $beneficiary = $this->beneficiaryMapping();
+        $beneficiary['beneficiary_id'] = $transfer->beneficiary_id;
+        $beneficiary['transfer_id'] = $transfer->id;
+        TransferBeneficiary::create($beneficiary);
+    }
+
+    private function dumpCustomer($transfer, $customer)
+    {
+        TransferCustomer::create([
+            'transfer_id' => $transfer->id,
+            'customer_id' => $customer->id,
+            'first_name' => $customer->first_name,
+            'middle_name' => $customer->middle_name,
+            'last_name' => $customer->last_name,
+            'relation_id' => $customer->relation_id,
+            'relation_name' => $customer->relation_name,
+            'gender' => $customer->gender,
+            'dob' => $customer->dob,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+            'phone_code' => $customer->phone_code,
+            'city_name' => $customer->city_name,
+            'house_no' => $customer->house_no,
+            'street_name' => $customer->street_name,
+            'postal_code' => $customer->postal_code,
+            'city_id' => $customer->city_id,
+            'country_id' => $customer->country_id,
+            'occupation' => $customer->occupation,
+            'nationality_country_id' => $customer->nationality_country_id
+        ]);
     }
 
     public function render()
