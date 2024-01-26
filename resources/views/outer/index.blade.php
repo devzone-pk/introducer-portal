@@ -96,12 +96,12 @@
 
                 <div class="col-auto">
 
-                    <a href="#!" class="text-reset d-inline-block me-1">
+                    <a href="{{ env('APP_STORE_LINK') }}" target="_blank" class="text-reset d-inline-block me-1">
                         <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."
                              style="max-width: 155px;">
                     </a>
 
-                    <a href="#" class="text-reset d-inline-block">
+                    <a href="{{ env('GOOGLE_PLAY_STORE_LINK') }}" target="_blank" class="text-reset d-inline-block">
                         <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."
                              style="max-width: 155px;">
                     </a>

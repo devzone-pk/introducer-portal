@@ -330,7 +330,7 @@
                         Landline: +44(0)1224453978<br>
                         Phone: +44(0)7821662833<br>
                         Whatsapp: +44(0)7821662833<br>
-                        Email: info@oriumpay.com
+                        Email:info@oriumglobalresources.com
                     </p>
 
                     <!-- Social -->
@@ -371,14 +371,16 @@
                     <ul class="list-unstyled list-inline list-social mb-md-0">
 
                         <li class="list-inline-item list-social-item">
-                            <a href="#!" class="text-reset d-inline-block">
-                                <img src="assets/img/buttons/button-play.webp" class="img-fluid" alt="..."
+                            <a href="{{ env('GOOGLE_PLAY_STORE_LINK') }}" target="_blank"
+                                class="text-reset d-inline-block">
+                                <img src="assets/img/buttons/button-play.png" class="img-fluid" alt="..."
                                     style="max-width: 97px;">
                             </a>
                         </li>
                         <li class="list-inline-item list-social-item me-3">
-                            <a href="#!" class="text-reset d-inline-block me-1">
-                                <img src="assets/img/buttons/button-app.webp" class="img-fluid" alt="..."
+                            <a href="{{ env('APP_STORE_LINK') }}" target="_blank"
+                                class="text-reset d-inline-block me-1">
+                                <img src="assets/img/buttons/button-app.png" class="img-fluid" alt="..."
                                     style="max-width: 97px;">
                             </a>
                         </li>
@@ -574,7 +576,8 @@
             s0.parentNode.insertBefore(s1, s0);
         })();
 
-        <!--End of Tawk.to Script -->
+        <
+        !--End of Tawk.to Script -->
 
         /**
          * @description Shows the cookie banner
