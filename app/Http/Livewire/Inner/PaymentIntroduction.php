@@ -848,7 +848,7 @@ class PaymentIntroduction extends Component
             $details = $this->details_completed;
             unset($details['docs_found']);
             if (in_array(false, $details)) {
-                throw new Exception('Please fill the form first');
+                throw new Exception('Please fill/confirm all the forms first');
             }
             $this->amounts['receive_amount'] = floatval(preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']));
             if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
