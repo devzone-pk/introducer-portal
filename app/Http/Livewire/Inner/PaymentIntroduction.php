@@ -9,12 +9,17 @@ use App\Models\Customer\Customer;
 use App\Models\Customer\CustomerDocument;
 use App\Models\Options\Option;
 use App\Models\Partner\Payer;
+use App\Models\Transfer\Ledger;
+use App\Models\Transfer\StatusTracker;
 use App\Models\Transfer\Transfer;
+use App\Models\Transfer\TransferAdditionalDetail;
 use App\Models\Transfer\TransferBeneficiary;
 use App\Models\Transfer\TransferCustomer;
+use App\Models\Transfer\TransferDetail;
 use App\Models\User\Beneficiary;
 use App\Models\User\BeneficiaryBank;
 use App\Models\User\User;
+use App\Traits\Modals\BeneficiaryBankList;
 use App\Traits\Modals\BeneficiaryList;
 use App\Traits\Modals\Nationality;
 use App\Traits\Modals\Occupation;
@@ -26,6 +31,9 @@ use Devzone\Rms\AdminFee;
 use Devzone\Rms\AllRates;
 use Devzone\Rms\Source;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -47,7 +55,9 @@ class PaymentIntroduction extends Component
     public $customer_user_id = null;
     public $customer_documents = [];
     public $selected_beneficiary = [];
-    public $existing_beneficiary_id = null;
+    public $existing_beneficiary_id = [];
+    public $existing_beneficiary_bank_id = null;
+    public $existing_beneficiary_bank_data = [];
     public $details_completed = [
         'customer_info' => false,
         'customer_docs' => false,
@@ -90,6 +100,7 @@ class PaymentIntroduction extends Component
         'rate_after_spread' => 0
     ];
     public $agent_user_id;
+    public $source_of_funds = null;
     public $error;
     public $selected_window = 'customer_info';
     protected $validationAttributes = [
@@ -118,6 +129,7 @@ class PaymentIntroduction extends Component
         'customer.first_name' => 'first name',
         'customer.last_name' => 'last name',
         'customer.email' => 'email',
+        'customer.password' => 'password',
         'customer.dob' => 'dob',
         'customer.gender' => 'gender',
         'customer.phone' => 'phone',
@@ -160,11 +172,11 @@ class PaymentIntroduction extends Component
             $rules = [
                 'customer.first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
                 'customer.last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
-                'customer.email' => 'required|string',
+                'customer.email' => 'required|email',
+                'customer.password' => ['required', Password::min(8)->mixedCase()->numbers()],
                 'customer.dob' => 'required|date|date_format:Y-m-d|before:-17 years',
                 'customer.gender' => 'required|string|in:f,m',
-                'customer.phone_code' => 'required|regex:/^[0-9]+$/',
-                'customer.phone_code' => 'required|string',
+                'customer.phone_code' => 'required',
                 'customer.nationality_country_id' => 'required|integer',
                 'customer.occupation_id' => 'required|integer',
                 'customer.place_of_birth' => 'required|string',
@@ -195,6 +207,7 @@ class PaymentIntroduction extends Component
                 'amounts.total' => 'required',
                 'amounts.sending_amount' => 'required|string',
                 'amounts.receive_amount' => 'required|string',
+                'source_of_funds' => 'required|string',
                 //'selected_sending_method.id' => 'required'
             ];
         }
@@ -309,20 +322,41 @@ class PaymentIntroduction extends Component
 
     }
 
-
-    public function updatedExistingBeneficiaryId($val,$key){
+    public function updatedExistingBeneficiaryId($val, $key)
+    {
 
 
         $bene_found = Beneficiary::find($val);
-        if (!empty($bene_found)){
+        if (!empty($bene_found)) {
 //            $bene_bank = BeneficiaryBank::
-            $this->selected_beneficiary[$key]['first_name']= $bene_found->first_name;
-            $this->selected_beneficiary[$key]['last_name']= $bene_found->last_name;
-            $this->selected_beneficiary[$key]['phone']= $bene_found->phone;
-            $this->selected_beneficiary[$key]['relationship_id']= $bene_found->relationship_id;
+            $this->selected_beneficiary[$key]['first_name'] = $bene_found->first_name;
+            $this->selected_beneficiary[$key]['last_name'] = $bene_found->last_name;
+            $this->selected_beneficiary[$key]['phone'] = $bene_found->phone;
+            $this->selected_beneficiary[$key]['relationship_id'] = $bene_found->relationship_id;
+
+            $bene_bank_found = BeneficiaryBank::where('beneficiary_id', $val)
+                ->select('*', 'name as old_name')
+                ->get();
+            if ($bene_bank_found->isNotEmpty()) {
+                $this->existing_beneficiary_bank_data = $bene_bank_found->toArray();
+            } else {
+                $this->existing_beneficiary_bank_data = [];
+            }
         }
 
     }
+
+    public function updatedExistingBeneficiaryBankId($val, $key)
+    {
+
+        $bene_bank_found = BeneficiaryBank::find($val);
+        if (!empty($bene_bank_found)) {
+            $this->selected_beneficiary[$key]['bank_id'] = $bene_bank_found->bank_id;
+            $this->selected_beneficiary[$key]['account_no'] = $bene_bank_found->account_no;
+        }
+
+    }
+
     public function getRates()
     {
         try {
@@ -799,9 +833,9 @@ class PaymentIntroduction extends Component
     public function saveRequestForm()
     {
 
-        foreach ($this->selected_beneficiary as $s){
-            if (!$this->validateBeneficiaryDetail($s)){
-                $this->addError('request_form','Invalid Beneficiary record found.');
+        foreach ($this->selected_beneficiary as $s) {
+            if (!$this->validateBeneficiaryDetail($s)) {
+                $this->addError('request_form', 'Invalid Beneficiary record found.');
             }
         }
         $this->details_completed['beneficiary'] = true;
@@ -809,6 +843,7 @@ class PaymentIntroduction extends Component
         $this->resetErrorBag();
         try {
 
+            DB::beginTransaction();
 
             $details = $this->details_completed;
             unset($details['docs_found']);
@@ -819,15 +854,23 @@ class PaymentIntroduction extends Component
             if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
                 throw new Exception('Sending amount must be equal to beneficiary receiving amount');
             }
-
             if (empty($this->customer_id)) {
                 $customer = $this->customer;
+                $user_id = User::create([
+                    'email' => $customer['email'],
+                    'password' => Hash::make($customer['password']),
+                    'type' => 'on',
+                    'status' => 't',
+                    'company_id' => config('app.company_id'),
+                ])->id;
                 $customer['occupation'] = $this->customer['occupation_id'];
-                unset($customer['country_name'], $customer['iso2'], $customer['occupation_id']);
+                $customer['user_id'] = $user_id;
+                unset($customer['country_name'], $customer['iso2'], $customer['occupation_id'], $customer['password']);
                 $customer_details = Customer::create($customer);
                 $this->customer_id = $customer_details->id;
+            } else {
+                $user_id = $this->customer['user_id'] ?? null;
             }
-
             if (!$this->details_completed['docs_found']) {
                 $this->customer_documents['customer_id'] = $this->customer_id;
                 CustomerDocument::create($this->customer_documents);
@@ -835,8 +878,19 @@ class PaymentIntroduction extends Component
 
             foreach ($this->selected_beneficiary as $key => $bene) {
                 $bene['customer_id'] = $this->customer_id;
-                $bene_id = Beneficiary::create($bene);
-//                BeneficiaryBank::create($bene);
+                if (empty($this->existing_beneficiary_id[$key])) {
+                    $bene_id = Beneficiary::create($this->beneficiaryMapping($bene))->id;
+                } else {
+                    $bene_id = $this->existing_beneficiary_id[$key];
+                }
+
+                if (empty($this->existing_beneficiary_bank_id[$key])) {
+                    $bank = BeneficiaryBank::create($this->beneficiaryBankMapping($bene, $bene_id));
+                    $bene_bank_id = $bank->id;
+                } else {
+                    $bene_bank_id = $this->existing_beneficiary_bank_id[$key];
+                    BeneficiaryBank::find($bene_bank_id)->update($this->beneficiaryBankMapping($bene, $bene_id));
+                }
                 $this->payments['status'] = 'PEN';
                 $this->payments['customer_id'] = $this->customer_id;
                 $this->payments['beneficiary_id'] = $bene_id;
@@ -844,9 +898,9 @@ class PaymentIntroduction extends Component
                 $transfer = Transfer::create([
                     'status' => $this->payments['status'],
                     'channel' => 'on',
-                    'customer_id' =>  $this->customer_id,
+                    'customer_id' => $this->customer_id,
                     'beneficiary_id' => $bene_id,
-                    'beneficiary_bank_id' =>  $this->customer_id,
+                    'beneficiary_bank_id' => $bene_bank_id,
                     'payer_id' => $this->selected_payer['id'],
                     'user_agent_id' => session('user_agent_id'),
                     'sending_currency' => $this->selected_payer['source_currency'],
@@ -870,18 +924,71 @@ class PaymentIntroduction extends Component
                     'company_id' => config('app.company_id'),
                     'payout_location_id' => $this->selected_cash_destination ?? null
                 ]);
+
+                $payer = Payer::find($this->selected_payer['id']);
+                $number = rand(111111, 999999);
+                $code = $payer['prefix'] . str_pad($transfer->id, 6, $number, STR_PAD_LEFT);
+
+                Transfer::find($transfer->id)->update([
+                    'transfer_code' => $code
+                ]);
+
+                StatusTracker::create([
+                    'key' => 'PEN',
+                    'caused_by' => session('customer_id'),
+                    'subject_id' => $transfer->id
+                ]);
+
+                TransferDetail::create([
+                    'transfer_id' => $transfer->id,
+                    'coupon_id' => null,
+                    'coupon_amount' => null,
+                    'created_on' => 'w',
+                    'fee_free_transfer_id' => null,
+                    'source_of_fund' => $this->source_of_funds
+                ]);
+
+                $ip = isset($_SERVER['HTTP_CF_CONNECTING_IP']) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : null;
+
+                $device = \Jenssegers\Agent\Facades\Agent::device();
+                $platform = \Jenssegers\Agent\Facades\Agent::platform();
+                $browser = \Jenssegers\Agent\Facades\Agent::browser();
+                $version = \Jenssegers\Agent\Facades\Agent::version($platform);
+
+                TransferAdditionalDetail::create([
+                    'transfer_id' => $transfer->id,
+                    'ip' => $ip,
+                    'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
+                ]);
+
+
+                Ledger::create([
+                    'user_id' => $user_id,
+                    'debit' => $this->amounts['sending_amount'] + $this->amounts['fees'],
+                    'credit' => 0,
+                    'description' => 'INV ' . $transfer->id . '; Payment # ' . $code . '; Admin Charges ' . $this->amounts['fees'] . '; Sending Amount ' . $this->amounts['sending_amount'] . '; Rate ' . $this->selected_payer['rate_after_spread'],
+                    'admin_charges' => $this->amounts['fees'],
+                    'agent_charges' => 0,
+                    'date' => date('Y-m-d'),
+                    'added_by' => session('user_id')
+                ]);
+
+                $this->dumpBeneficiary($transfer, $bene);
+                $this->dumpCustomer($transfer, $this->customer);
             }
 
-            redirect()->to('/paymentrequest');
+            DB::commit();
+            redirect()->to('/paymentrequest')->with('form_success', 'Payment request form submitted successfully.');
 
         } catch (Exception $e) {
+            DB::rollBack();
             $this->addError('request_form', $e->getMessage());
         }
     }
 
-    private function dumpBeneficiary($transfer)
+    private function dumpBeneficiary($transfer, $bene)
     {
-        $beneficiary = $this->beneficiaryMapping();
+        $beneficiary = $this->beneficiaryMapping($bene);
         $beneficiary['beneficiary_id'] = $transfer->beneficiary_id;
         $beneficiary['transfer_id'] = $transfer->id;
         TransferBeneficiary::create($beneficiary);
@@ -891,26 +998,60 @@ class PaymentIntroduction extends Component
     {
         TransferCustomer::create([
             'transfer_id' => $transfer->id,
-            'customer_id' => $customer->id,
-            'first_name' => $customer->first_name,
-            'middle_name' => $customer->middle_name,
-            'last_name' => $customer->last_name,
-            'relation_id' => $customer->relation_id,
-            'relation_name' => $customer->relation_name,
-            'gender' => $customer->gender,
-            'dob' => $customer->dob,
-            'email' => $customer->email,
-            'phone' => $customer->phone,
-            'phone_code' => $customer->phone_code,
-            'city_name' => $customer->city_name,
-            'house_no' => $customer->house_no,
-            'street_name' => $customer->street_name,
-            'postal_code' => $customer->postal_code,
-            'city_id' => $customer->city_id,
-            'country_id' => $customer->country_id,
-            'occupation' => $customer->occupation,
-            'nationality_country_id' => $customer->nationality_country_id
+            'customer_id' => $this->customer_id,
+            'first_name' => $customer['first_name'],
+            'middle_name' => null,
+            'last_name' => $customer['last_name'],
+            'relation_id' => null,
+            'relation_name' => null,
+            'gender' => $customer['gender'],
+            'dob' => $customer['dob'],
+            'email' => $customer['email'],
+            'phone' => $customer['phone'],
+            'phone_code' => $customer['phone_code'],
+            'city_name' => $customer['city_name'],
+            'house_no' => $customer['house_no'],
+            'street_name' => $customer['street_name'],
+            'postal_code' => $customer['postal_code'],
+            'city_id' => null,
+            'country_id' => 232,
+            'occupation' => null,
+            'nationality_country_id' => null
         ]);
+    }
+
+
+    private function beneficiaryMapping($bene)
+    {
+        $first_name = preg_replace('/\s+/', ' ', $bene['first_name']);
+        $last_name = preg_replace('/\s+/', ' ', $bene['last_name']);
+        return [
+            'customer_id' => $bene['customer_id'],
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'relationship_id' => $bene['relationship_id'],
+            'nationality_country_id' => 161,
+            'country_id' => 161,
+            'phone' => $bene['phone'],
+            'code' => $bene['code'],
+            'type' => 'on'
+        ];
+    }
+
+    private function beneficiaryBankMapping($bene, $bene_id)
+    {
+        return [
+            'beneficiary_id' => $bene_id,
+            'name' => optional(collect($this->sb_data)->where('id', $bene['bank_id'])->first())['name'] ?? null,
+            'bank_id' => $bene['bank_id'],
+            'code' => null,
+            'branch_name' => null,
+            'branch_code' => null,
+            'account_no' => $bene['account_no'],
+            'iban' => null,
+            'ifsc' => null,
+            'country_id' => null
+        ];
     }
 
     public function render()

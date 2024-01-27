@@ -1,5 +1,10 @@
 <div class="row g-3">
 
+    @if (session()->has('form_success'))
+        <div class="alert fs-12px  alert-success">
+            {{ session('form_success') }}
+        </div>
+    @endif
     <div class="card mt-2 card-border border-primary">
         <div class="card-header ">
             <div class="row align-items-center">
@@ -13,7 +18,6 @@
         </div>
         <div class="card-body">
             <div class="col-12">
-
                 <div class="list-group list-group-flush mb-4">
                     <div class="list-group-item">
                         <div class="d-flex align-items-center justify-content-between text-center">
@@ -192,11 +196,25 @@
                                                     <label class="form-label fs-16px  mb-1">Email<span
                                                                 class="text-danger">*</span></label>
                                                     <input
-                                                            {{--                                                    value="{{ $customer['email'] }}"--}}
-                                                            type="email" wire:model.defer="customer.email"
+                                                            disabled value="{{ $customer['email'] }}"
+                                                            type="email"
                                                             class=" fs-16px form-control form-control-sm  @error('customer.email') is-invalid @enderror"
                                                             placeholder="Email">
                                                     @error('customer.email')
+                                                    <span class="invalid-feedback" role="alert">
+                                          {{ $message }}
+                                            </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-3">
+                                                    <label class="form-label fs-16px  mb-1">Password<span
+                                                                class="text-danger">*</span></label>
+                                                    <input
+                                                            {{--                                                    value="{{ $customer['email'] }}"--}}
+                                                            type="text" wire:model.defer="customer.password"
+                                                            class=" fs-16px form-control form-control-sm  @error('customer.password') is-invalid @enderror"
+                                                            placeholder="Password">
+                                                    @error('customer.password')
                                                     <span class="invalid-feedback" role="alert">
                                           {{ $message }}
                                             </span>
@@ -229,14 +247,15 @@
                                                       id="basic-addon1">
                                                     {{ $customer['phone_code'] }}
                                                 </span>
-                                                        <input type="text"
+                                                        <input type="text" disabled
+                                                               value="{{$customer['phone']}}"
                                                                class="form-control only-just-numbers form-control-sm  @error('customer.phone') is-invalid @enderror"
-                                                               wire:model.defer="customer.phone"
+{{--                                                               wire:model.defer="customer.phone"--}}
                                                                placeholder="Mobile number">
                                                         @error('customer.phone')
                                                         <span class="invalid-feedback" role="alert">
-                              {{ $message }}
-                               </span>
+                                                   {{ $message }}
+                                                     </span>
                                                         @enderror
                                                     </div>
 
@@ -432,7 +451,7 @@
 
                                                         <!-- Text -->
                                                         <small class="text-gray-700 fw-light">
-                                                            {{ $customer['id'] }}
+                                                            {{ $customer['id'] ?? null }}
                                                         </small>
 
                                                     </div>
@@ -826,6 +845,28 @@
                                 <form wire:submit.prevent="validateSendingDetails">
 
                                     <div class="row g-4">
+
+                                        <div class="col-xs-12  ">
+                                            <div class="mb-3">
+                                                <label class="form-label fs-16px mb-1">Source of Funds</label>
+                                                <select name="" wire:model="source_of_funds"
+                                                        class="form-select fs-16px  @error('source_of_funds') is-invalid @enderror">
+                                                    <option value="">Select</option>
+                                                    @php
+                                                        $sources = ['SALARY', 'SAVINGS', 'BUSINESS', 'GIFT', 'PENSION', 'BANK LOAN', 'SALES OF PROPERTY OR ASSETS'];
+                                                    @endphp
+                                                    @foreach (collect($sources)->sort() as $s)
+                                                        <option value="{{ $s }}">{{ $s }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('source_of_funds')
+                                                <span class="invalid-feedback fs-14px" role="alert">
+                                                {{ $message }}
+                                               </span>
+                                                @enderror
+
+                                            </div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="form-group country-page" wire:ignore>
                                                 <label class="form-label mb-1 " for="">You Send</label>
@@ -1008,7 +1049,8 @@
                                              style="border: 1px solid #00000010;border-radius: 10px;background-color: #f5f5f530">
 
                                             <div>
-                                            <span role="button" wire:click="deleteBeneficiaryCard('{{$key}}')" style="visibility: hidden">
+                                            <span role="button" wire:click="deleteBeneficiaryCard('{{$key}}')"
+                                                  style="visibility: hidden">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                      width="26px" height="26px" style="color: gray" class=""
                                                      stroke-width="1.5" stroke="currentColor">
@@ -1023,19 +1065,21 @@
                                                 <p class="fw-bold fs-14px">Personal Details:</p>
 
                                                 @if(!empty($customer_id))
-                                                <div class="col-xs-12  ">
-                                                    <div class="mb-3">
-                                                        <label class="form-label fs-16px mb-1">Choose From Existing Receivers</label>
-                                                        <select name="" wire:model="existing_beneficiary_id.{{$key}}"
-                                                                class="form-select form-select-sm fs-16px  @error('existing_beneficiary_id'. $key) is-invalid @enderror">
-                                                            <option value="">Select</option>
-                                                            @foreach ($bene_data as $s)
-                                                                <option value="{{ $s['id'] }}">
-                                                                    {{ $s['first_name'] . ' ' . $s['last_name'] }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="col-xs-12  ">
+                                                        <div class="mb-3">
+                                                            <label class="form-label fs-16px mb-1">Choose From Existing
+                                                                Receivers</label>
+                                                            <select name=""
+                                                                    wire:model="existing_beneficiary_id.{{$key}}"
+                                                                    class="form-select form-select-sm fs-16px  @error('existing_beneficiary_id'. $key) is-invalid @enderror">
+                                                                <option value="">Select</option>
+                                                                @foreach ($bene_data as $s)
+                                                                    <option value="{{ $s['id'] }}">
+                                                                        {{ $s['first_name'] . ' ' . $s['last_name'] }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
                                                 @endif
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="mb-3">
@@ -1127,6 +1171,23 @@
                                                 </div>
                                                 <p class="fw-bold fs-14px">Bank Details:</p>
 
+                                                @if(!empty($existing_beneficiary_id[$key]))
+                                                    <div class="col-xs-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label fs-16px mb-1">Select Existing
+                                                                Receiver Account</label>
+                                                            <select name=""
+                                                                    wire:model="existing_beneficiary_bank_id.{{$key}}"
+                                                                    class="form-select form-select-sm fs-16px  ">
+                                                                <option value="">Select</option>
+                                                                @foreach ($existing_beneficiary_bank_data as $s)
+                                                                    <option value="{{ $s['id'] }}">{{ $s['old_name'] }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label mb-1">Bank Name</label>
@@ -1153,7 +1214,7 @@
                                                                autocomplete="false"
                                                                autocorrect="off" autocapitalize="off"
                                                                wire:model.defer="selected_beneficiary.{{$key}}.account_no"
-                                                               class="form-control fs-16px form-control-sm  only-name  @error('selected_beneficiary.' . $key . '.account_no') is-invalid @enderror">
+                                                               class="form-control fs-16px form-control-sm  @error('selected_beneficiary.' . $key . '.account_no') is-invalid @enderror">
                                                         @error('selected_beneficiary.' . $key . '.account_no')
                                                         <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
@@ -1190,12 +1251,12 @@
                                         </div>
                                     </div>
                                     @enderror
-{{--                                    <div class="d-flex align-items-center mt-2 fs-14px">--}}
-{{--                                        <button class="btn btn-sm btn-outline-primary" style="padding: 5px 9px 5px 9px">--}}
-{{--                                            <span> +</span>--}}
-{{--                                            <span class="fs-14px p-0">Add Beneficiary</span>--}}
-{{--                                        </button>--}}
-{{--                                    </div>--}}
+                                    {{--                                    <div class="d-flex align-items-center mt-2 fs-14px">--}}
+                                    {{--                                        <button class="btn btn-sm btn-outline-primary" style="padding: 5px 9px 5px 9px">--}}
+                                    {{--                                            <span> +</span>--}}
+                                    {{--                                            <span class="fs-14px p-0">Add Beneficiary</span>--}}
+                                    {{--                                        </button>--}}
+                                    {{--                                    </div>--}}
                                 </form>
                             </div>
                         </div>
@@ -1214,12 +1275,20 @@
                                 </div>
                             </div>
                             @enderror
-                            <button type="submit" id="submit"
-                                    wire:loading.attr="disabled"
-                                    class="btn btn-primary shadow-none">Submit Request Form
-                            </button>
-
-
+                            <div class="d-flex gap-2">
+                                <div class="col-6 ">
+                                    <a href="{{'/paymentrequest'}}"
+                                            wire:loading.attr="disabled"
+                                            class="btn btn-danger shadow-none w-100">Reset Form
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <button type="submit" id="submit"
+                                            wire:loading.attr="disabled"
+                                            class="btn btn-primary shadow-none w-100">Submit Request Form
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
 
