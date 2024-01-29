@@ -145,7 +145,7 @@ Route::middleware(['auth.allow'])->group(function () {
     Route::get('mobile/terms-conditions', function () {
         return view('mobile.terms-conditions');
     });
-//
+
     Route::get('mobile/password-view', function () {
         return view('mobile.change-password-view');
     });

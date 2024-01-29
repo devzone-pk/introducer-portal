@@ -30,7 +30,7 @@
                 </p>
                 <p class="text-justify text-3">
                     If you have questions or concerns regarding this policy, you should first contact us at DPO’s email
-                    <a href="mailto:info@oriumpay.com">info@oriumpay.com</a>
+                    <a href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a>
                 </p>
                 <h2 class="">What Kind of information do we collect about You?</h2>
                 <p class="text-3 text-justify">
@@ -81,7 +81,7 @@
                 <p class="text-3 text-justify">
                     We may perform enhanced due diligence by verifying your information by using credible electronic
                     verification software, In case of any objection, you can contact us at
-                    <a href="mailto:info@oriumpay.com">info@oriumpay.com</a>
+                    <a href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a>
                 </p>
                 <h2 class="">How We Collect Personal Information</h2>
                 <p class="text-3 text-justify">
@@ -254,7 +254,7 @@
 
                 </ul>
                 <p class="text-3 text-justify">
-                    <b>You can contact us at <a href="mailto:info@oriumpay.com">info@oriumpay.com</a> if you want to
+                    <b>You can contact us at <a href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a> if you want to
                         enforce any of these rights.
                         We will comply with our legal obligations as regards Your rights as a data subject.</b>
                 </p>
@@ -276,7 +276,7 @@
 
                 <p class="text-3 text-justify">
                     In case of any complaints concerning personal data please contact us at <a
-                            href="mailto:info@oriumpay.com">info@oriumpay.com</a>
+                            href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a>
                 </p>
                 <h2 class="">Changes to this Privacy Policy</h2>
                 <p class="text-3 text-justify">
@@ -288,7 +288,7 @@
                 <p class="text-3 text-justify">
                     If you would like to ask any question regarding t he privacy policy, please feel free to write
                     to us at<br>
-                    <a href="mailto:info@oriumpay.com">info@oriumpay.com</a>
+                    <a href="mailto:info@oriumglobalresources.com">info@oriumglobalresources.com</a>
                 </p>
             </div>
 

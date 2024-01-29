@@ -377,15 +377,7 @@
                                     </div>
                                 @endif
 
-                                <div class="form-check text-danger ">
-                                    <input class="form-check-input" wire:model="payment_done" type="checkbox" value=""
-                                           id="payment">
-                                    <label class="form-check-label" for="payment">
-                                        <strong>
-                                            The payment has been deposited into the following account details.
-                                        </strong>
-                                    </label>
-                                </div>
+
 
                                 <div class=" my-2 alert alert-warning">
 
@@ -407,6 +399,20 @@
                                     </p>
 
                                 </div>
+                                <div class="  ">
+
+                                    <label class="form-check-label" for="payment">
+                                        <strong>
+                                            Has payment been deposited into the account stated above?
+                                        </strong>
+                                    </label>
+                                </div>
+                                <select name="" wire:model="payment_done"
+                                        class="form-select mb-2 fs-16px  @error('selected_cash_destination') is-invalid @enderror">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+
+                                </select>
 
                                 @if($payment_done)
 

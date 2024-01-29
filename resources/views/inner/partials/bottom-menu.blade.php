@@ -26,13 +26,9 @@
 
     <a href="{{ url('mobile/send/money') }}" class="item">
         <div class="col">
-            <div class="action-button large">
-                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 17.5L12 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8 11.0883L12 6.50002L16 11.0883" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-
-
+            <div class="action-button large"
+                 style="color: #fff;font-size: 15px;line-height: 18px;font-weight: 600;border-radius:12px;">
+                Send Money
 
 
             </div>

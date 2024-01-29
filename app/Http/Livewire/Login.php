@@ -65,7 +65,15 @@ class Login extends Component
                     }
                     $this->success = $response['message'];
                     Session::put($response['data']);
-                    return $this->redirect('/dashboard');
+
+
+                    $agent = new \Jenssegers\Agent\Agent();
+                    if ($agent->isMobile() || $agent->isTablet()) {
+                        return $this->redirect('/mobile/dashboard');
+                    } else {
+                        return $this->redirect('/dashboard');
+                    }
+
 
                 } else {
 
