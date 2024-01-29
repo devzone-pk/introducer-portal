@@ -62,6 +62,11 @@ Route::middleware(['auth.allow'])->group(function () {
     Route::get('refer-friend', function () {
         return view('inner.refer-friend');
     });
+
+    Route::get('paymentrequest', function () {
+        return view('inner.payment-introduction');
+    });
+
     Route::get('user/documents', function () {
         return view('inner.documents');
     });
