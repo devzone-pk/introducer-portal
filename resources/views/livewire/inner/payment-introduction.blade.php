@@ -11,17 +11,17 @@
                 <div class="col">
                     <!-- Heading -->
                     <h4 class="mb-0 text-center fw-bold">
-                        OGR Payment Request Form
+                        Orium Pay Payment Request Form
                     </h4>
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
             <div class="col-12">
                 <div class="list-group list-group-flush mb-4">
                     <div class="list-group-item">
-                        <div class="d-flex align-items-center justify-content-between text-center">
-                            <div class="col">
+                        <div class="d-flex align-items-center justify-content-between text-center pt-5">
+                            <div class="col ">
 
                                 <!-- Heading -->
                                 <p class="mb-0 fw-bold">
@@ -66,7 +66,7 @@
 
 
                 <div class="accordion card-border border-primary mb-4" id="accordionExample"
-                     style="box-shadow: 0 5px 15px #00000010">
+                     style="box-shadow: 0 2px 10px #00000010">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button @if($selected_window != 'customer_info'  && (!$details_completed['customer_info'])) bg-gray-200  @endif "
@@ -107,11 +107,11 @@
                              wire:ignore.self
                              aria-labelledby="headingOne"
                              data-bs-parent="#accordionExample">
-                            <div class="accordion-body bg-white">
+                            <div class="accordion-body">
 
                                 @if(!$customer_check)
                                     <form wire:submit.prevent="customerExistsCheck">
-                                        <div class="row">
+                                        <div class="row pt-3">
                                             <div class="col-12 col-sm-6">
                                                 <label class="form-label fs-16px  mb-1">Email<span
                                                             class="text-danger">*</span></label>
@@ -165,7 +165,7 @@
                                 @else
                                     @if(empty($customer_id))
                                         <form wire:submit.prevent="validateCustomerDetails">
-                                            <div class="row">
+                                            <div class="row pt-3">
                                                 <div class="col-12 col-sm-4">
                                                     <label class="form-label fs-16px mb-1">First Name<span
                                                                 class="text-danger">*</span></label>
@@ -201,20 +201,6 @@
                                                             class=" fs-16px form-control form-control-sm  @error('customer.email') is-invalid @enderror"
                                                             placeholder="Email">
                                                     @error('customer.email')
-                                                    <span class="invalid-feedback" role="alert">
-                                          {{ $message }}
-                                            </span>
-                                                    @enderror
-                                                </div>
-                                                <div class="col-12 col-sm-4 mt-3">
-                                                    <label class="form-label fs-16px  mb-1">Password<span
-                                                                class="text-danger">*</span></label>
-                                                    <input
-                                                            {{--                                                    value="{{ $customer['email'] }}"--}}
-                                                            type="text" wire:model.defer="customer.password"
-                                                            class=" fs-16px form-control form-control-sm  @error('customer.password') is-invalid @enderror"
-                                                            placeholder="Password">
-                                                    @error('customer.password')
                                                     <span class="invalid-feedback" role="alert">
                                           {{ $message }}
                                             </span>
@@ -439,7 +425,7 @@
                                         </form>
                                     @else
 
-                                        <div class="list-group list-group-flush">
+                                        <div class="list-group list-group-flush"  >
                                             <div class="list-group-item">
                                                 <div class="row align-items-center">
                                                     <div class="col">
@@ -1049,8 +1035,7 @@
                                              style="border: 1px solid #00000010;border-radius: 10px;background-color: #f5f5f530">
 
                                             <div>
-                                            <span role="button" wire:click="deleteBeneficiaryCard('{{$key}}')"
-                                                  style="visibility: hidden">
+                                            <span role="button" wire:click="deleteBeneficiaryCard('{{$key}}')"  style="visibility: hidden">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                      width="26px" height="26px" style="color: gray" class=""
                                                      stroke-width="1.5" stroke="currentColor">
@@ -1251,12 +1236,13 @@
                                         </div>
                                     </div>
                                     @enderror
-                                    {{--                                    <div class="d-flex align-items-center mt-2 fs-14px">--}}
-                                    {{--                                        <button class="btn btn-sm btn-outline-primary" style="padding: 5px 9px 5px 9px">--}}
-                                    {{--                                            <span> +</span>--}}
-                                    {{--                                            <span class="fs-14px p-0">Add Beneficiary</span>--}}
-                                    {{--                                        </button>--}}
-                                    {{--                                    </div>--}}
+{{--                                        <div class="d-flex align-items-center mt-2 fs-14px">--}}
+{{--                                            <button class="btn btn-sm btn-outline-primary"--}}
+{{--                                                    style="padding: 5px 9px 5px 9px">--}}
+{{--                                                <span> +</span>--}}
+{{--                                                <span class="fs-14px p-0">Add Beneficiary</span>--}}
+{{--                                            </button>--}}
+{{--                                        </div>--}}
                                 </form>
                             </div>
                         </div>

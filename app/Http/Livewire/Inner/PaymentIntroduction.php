@@ -27,13 +27,13 @@ use App\Traits\Modals\Relationship;
 use App\Traits\Modals\SearchBanks;
 use App\Traits\Modals\SendingReasons;
 use App\Traits\Validation\UserDocumentValidation;
+use Carbon\Carbon;
 use Devzone\Rms\AdminFee;
 use Devzone\Rms\AllRates;
 use Devzone\Rms\Source;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -173,7 +173,6 @@ class PaymentIntroduction extends Component
                 'customer.first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
                 'customer.last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
                 'customer.email' => 'required|email',
-                'customer.password' => ['required', Password::min(8)->mixedCase()->numbers()],
                 'customer.dob' => 'required|date|date_format:Y-m-d|before:-17 years',
                 'customer.gender' => 'required|string|in:f,m',
                 'customer.phone_code' => 'required',
@@ -254,6 +253,7 @@ class PaymentIntroduction extends Component
         $this->customer['phone_code'] = optional($uk_data)['phonecode'];
         $this->customer['country_name'] = optional($uk_data)['name'];
         $this->customer['iso2'] = optional($uk_data)['iso2'];
+        $this->customer['dob'] = Carbon::now()->subYear(18)->toDateString();
         $this->options = Option::where('option_type_id', '2')
             ->where('secondary_name', 'Identification Documents')
             ->orderBy('additional_info')->get();
@@ -329,6 +329,7 @@ class PaymentIntroduction extends Component
         $bene_found = Beneficiary::find($val);
         if (!empty($bene_found)) {
 //            $bene_bank = BeneficiaryBank::
+            $this->selected_beneficiary[$key]['id'] = $bene_found->id;
             $this->selected_beneficiary[$key]['first_name'] = $bene_found->first_name;
             $this->selected_beneficiary[$key]['last_name'] = $bene_found->last_name;
             $this->selected_beneficiary[$key]['phone'] = $bene_found->phone;
@@ -504,7 +505,7 @@ class PaymentIntroduction extends Component
             $source->receiving_method_id = $this->receiving_method_id;
             $rates = new AdminFee($source);
             $fees = $rates->apply();
-            $this->amounts['fees'] = $fees;
+            $this->amounts['fees'] = 0;
             $this->amounts['total'] = $fees + $this->amounts['sending_amount'];
 
             if ($this->amounts['calculation_mode'] == 'S') {
@@ -555,7 +556,7 @@ class PaymentIntroduction extends Component
                 $this->customer = $customer_found;
                 $this->details_completed['customer_info'] = true;
                 $docs_found = CustomerDocument::where('customer_id', $this->customer_id)->where('is_primary', 't')->where('issuance', '<=', date('Y-m-d'))
-                    ->where('expiry', '>=', date('Y-m-d'))->whereNull('deleted_at')->first();
+                    ->where('expiry', '>=', date('Y-m-d'))->whereNull('deleted_at')->where('status','t')->first();
                 if ($docs_found) {
                     $this->customer_documents['type'] = $docs_found['type'];
                     $this->details_completed['customer_docs'] = true;
@@ -593,7 +594,6 @@ class PaymentIntroduction extends Component
                 $this->addError('customer.phone', 'Please enter valid phone number.');
                 return;
             }
-
             $customer_user_ids = Customer::where('phone', $this->customer['phone'])
                 ->where('phone_code', $this->customer['phone_code'])->whereNotNull('user_id')->pluck('user_id')->toArray();
 
@@ -736,12 +736,19 @@ class PaymentIntroduction extends Component
             return false;
         }
 
-        $duplicate = Beneficiary::where('country_id', $this->receiving_country['id'])
-            ->where(function ($q) use ($previous_bene) {
-                return $q->orWhere(function ($w) use ($previous_bene) {
-                    return $w->where('first_name', $previous_bene['first_name'])->where('last_name', $previous_bene['last_name']);
-                })->orWhere('phone', $previous_bene['phone']);
-            })->exists();
+        $duplicate = false;
+        if (empty($previous_bene['id'])) {
+
+            $duplicate = Beneficiary::where('country_id', $this->receiving_country['id'])
+                ->when(!empty($this->customer_id) && ($this->customer_check), function ($q) {
+                    return $q->where('customer_id', $this->customer_id);
+                })
+                ->where(function ($q) use ($previous_bene) {
+                    return $q->orWhere(function ($w) use ($previous_bene) {
+                        return $w->where('first_name', $previous_bene['first_name'])->where('last_name', $previous_bene['last_name']);
+                    })->orWhere('phone', $previous_bene['phone']);
+                })->exists();
+        }
 
         if ($duplicate) {
             $this->addError('error', 'Duplication Alert! The beneficiary already exists. Please choose from the existing receiver list.');
@@ -750,8 +757,8 @@ class PaymentIntroduction extends Component
             return false;
         }
 
-        $duplicate = BeneficiaryBank::join('beneficiaries as b', 'b.id', '=', 'beneficiary_banks.beneficiary_id')
-            ->where('b.customer_id', session('customer_id'))
+        $bank_duplicate = BeneficiaryBank::join('beneficiaries as b', 'b.id', '=', 'beneficiary_banks.beneficiary_id')
+            ->where('b.customer_id', $this->customer_id)
             ->where(function ($q) use ($previous_bene) {
                 return $q->when(!empty($previous_bene['account_no']), function ($q) use ($previous_bene) {
                     $q->orWhere('account_no', $previous_bene['account_no']);
@@ -760,9 +767,9 @@ class PaymentIntroduction extends Component
                 });
             })->select('beneficiary_id')->first();
 
-        if (!empty($duplicate)) {
+        if (!empty($bank_duplicate)) {
 
-            $bene = Beneficiary::find($duplicate['beneficiary_id']);
+            $bene = Beneficiary::find($bank_duplicate['beneficiary_id']);
 
             $this->addError('error', 'Duplication Alert! The bank details for the beneficiary named "' . $bene['first_name'] . ' ' . $bene['last_name'] . '" already exist. Please select from the existing options.');
             $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
@@ -850,21 +857,25 @@ class PaymentIntroduction extends Component
             if (in_array(false, $details)) {
                 throw new Exception('Please fill/confirm all the forms first');
             }
-            $this->amounts['receive_amount'] = floatval(preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']));
-            if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
-                throw new Exception('Sending amount must be equal to beneficiary receiving amount');
-            }
+//            $this->amounts['receive_amount'] = floatval(preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']));
+//            if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
+//                throw new Exception('Total receiving amount must be equal to beneficiary receiving amount');
+//            }
             if (empty($this->customer_id)) {
                 $customer = $this->customer;
                 $user_id = User::create([
                     'email' => $customer['email'],
-                    'password' => Hash::make($customer['password']),
+                    'password' => Hash::make('Abcd1234'),
                     'type' => 'on',
                     'status' => 't',
                     'company_id' => config('app.company_id'),
                 ])->id;
                 $customer['occupation'] = $this->customer['occupation_id'];
                 $customer['user_id'] = $user_id;
+                $customer['status'] = 't';
+                $customer['type'] = 'on';
+                $customer['user_agent_id'] = session('user_agent_id');
+                $customer['country_id'] = 232;
                 unset($customer['country_name'], $customer['iso2'], $customer['occupation_id'], $customer['password']);
                 $customer_details = Customer::create($customer);
                 $this->customer_id = $customer_details->id;
