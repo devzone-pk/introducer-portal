@@ -857,10 +857,10 @@ class PaymentIntroduction extends Component
             if (in_array(false, $details)) {
                 throw new Exception('Please fill/confirm all the forms first');
             }
-//            $this->amounts['receive_amount'] = floatval(preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']));
-//            if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
-//                throw new Exception('Total receiving amount must be equal to beneficiary receiving amount');
-//            }
+            $this->amounts['receive_amount'] = floatval(preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']));
+            if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
+                throw new Exception('Total receiving amount must be equal to beneficiary receiving amount');
+            }
             if (empty($this->customer_id)) {
                 $customer = $this->customer;
                 $user_id = User::create([
