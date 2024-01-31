@@ -1283,7 +1283,7 @@
                                 </div>
                             </div>
                             @enderror
-                            <div class="d-flex gap-2 ps-2 pe-3">
+                            <div class="d-flex gap-2 ps-2 pe-4">
                                 <div class="col-6 ">
                                     <a href="{{'/paymentrequest'}}"
                                             wire:loading.attr="disabled"
