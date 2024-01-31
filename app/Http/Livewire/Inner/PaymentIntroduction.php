@@ -767,15 +767,15 @@ class PaymentIntroduction extends Component
                 });
             })->select('beneficiary_id')->first();
 
-        if (!empty($bank_duplicate)) {
-
-            $bene = Beneficiary::find($bank_duplicate['beneficiary_id']);
-
-            $this->addError('error', 'Duplication Alert! The bank details for the beneficiary named "' . $bene['first_name'] . ' ' . $bene['last_name'] . '" already exist. Please select from the existing options.');
-            $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
-            $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
-            return false;
-        }
+//        if (!empty($bank_duplicate)) {
+//
+//            $bene = Beneficiary::find($bank_duplicate['beneficiary_id']);
+//
+//            $this->addError('error', 'Duplication Alert! The bank details for the beneficiary named "' . $bene['first_name'] . ' ' . $bene['last_name'] . '" already exist. Please select from the existing options.');
+//            $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
+//            $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
+//            return false;
+//        }
         return true;
     }
 
