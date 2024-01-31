@@ -561,7 +561,7 @@ class PaymentIntroduction extends Component
                     $this->customer_documents['type'] = $docs_found['type'];
                     $this->details_completed['customer_docs'] = true;
                     $this->details_completed['docs_found'] = true;
-                    $this->benefetchData();
+                    $this->benelistData();
                     $this->selected_window = 'payments';
                     $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
                 } else {
@@ -1076,5 +1076,30 @@ class PaymentIntroduction extends Component
     public function render()
     {
         return view('livewire.inner.payment-introduction');
+    }
+
+    private function benelistData()
+    {
+        $data = Beneficiary::from('beneficiaries as b')
+            ->join('countries as c', 'c.id', '=', 'b.country_id')
+            ->when(!empty($this->bene_search_query), function ($q) {
+                $q->where(function ($e) {
+                    $e->orWhere('b.first_name', 'LIKE', '%' . $this->bene_search_query . '%')
+                        ->orWhere('b.last_name', 'LIKE', '%' . $this->bene_search_query . '%');
+                });
+            })
+            ->leftJoin('options as o', 'o.id', '=', 'b.relationship_id')
+            ->where('b.customer_id', $this->customer_id)
+            ->where('b.country_id', $this->receiving_country['id'])
+            ->select([
+                'b.id', 'b.customer_id', 'b.first_name', 'b.last_name', 'b.relationship_id', 'o.name as relationship_name', 'b.phone',
+                'c.id as country_id', 'c.currency', 'c.name as country_name','c.iso2','c.phonecode as code'
+            ])->get();
+
+        if ($data->isEmpty()) {
+            $this->bene_data = [];
+        } else {
+            $this->bene_data = $data->toArray();
+        }
     }
 }
