@@ -14,12 +14,12 @@ use App\Models\Transfer\StatusTracker;
 use App\Models\Transfer\Transfer;
 use App\Models\Transfer\TransferAdditionalDetail;
 use App\Models\Transfer\TransferBeneficiary;
+use App\Models\Transfer\TransferBeneficiaryBank;
 use App\Models\Transfer\TransferCustomer;
 use App\Models\Transfer\TransferDetail;
 use App\Models\User\Beneficiary;
 use App\Models\User\BeneficiaryBank;
 use App\Models\User\User;
-use App\Traits\Modals\BeneficiaryBankList;
 use App\Traits\Modals\BeneficiaryList;
 use App\Traits\Modals\Nationality;
 use App\Traits\Modals\Occupation;
@@ -750,12 +750,12 @@ class PaymentIntroduction extends Component
                 })->exists();
         }
 
-        if ($duplicate) {
-            $this->addError('error', 'Duplication Alert! The beneficiary already exists. Please choose from the existing receiver list.');
-            $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
-            $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
-            return false;
-        }
+//        if ($duplicate) {
+//            $this->addError('error', 'Duplication Alert! The beneficiary already exists. Please choose from the existing receiver list.');
+//            $this->dispatchBrowserEvent('close-modal', ['model' => 'errors']);
+//            $this->dispatchBrowserEvent('open-modal', ['model' => 'errors']);
+//            return false;
+//        }
 
         $bank_duplicate = BeneficiaryBank::join('beneficiaries as b', 'b.id', '=', 'beneficiary_banks.beneficiary_id')
             ->where('b.customer_id', $this->customer_id)
@@ -903,6 +903,7 @@ class PaymentIntroduction extends Component
                     $bene_bank_id = $this->existing_beneficiary_bank_id[$key];
                     BeneficiaryBank::find($bene_bank_id)->update($this->beneficiaryBankMapping($bene, $bene_id));
                 }
+
                 $this->payments['status'] = 'PEN';
                 $this->payments['customer_id'] = $this->customer_id;
                 $this->payments['beneficiary_id'] = $bene_id;
@@ -986,7 +987,11 @@ class PaymentIntroduction extends Component
                     'date' => date('Y-m-d'),
                     'added_by' => session('user_id')
                 ]);
-
+                $bank_data = BeneficiaryBank::find($bene_bank_id);
+                unset($bank_data['created_at'], $bank_data['status'], $bank_data['deleted_at'], $bank_data['updated_at'], $bank_data['id']);
+                $bank_data['beneficiary_bank_id'] = $bene_bank_id;
+                $bank_data['transfer_id'] = $transfer->id;
+                TransferBeneficiaryBank::create($bank_data);
                 $this->dumpBeneficiary($transfer, $bene);
                 $this->dumpCustomer($transfer, $this->customer);
             }

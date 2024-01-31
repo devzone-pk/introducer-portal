@@ -11,13 +11,13 @@
                 <div class="col">
                     <!-- Heading -->
                     <h4 class="mb-0 text-center fw-bold">
-                        Orium Pay Payment Request Form
+                        Payment Request Form
                     </h4>
                 </div>
             </div>
         </div>
         <div class="card-body p-0">
-            <div class="col-12">
+            <div class="col-12 jumbotron">
                 <div class="list-group list-group-flush mb-4">
                     <div class="list-group-item">
                         <div class="d-flex align-items-center justify-content-between text-center pt-5">
@@ -233,7 +233,7 @@
                                                       id="basic-addon1">
                                                     {{ $customer['phone_code'] }}
                                                 </span>
-                                                        <input type="text" disabled
+                                                        <input type="text"
                                                                value="{{$customer['phone']}}"
                                                                class="form-control only-just-numbers form-control-sm  @error('customer.phone') is-invalid @enderror"
 {{--                                                               wire:model.defer="customer.phone"--}}
