@@ -884,6 +884,7 @@ class PaymentIntroduction extends Component
             }
             if (!$this->details_completed['docs_found']) {
                 $this->customer_documents['customer_id'] = $this->customer_id;
+                $this->customer_documents['status'] = 't';
                 CustomerDocument::create($this->customer_documents);
             }
 
@@ -906,6 +907,8 @@ class PaymentIntroduction extends Component
                 $this->payments['customer_id'] = $this->customer_id;
                 $this->payments['beneficiary_id'] = $bene_id;
 
+                $sending_amount = $bene['receiving_amount'] / $this->selected_payer['rate_after_spread'];
+
                 $transfer = Transfer::create([
                     'status' => $this->payments['status'],
                     'channel' => 'on',
@@ -923,8 +926,8 @@ class PaymentIntroduction extends Component
                     'customer_rate' => $this->selected_payer['rate_after_spread'],
                     'agent_rate' => $this->selected_payer['rate_before_spread'],
                     'main_agent_rate' => $this->selected_payer['main_agent_rate'],
-                    'sending_amount' => $this->amounts['sending_amount'],
-                    'receiving_amount' => $this->amounts['receive_amount'],
+                    'sending_amount' => $sending_amount,
+                    'receiving_amount' => $bene['receiving_amount'],
                     'agent_charges' => 0,
                     'company_charges' => $this->amounts['fees'],
                     'sending_method_id' => 91,
