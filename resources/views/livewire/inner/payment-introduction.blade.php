@@ -1122,7 +1122,7 @@
                                                         <label class="form-label fs-16px  mb-1">Your
                                                             Relationship</label>
                                                         <select name=""
-                                                                wire:model="selected_beneficiary.{{$key}}.relationship_id"
+                                                                wire:model.defer="selected_beneficiary.{{$key}}.relationship_id"
                                                                 class="form-select form-select-sm @error('selected_beneficiary.' . $key . '.relationship_id') is-invalid @enderror">
                                                             <option value="">Select</option>
                                                             @foreach ($rl_data as $s)
@@ -1140,7 +1140,7 @@
                                                     <div class="mb-3">
                                                         <label class="form-label fs-16px  mb-1">Sending Reason</label>
                                                         <select name=""
-                                                                wire:model="selected_beneficiary.{{$key}}.selected_sending_reason"
+                                                                wire:model.defer="selected_beneficiary.{{$key}}.selected_sending_reason"
                                                                 class="form-select form-select-sm  @error('selected_beneficiary.' . $key . '.selected_sending_reason') is-invalid @enderror">
                                                             <option value="">Select</option>
                                                             @foreach ($sr_data as $s)
@@ -1177,7 +1177,7 @@
                                                     <div class="mb-3">
                                                         <label class="form-label mb-1">Bank Name</label>
                                                         <select name=""
-                                                                wire:model="selected_beneficiary.{{$key}}.bank_id"
+                                                                wire:model.defer="selected_beneficiary.{{$key}}.bank_id"
                                                                 class="form-select form-select-sm fs-16px @error('selected_beneficiary.' . $key . '.bank_id') is-invalid @enderror">
                                                             <option value="">Select</option>
                                                             @foreach (collect($sb_data)->sortBy('name')->toArray() as $s)
