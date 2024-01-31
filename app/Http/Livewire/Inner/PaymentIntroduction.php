@@ -987,7 +987,7 @@ class PaymentIntroduction extends Component
                     'date' => date('Y-m-d'),
                     'added_by' => session('user_id')
                 ]);
-                $bank_data = BeneficiaryBank::find($bene_bank_id)->toArray();
+                $bank_data = BeneficiaryBank::where('id',$bene_bank_id)->first()->toArray();
                 unset($bank_data['created_at'], $bank_data['status'], $bank_data['deleted_at'], $bank_data['updated_at'], $bank_data['id']);
                 $bank_data['beneficiary_bank_id'] = $bene_bank_id;
                 $bank_data['transfer_id'] = $transfer->id;
