@@ -126,7 +126,7 @@ class SendMoney extends Component
         'selected_bank_beneficiary.branch_code' => 'branch code',
         'selected_cash_destination.id' => 'Cash Pickup Location'
     ];
-    public $payment_done = 0;
+    public $payment_done;
 
     public $profile = false;
     public $address = false;

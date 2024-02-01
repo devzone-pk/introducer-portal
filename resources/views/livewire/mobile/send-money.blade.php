@@ -414,7 +414,7 @@
                                 </div>
                             </div>
 
-                            <div class=" my-2 alert alert-warning">
+                            <div class=" my-2 alert alert-warning @if($payment_done == 'false') d-none @endif">
 
                                 <p class="m-0">
                                     <span>Bank Name: </span>
@@ -434,23 +434,29 @@
                                 </p>
 
                             </div>
-                            <div class="  ">
+                            <p class="my-2 mx-1 fw-bold  @if($payment_done == 'false') d-none @endif"> Has payment been deposited into the account stated above?</p>
 
-                                <label class="form-check-label" for="payment">
-                                    <strong>
-                                        Has payment been deposited into the account stated above?
-                                    </strong>
-                                </label>
+                            <div class="d-flex w-50 justify-content-between mb-3 my-2  mx-1 ">
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="radio" wire:model="payment_done" value="true" id="true_radio"
+                                           class="  @error('agree') is-invalid @enderror">
+
+                                    <label class="fw-semibold" for="">
+                                        Yes
+                                    </label>
+
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="radio" wire:model="payment_done" value="false" id="false_radio"
+                                           class=" @error('agree') is-invalid @enderror">
+                                    <label class="fw-semibold">
+                                        No
+                                    </label>
+                                </div>
                             </div>
-                            <select name="" wire:model="payment_done"
-                                    class="form-select mb-2 fs-16px  @error('selected_cash_destination') is-invalid @enderror">
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-
-                            </select>
 
 
-                            @if($payment_done)
+                            @if($payment_done == 'true')
                                 <button type="submit" class="btn btn-primary mt-2  btn-block btn-lg">
                                 <span wire:loading wire:target="validateSendingDetails">
                                     <span class="spinner-grow spinner-grow-sm me-05" role="status"
@@ -458,6 +464,30 @@
                                 </span>
                                     Continue
                                 </button>
+                            @elseif($payment_done == 'false')
+
+                                <p class="my-2 mx-1 text-danger fw-bold">Please deposit the payment into the account stated below.</p>
+
+                                <div class=" my-2 alert alert-warning">
+
+                                    <p class="m-0">
+                                        <span>Bank Name: </span>
+                                        <strong>Leatherback Ltd</strong>
+                                    </p>
+                                    <p class="m-0">
+                                        <span>Account Name: </span>
+                                        <strong>ORIUM GLOBAL RESOURCES LIMITED </strong>
+                                    </p>
+                                    <p class="m-0">
+                                        <span>Sort Code: </span>
+                                        <strong>040691</strong>
+                                    </p>
+                                    <p class="m-0">
+                                        <span>Account Number: </span>
+                                        <strong>00027862</strong>
+                                    </p>
+
+                                </div>
                             @endif
 
                         @endif
