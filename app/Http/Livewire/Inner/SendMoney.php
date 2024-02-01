@@ -167,7 +167,7 @@ class SendMoney extends Component
     ];
 
 
-    public $payment_done = 0;
+    public $payment_done;
     public $profile = false;
     public $address = false;
     public $documents = false;

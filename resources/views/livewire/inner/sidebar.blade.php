@@ -80,7 +80,7 @@
                 <h3 class="text-5 fw-bold my-4 text-warning">Need Help?</h3>
                 <p class=" fs-12px opacity-8 mb-4">Have questions or concerns regrading your account?</p>
                 <p class=" fs-12px mb-5"> Our experts are here to help!.</p>
-                <div class="fs-12px w-100 "><a href="{{url('customer-support/add-complaint')}}" class="btn btn-primary btn-sm w-100">Chat with Us</a></div>
+                <div class="fs-12px w-100 "><a href="{{url('customer-support/add-complaint')}}" class="btn btn-primary btn-sm w-100">Open a Ticket</a></div>
             </div>
         </div>
     </div>
