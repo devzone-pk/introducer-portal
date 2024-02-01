@@ -247,9 +247,8 @@
                                                     {{ $customer['phone_code'] }}
                                                 </span>
                                                         <input type="text"
-                                                               value="{{$customer['phone']}}"
                                                                class="form-control only-just-numbers form-control-sm  @error('customer.phone') is-invalid @enderror"
-{{--                                                               wire:model.defer="customer.phone"--}}
+                                                               wire:model.defer="customer.phone"
                                                                placeholder="Mobile number">
                                                         @error('customer.phone')
                                                         <span class="invalid-feedback" role="alert">
