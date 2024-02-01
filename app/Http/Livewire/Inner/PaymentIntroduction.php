@@ -124,7 +124,7 @@ class PaymentIntroduction extends Component
         'customer_documents.issuance' => 'issuance',
         'customer_documents.expiry' => 'issuance',
         'customer_documents.issuer_country_id' => 'issuer country',
-        'customer.occupation_id' => 'occupation',
+        'customer.occupation' => 'occupation',
         'customer.nationality_country_id' => 'nationality',
         'customer.first_name' => 'first name',
         'customer.last_name' => 'last name',
@@ -177,7 +177,7 @@ class PaymentIntroduction extends Component
                 'customer.gender' => 'required|string|in:f,m',
                 'customer.phone_code' => 'required',
                 'customer.nationality_country_id' => 'required|integer',
-                'customer.occupation_id' => 'required|integer',
+                'customer.occupation' => 'required|integer',
                 'customer.place_of_birth' => 'required|string',
                 'customer.house_no' => 'required|string',
                 'customer.street_name' => 'required|string',
@@ -546,27 +546,29 @@ class PaymentIntroduction extends Component
                 ->where('u.company_id', env('COMPANY_ID'))
                 ->select('customers.id', 'customers.user_id', 'customers.first_name', 'customers.last_name', 'customers.email', 'customers.dob',
                     'customers.phone_code', 'customers.phone', 'customers.gender', 'customers.house_no', 'customers.street_name',
-                    'customers.postal_code', 'customers.city_name', 'co.name as country_name')
+                    'customers.postal_code', 'customers.city_name', 'co.name as country_name', 'customers.is_verified', 'customers.nationality_country_id', 'customers.place_of_birth', 'customers.occupation')
                 ->get()->first();
 
             if (!empty($customer_found)) {
                 $customer_found = $customer_found->toArray();
                 $this->customer_id = $customer_found['id'];
                 $this->customer_user_id = $customer_found['user_id'];
+                $iso2 = $this->customer['iso2'];
                 $this->customer = $customer_found;
+                $this->customer['iso2'] = $iso2;
                 $this->details_completed['customer_info'] = true;
                 $docs_found = CustomerDocument::where('customer_id', $this->customer_id)->where('is_primary', 't')->where('issuance', '<=', date('Y-m-d'))
-                    ->where('expiry', '>=', date('Y-m-d'))->whereNull('deleted_at')->where('status','t')->first();
+                    ->where('expiry', '>=', date('Y-m-d'))->whereNull('deleted_at')->where('status', 't')->first();
                 if ($docs_found) {
                     $this->customer_documents['type'] = $docs_found['type'];
                     $this->details_completed['customer_docs'] = true;
                     $this->details_completed['docs_found'] = true;
                     $this->benelistData();
-                    $this->selected_window = 'payments';
-                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
+//                    $this->selected_window = 'payments';
+//                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
                 } else {
-                    $this->selected_window = 'cus_docs';
-                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseTwo']);
+//                    $this->selected_window = 'cus_docs';
+//                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseTwo']);
                 }
             }
             $this->customer_check = true;
@@ -586,7 +588,6 @@ class PaymentIntroduction extends Component
             }
         })->validate();
         try {
-
             $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
             $number = $phoneUtil->parse($this->customer['phone_code'] . $this->customer['phone'], $this->customer['iso2']);
             $isValid = $phoneUtil->isValidNumber($number);
@@ -607,10 +608,17 @@ class PaymentIntroduction extends Component
             $this->customer['first_name'] = preg_replace('/\s+/', ' ', $this->customer['first_name']);
             $this->customer['last_name'] = preg_replace('/\s+/', ' ', $this->customer['last_name']);
 
-            $this->selected_window = 'cus_docs';
-
             $this->details_completed['customer_info'] = true;
-            $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseTwo']);
+
+            if ($this->details_completed['customer_docs'] = true && $this->details_completed['docs_found'] = true) {
+                $this->selected_window = 'payments';
+                $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
+
+            } else {
+                $this->selected_window = 'cus_docs';
+                $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseTwo']);
+            }
+
 
         } catch (\Exception $e) {
             $this->addError('cus_info', $e->getMessage());
@@ -870,16 +878,20 @@ class PaymentIntroduction extends Component
                     'status' => 't',
                     'company_id' => config('app.company_id'),
                 ])->id;
-                $customer['occupation'] = $this->customer['occupation_id'];
                 $customer['user_id'] = $user_id;
                 $customer['status'] = 't';
                 $customer['type'] = 'on';
                 $customer['user_agent_id'] = session('user_agent_id');
                 $customer['country_id'] = 232;
-                unset($customer['country_name'], $customer['iso2'], $customer['occupation_id'], $customer['password']);
+                unset($customer['country_name'], $customer['iso2'], $customer['password']);
                 $customer_details = Customer::create($customer);
                 $this->customer_id = $customer_details->id;
             } else {
+                if ($this->customer['is_verified'] == 't') {
+                    Customer::find($this->customer_id)->update(['phone' => $this->customer['phone']]);
+                } else {
+                    Customer::find($this->customer_id)->update($this->customer);
+                }
                 $user_id = $this->customer['user_id'] ?? null;
             }
             if (!$this->details_completed['docs_found']) {
@@ -894,6 +906,7 @@ class PaymentIntroduction extends Component
                     $bene_id = Beneficiary::create($this->beneficiaryMapping($bene))->id;
                 } else {
                     $bene_id = $this->existing_beneficiary_id[$key];
+                    Beneficiary::find($bene_id)->update($this->beneficiaryMapping($bene));
                 }
 
                 if (empty($this->existing_beneficiary_bank_id[$key])) {
@@ -935,7 +948,7 @@ class PaymentIntroduction extends Component
                     'gateway_id' => 3,
                     'sending_reason' => $bene['selected_sending_reason'],
                     'receiving_method_id' => $this->selected_payer['method_id'],
-                    'user_id' => $this->customer_user_id,
+                    'user_id' => $customer['user_id'],
                     'company_id' => config('app.company_id'),
                     'payout_location_id' => $this->selected_cash_destination ?? null
                 ]);
@@ -987,7 +1000,7 @@ class PaymentIntroduction extends Component
                     'date' => date('Y-m-d'),
                     'added_by' => session('user_id')
                 ]);
-                $bank_data = BeneficiaryBank::where('id',$bene_bank_id)->first()->toArray();
+                $bank_data = BeneficiaryBank::where('id', $bene_bank_id)->first()->toArray();
                 unset($bank_data['created_at'], $bank_data['status'], $bank_data['deleted_at'], $bank_data['updated_at'], $bank_data['id']);
                 $bank_data['beneficiary_bank_id'] = $bene_bank_id;
                 $bank_data['transfer_id'] = $transfer->id;
@@ -1093,7 +1106,7 @@ class PaymentIntroduction extends Component
             ->where('b.country_id', $this->receiving_country['id'])
             ->select([
                 'b.id', 'b.customer_id', 'b.first_name', 'b.last_name', 'b.relationship_id', 'o.name as relationship_name', 'b.phone',
-                'c.id as country_id', 'c.currency', 'c.name as country_name','c.iso2','c.phonecode as code'
+                'c.id as country_id', 'c.currency', 'c.name as country_name', 'c.iso2', 'c.phonecode as code'
             ])->get();
 
         if ($data->isEmpty()) {

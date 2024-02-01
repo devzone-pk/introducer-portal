@@ -60,6 +60,20 @@
 
                             </div>
 
+                            <div class="col">
+
+                                <!-- Heading -->
+                                <p class="mb-0 fw-bold">
+                                    Exchange Rate
+                                </p>
+
+                                <!-- Text -->
+                                <small class="fw-normal text-gray-900">
+                                    {{!empty($selected_payer['rate_after_spread']) ? number_format($selected_payer['rate_after_spread'],2) . ' ' . $selected_payer['currency']  :0}}
+                                </small>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -234,14 +248,13 @@
                                                     {{ $customer['phone_code'] }}
                                                 </span>
                                                         <input type="text"
-                                                               value="{{$customer['phone']}}"
+                                                               wire:model.defer="customer.phone"
                                                                class="form-control only-just-numbers form-control-sm  @error('customer.phone') is-invalid @enderror"
-{{--                                                               wire:model.defer="customer.phone"--}}
                                                                placeholder="Mobile number">
                                                         @error('customer.phone')
                                                         <span class="invalid-feedback" role="alert">
-                                                   {{ $message }}
-                                                     </span>
+                                                         {{ $message }}
+                                                        </span>
                                                         @enderror
                                                     </div>
 
@@ -311,16 +324,16 @@
                                                     <label for="occupation"
                                                            class="form-label fs-16px  mb-1">Occupation<span
                                                                 class="text-danger">*</span></label>
-                                                    <select wire:model.defer="customer.occupation_id"
+                                                    <select wire:model.defer="customer.occupation"
                                                             {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }} --}}
-                                                            class="form-control form-control-sm  @error('customer.occupation_id') is-invalid @enderror">
+                                                            class="form-control form-control-sm  @error('customer.occupation') is-invalid @enderror">
                                                         <option value="">Choose Occupation</option>
                                                         @foreach($oc_data as $n)
                                                             <option value="{{ $n['id'] }}">{{ $n['name'] }}</option>
                                                         @endforeach
                                                     </select>
 
-                                                    @error('customer.occupation_id')
+                                                    @error('customer.occupation')
                                                     <span class="invalid-feedback" role="alert">
                               {{ $message }}
                                </span>
@@ -425,102 +438,271 @@
                                         </form>
                                     @else
 
-                                        <div class="list-group list-group-flush"  >
-                                            <div class="list-group-item">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
+                                        <form wire:submit.prevent="validateCustomerDetails">
+                                            <div class="row pt-3">
+                                                <div class="col-12 col-sm-4">
+                                                    <label class="form-label fs-16px mb-1">First Name<span
+                                                                class="text-danger">*</span></label>
+                                                    <input type="text" @if($customer['is_verified'] == 't')  disabled  value="{{$customer['first_name']}}" @else  wire:model="customer.first_name"  @endif
+                                                           class="only-name form-control form-control-sm  @error('customer.first_name') is-invalid @enderror"
+                                                           {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           placeholder="First Name">
+                                                    @error('customer.first_name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                   {{ $message }}
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-12 col-sm-4">
+                                                    <label class="form-label fs-16px  mb-1">Last Name<span
+                                                                class="text-danger">*</span></label>
+                                                    <input  type="text"  @if($customer['is_verified'] == 't')  disabled  value="{{$customer['last_name']}}" @else  wire:model.defer="customer.last_name"  @endif
+                                                           class="only-name form-control form-control-sm  @error('customer.last_name') is-invalid @enderror"
+                                                           {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           placeholder="Last Name">
+                                                    @error('customer.last_name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-12 col-sm-4">
+                                                    <label class="form-label fs-16px  mb-1">Email<span
+                                                                class="text-danger">*</span></label>
+                                                    <input
+                                                            @if($customer['is_verified'] == 't')  disabled  value="{{$customer['email']}}" @else  wire:model.defer="customer.email"  @endif
+                                                            type="email"
+                                                            class=" fs-16px form-control form-control-sm  @error('customer.email') is-invalid @enderror"
+                                                            placeholder="Email">
+                                                    @error('customer.email')
+                                                    <span class="invalid-feedback" role="alert">
+                                          {{ $message }}
+                                            </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-3">
+                                                    <label for="birthDate" class="form-label fs-16px  mb-1">Date of
+                                                        Birth<span
+                                                                class="text-danger">*</span></label>
+                                                    <div class="position-relative">
+                                                        <input id="birthDate" @if($customer['is_verified'] == 't')  disabled  value="{{$customer['dob']}}" @else  wire:model.defer="customer.dob"  @endif
 
-                                                        <!-- Heading -->
-                                                        <p class="mb-0">
-                                                            Customer Code
-                                                        </p>
+                                                        type="date"
+                                                               class=" form-control form-control-sm  @error('customer.dob') is-invalid @enderror"
+                                                               {{--                                                       {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                               placeholder="Date of Birth">
 
-                                                        <!-- Text -->
-                                                        <small class="text-gray-700 fw-light">
-                                                            {{ $customer['id'] ?? null }}
-                                                        </small>
+                                                        @error('customer.dob')
+                                                        <span class="invalid-feedback" role="alert">
+                                                       {{ $message }}
+                                                       </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-3">
 
+                                                    <label class="form-label fs-16px  mb-1">Mobile Number<span
+                                                                class="text-danger">*</span></label>
+                                                    <div class="input-group mb-3">
+                                                <span class="input-group-text fs-14px"
+                                                      id="basic-addon1">
+                                                    {{ $customer['phone_code'] }}
+                                                </span>
+                                                        <input type="text" wire:model.defer="customer.phone"
+                                                               class="form-control only-just-numbers form-control-sm  @error('customer.phone') is-invalid @enderror"
+                                                               placeholder="Mobile number">
+                                                        @error('customer.phone')
+                                                        <span class="invalid-feedback" role="alert">
+                                                         {{ $message }}
+                                                        </span>
+                                                        @enderror
                                                     </div>
 
+
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-3">
+                                                    <label for="gender" class="form-label  fs-16px mb-1">Gender<span
+                                                                class="text-danger">*</span></label>
+                                                    <select @if($customer['is_verified'] == 't')  disabled  @else  wire:model.defer="customer.gender"  @endif
+                                                            {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }} --}}
+                                                            class="form-control form-control-sm @error('customer.gender') is-invalid @enderror "
+                                                            id="gender"
+                                                            name="gender">
+                                                        <option  value="">Choose Gender</option>
+                                                        <option {{ ($customer['is_verified'] == 't') &&  ($customer['gender'] == 'm') ? 'selected' : '' }} value="m">Male</option>
+                                                        <option {{ ($customer['is_verified'] == 't') &&  ($customer['gender'] == 'f') ? 'selected' : '' }} value="f">Female</option>
+                                                    </select>
+                                                    @error('customer.gender')
+                                                    <span class="invalid-feedback" role="alert">
+                              {{ $message }}
+                               </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+
+                                                    <label class="form-label   fs-16px mb-1">Nationality<span
+                                                                class="text-danger">*</span></label>
+
+                                                    <select
+                                                            @if($customer['is_verified'] == 't')  disabled @else  wire:model.defer="customer.nationality_country_id"  @endif
+                                                            {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }} --}}
+                                                            class="form-control form-control-sm  @error('customer.nationality_country_id') is-invalid @enderror ">
+                                                        <option value="">Choose Nationality</option>
+                                                        @foreach($n_data as $n)
+                                                            <option {{ ($customer['is_verified'] == 't') && ($customer['nationality_country_id'] == $n['id']) ? 'selected' : '' }} value="{{ $n['id'] }}">{{ $n['nationality'] }}</option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    @error('customer.nationality_country_id')
+                                                    <span class="invalid-feedback" role="alert">
+                              {{ $message }}
+                               </span>
+                                                    @enderror
+
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+
+                                                    <label class="form-label  fs-16px  mb-1">Place of Birth<span
+                                                                class="text-danger">*</span></label>
+                                                    <select
+                                                            @if($customer['is_verified'] == 't')  disabled  @else  wire:model.defer="customer.place_of_birth"  @endif
+                                                            class="only-name form-control-sm   form-control @error('customer.place_of_birth') is-invalid @enderror"
+                                                            {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                            placeholder="Place of Birth">
+                                                        <option value="">Choose Place of Birth</option>
+                                                        @foreach($countries as $co)
+                                                            <option {{ ($customer['is_verified'] == 't') &&  ($customer['place_of_birth'] == $co['name']) ? 'selected' : '' }} value="{{$co['name']}}">{{$co['name']}}</option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    @error('customer.place_of_birth')
+                                                    <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                    </span>
+                                                    @enderror
+
+                                                </div>
+                                                <div class="col-12 col-sm-4">
+                                                    <label for="occupation"
+                                                           class="form-label fs-16px  mb-1">Occupation<span
+                                                                class="text-danger">*</span></label>
+                                                    <select  @if($customer['is_verified'] == 't')  disabled  @else  wire:model.defer="customer.occupation"  @endif
+                                                            {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }} --}}
+                                                            class="form-control form-control-sm  @error('customer.occupation') is-invalid @enderror">
+                                                        <option value="">Choose Occupation</option>
+                                                        @foreach($oc_data as $n)
+                                                            <option {{ ($customer['is_verified'] == 't') &&  ($customer['occupation'] == $n['id']) ? 'selected' : '' }} value="{{ $n['id'] }}">{{ $n['name'] }}</option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    @error('customer.occupation')
+                                                    <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                    </span>
+                                                    @enderror
+
+
+                                                </div>
+                                                <div class="col-12 col-sm-12 mt-5">
+                                                    <h4 class="mt-4 fw-bold">Address</h4>
                                                 </div>
                                             </div>
-                                            <div class="list-group-item">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-4 mt-3">
+                                                    <label class="form-label mb-1">House No</label>
+                                                    <input type="text"
+                                                           @if($customer['is_verified'] == 't')  disabled  value="{{$customer['house_no']}}" @else  wire:model.defer="customer.house_no"  @endif
+                                                           class="only-alphanum form-control form-control-sm  @error('customer.house_no') is-invalid @enderror "
+                                                           {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           placeholder="House No # ">
+                                                    @error('customer.house_no')
+                                                    <span class="invalid-feedback" role="alert">
+                              {{ $message }}
+                               </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-3">
+                                                    <label class="form-label mb-1">Street</label>
+                                                    <input type="text"
+                                                           @if($customer['is_verified'] == 't')  disabled  value="{{$customer['street_name']}}" @else  wire:model.defer="customer.street_name"  @endif
 
-                                                        <!-- Heading -->
-                                                        <p class="mb-0">
-                                                            Name
-                                                        </p>
+                                                           class="only-alphanum form-control form-control-sm  @error('customer.street_name') is-invalid @enderror"
+                                                           {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           placeholder="Street Address">
+                                                    @error('customer.street_name')
+                                                    <span class="invalid-feedback" role="alert">
+                              {{ $message }}
+                               </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-12 col-sm-4 mt-3">
+                                                    <label class="form-label mb-1">Post Code</label>
+                                                    <input type="text"
+                                                           @if($customer['is_verified'] == 't')  disabled  value="{{$customer['postal_code']}}" @else  wire:model.defer="customer.postal_code"  @endif
+                                                           class="only-alphanum form-control form-control-sm  @error('customer.postal_code') is-invalid @enderror"
+                                                           {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           oninput="this.value = this.value.toUpperCase()"
+                                                           placeholder="Post Code">
+                                                    @error('customer.postal_code')
+                                                    <span class="invalid-feedback" role="alert">
+                              {{ $message }}
+                               </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 mt-3">
 
-                                                        <!-- Text -->
-                                                        <small class="fw-light text-gray-700">
-                                                            {{ $customer['first_name'] }} {{ $customer['last_name'] }}
-                                                        </small>
+                                                    <label class="form-label mb-1">City</label>
+                                                    <input  type="text"
+                                                            @if($customer['is_verified'] == 't')  disabled  value="{{$customer['city_name']}}" @else  wire:model.defer="customer.city_name"  @endif
+                                                           class="only-name form-control form-control-sm  @error('customer.city_name') is-invalid @enderror"
+                                                           {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           placeholder="City Name">
+                                                    @error('customer.city_name')
+                                                    <span class="invalid-feedback" role="alert">
+                              {{ $message }}
+                               </span>
+                                                    @enderror
 
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 mt-3">
+
+                                                    <label class="form-label mb-1">Country</label>
+                                                    <input type="text" class="form-control form-control-sm" readonly
+                                                           placeholder="Country"
+                                                           value="{{ $customer['country_name'] }}"
+                                                    >
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group  mb-3 mt-5 row">
+                                                @error('cus_info')
+                                                <div class="alert alert-danger mb-3 fade show d-flex justify-content-between"
+                                                     role="alert">
+                                                    <div>
+                                                        <p class="m-0"> {{ $message }}</p>
                                                     </div>
-
                                                 </div>
-                                            </div>
-                                            <div class="list-group-item">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
+                                                @enderror
 
-                                                        <!-- Heading -->
-                                                        <p class="mb-0">
-                                                            Date of Birth
-                                                        </p>
 
-                                                        <!-- Text -->
-                                                        <small class="fw-light text-gray-700">
-                                                            @if(!empty( $customer['dob']))
-                                                                {{ date('d M, Y',strtotime( $customer['dob']))  }}
-                                                            @endif
-                                                        </small>
-
+                                                @error('cus_info')
+                                                <div class="alert alert-danger mb-3 fade show d-flex justify-content-between"
+                                                     role="alert">
+                                                    <div>
+                                                        <p class="m-0"> {{ $message }}</p>
                                                     </div>
-
+                                                </div>
+                                                @enderror
+                                                <div class="col-sm-12 d-grid">
+                                                    <button type="submit" id="submit"
+                                                            wire:loading.attr="disabled"
+                                                            class="btn btn-primary shadow-none">Continue
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div class="list-group-item">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
-
-                                                        <!-- Heading -->
-                                                        <p class="mb-0">
-                                                            Phone
-                                                        </p>
-
-                                                        <!-- Text -->
-                                                        <small class="fw-light text-gray-700">
-                                                            {{ $customer['phone_code'] }} {{ $customer['phone'] }}
-                                                        </small>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div class="list-group-item">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
-
-                                                        <!-- Heading -->
-                                                        <p class="mb-0">
-                                                            Address
-                                                        </p>
-
-                                                        <!-- Text -->
-                                                        <small class="fw-light text-gray-700">
-                                                            {{ $customer['house_no'] }} {{ $customer['street_name'] }} {{ $customer['postal_code'] }}  {{ $customer['city_name'] }}
-                                                            , {{ $customer['country_name'] }}
-                                                        </small>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                        </form>
                                     @endif
                                 @endif
                             </div>
@@ -1230,7 +1412,7 @@
                                                                class="form-control fs-16px form-control-sm  @error('selected_beneficiary.' . $key . '.receiving_amount') is-invalid @enderror">
 
                                                             <div class="input-group-append ">
-                                                                <span class="input-group-text fs-14px" style="border-bottom-left-radius: 0; border-top-left-radius: 0 " >{{$remaining}}</span>
+                                                                <span class="input-group-text fs-14px" style="border-bottom-left-radius: 0; border-top-left-radius: 0 " >{{$remaining}} NGN</span>
                                                             </div>
                                                             @error('selected_beneficiary.' . $key . '.receiving_amount')
                                                             <span class="invalid-feedback fs-14px" role="alert">
