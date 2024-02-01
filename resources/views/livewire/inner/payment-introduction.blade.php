@@ -59,21 +59,6 @@
                                 </small>
 
                             </div>
-
-                            <div class="col">
-
-                                <!-- Heading -->
-                                <p class="mb-0 fw-bold">
-                                    Exchange Rate
-                                </p>
-
-                                <!-- Text -->
-                                <small class="fw-normal text-gray-900">
-                                    {{!empty($selected_payer['rate_after_spread']) ? number_format($selected_payer['rate_after_spread'],2) . ' ' . $selected_payer['currency']  :0}}
-                                </small>
-
-                            </div>
-
                         </div>
                     </div>
                 </div>

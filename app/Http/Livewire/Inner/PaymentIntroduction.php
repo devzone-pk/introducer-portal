@@ -596,6 +596,9 @@ class PaymentIntroduction extends Component
                 return;
             }
             $customer_user_ids = Customer::where('phone', $this->customer['phone'])
+                ->when(!empty($this->customer_id),function ($q){
+                    $q->where('id','!=',$this->customer_id);
+                })
                 ->where('phone_code', $this->customer['phone_code'])->whereNotNull('user_id')->pluck('user_id')->toArray();
 
             if (!empty($customer_user_ids)) {
