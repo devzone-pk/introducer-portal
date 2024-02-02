@@ -64,6 +64,9 @@ Route::middleware(['auth.allow'])->group(function () {
     });
 
     Route::get('paymentrequest', function () {
+        if (!\App\Models\Customer\CustomerDetail::where('customer_id',session('customer_id'))->where('is_introducer','t')->exists()){
+            return redirect()->back();
+        }
         return view('inner.payment-introduction');
     });
 

@@ -864,11 +864,16 @@ class PaymentIntroduction extends Component
 
             DB::beginTransaction();
 
+            if (!\App\Models\Customer\CustomerDetail::where('customer_id',session('customer_id'))->where('is_introducer','t')->exists()){
+                throw new Exception("You don't have the permission to perform this action.");
+            }
+
             $details = $this->details_completed;
             unset($details['docs_found']);
             if (in_array(false, $details)) {
                 throw new Exception('Please fill/confirm all the forms first');
             }
+
             $this->amounts['receive_amount'] = floatval(preg_replace("/[^0-9.]/", "", $this->amounts['receive_amount']));
             if ($this->amounts['receive_amount'] != array_sum(array_column($this->selected_beneficiary, 'receiving_amount'))) {
                 throw new Exception('Total receiving amount must be equal to beneficiary receiving amount');
