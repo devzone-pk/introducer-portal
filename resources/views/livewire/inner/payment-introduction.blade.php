@@ -428,9 +428,10 @@
                                                 <div class="col-12 col-sm-4">
                                                     <label class="form-label fs-16px mb-1">First Name<span
                                                                 class="text-danger">*</span></label>
-                                                    <input type="text" @if($customer['is_verified'] == 't')  disabled  value="{{$customer['first_name']}}" @else  wire:model="customer.first_name"  @endif
+                                                    <input type="text" @if($customer['is_verified'] == 't')  disabled  value="{{$customer['first_name']}}" @else  wire:model.defer="customer.first_name"  @endif
                                                            class="only-name form-control form-control-sm  @error('customer.first_name') is-invalid @enderror"
                                                            {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           id="first_name"
                                                            placeholder="First Name">
                                                     @error('customer.first_name')
                                                     <span class="invalid-feedback" role="alert">
@@ -444,6 +445,7 @@
                                                     <input  type="text"  @if($customer['is_verified'] == 't')  disabled  value="{{$customer['last_name']}}" @else  wire:model.defer="customer.last_name"  @endif
                                                            class="only-name form-control form-control-sm  @error('customer.last_name') is-invalid @enderror"
                                                            {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
+                                                           id="last_name"
                                                            placeholder="Last Name">
                                                     @error('customer.last_name')
                                                     <span class="invalid-feedback" role="alert">
@@ -454,7 +456,7 @@
                                                 <div class="col-12 col-sm-4">
                                                     <label class="form-label fs-16px  mb-1">Email<span
                                                                 class="text-danger">*</span></label>
-                                                    <input
+                                                    <input id="email"
                                                             @if($customer['is_verified'] == 't')  disabled  value="{{$customer['email']}}" @else  wire:model.defer="customer.email"  @endif
                                                             type="email"
                                                             class=" fs-16px form-control form-control-sm  @error('customer.email') is-invalid @enderror"
@@ -493,7 +495,7 @@
                                                       id="basic-addon1">
                                                     {{ $customer['phone_code'] }}
                                                 </span>
-                                                        <input type="text" wire:model.defer="customer.phone"
+                                                        <input type="text" wire:model.defer="customer.phone" id="phone"
                                                                class="form-control only-just-numbers form-control-sm  @error('customer.phone') is-invalid @enderror"
                                                                placeholder="Mobile number">
                                                         @error('customer.phone')
@@ -528,7 +530,7 @@
                                                     <label class="form-label   fs-16px mb-1">Nationality<span
                                                                 class="text-danger">*</span></label>
 
-                                                    <select
+                                                    <select id="nationality"
                                                             @if($customer['is_verified'] == 't')  disabled @else  wire:model.defer="customer.nationality_country_id"  @endif
                                                             {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }} --}}
                                                             class="form-control form-control-sm  @error('customer.nationality_country_id') is-invalid @enderror ">
@@ -549,7 +551,7 @@
 
                                                     <label class="form-label  fs-16px  mb-1">Place of Birth<span
                                                                 class="text-danger">*</span></label>
-                                                    <select
+                                                    <select id="place_of_birth"
                                                             @if($customer['is_verified'] == 't')  disabled  @else  wire:model.defer="customer.place_of_birth"  @endif
                                                             class="only-name form-control-sm   form-control @error('customer.place_of_birth') is-invalid @enderror"
                                                             {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
@@ -572,6 +574,7 @@
                                                            class="form-label fs-16px  mb-1">Occupation<span
                                                                 class="text-danger">*</span></label>
                                                     <select  @if($customer['is_verified'] == 't')  disabled  @else  wire:model.defer="customer.occupation"  @endif
+                                                    id="occupation"
                                                             {{--                                                    {{ $customer['is_verified'] == 't' ? 'readonly':'' }} --}}
                                                             class="form-control form-control-sm  @error('customer.occupation') is-invalid @enderror">
                                                         <option value="">Choose Occupation</option>
@@ -595,7 +598,7 @@
                                             <div class="row">
                                                 <div class="col-12 col-sm-4 mt-3">
                                                     <label class="form-label mb-1">House No</label>
-                                                    <input type="text"
+                                                    <input type="text" id="house_no"
                                                            @if($customer['is_verified'] == 't')  disabled  value="{{$customer['house_no']}}" @else  wire:model.defer="customer.house_no"  @endif
                                                            class="only-alphanum form-control form-control-sm  @error('customer.house_no') is-invalid @enderror "
                                                            {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
@@ -608,7 +611,7 @@
                                                 </div>
                                                 <div class="col-12 col-sm-4 mt-3">
                                                     <label class="form-label mb-1">Street</label>
-                                                    <input type="text"
+                                                    <input type="text" id="street"
                                                            @if($customer['is_verified'] == 't')  disabled  value="{{$customer['street_name']}}" @else  wire:model.defer="customer.street_name"  @endif
 
                                                            class="only-alphanum form-control form-control-sm  @error('customer.street_name') is-invalid @enderror"
@@ -622,7 +625,7 @@
                                                 </div>
                                                 <div class="col-12 col-sm-4 mt-3">
                                                     <label class="form-label mb-1">Post Code</label>
-                                                    <input type="text"
+                                                    <input type="text"  id="post_code"
                                                            @if($customer['is_verified'] == 't')  disabled  value="{{$customer['postal_code']}}" @else  wire:model.defer="customer.postal_code"  @endif
                                                            class="only-alphanum form-control form-control-sm  @error('customer.postal_code') is-invalid @enderror"
                                                            {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
@@ -637,7 +640,7 @@
                                                 <div class="col-xs-12 col-sm-4 mt-3">
 
                                                     <label class="form-label mb-1">City</label>
-                                                    <input  type="text"
+                                                    <input  type="text" id="city_name"
                                                             @if($customer['is_verified'] == 't')  disabled  value="{{$customer['city_name']}}" @else  wire:model.defer="customer.city_name"  @endif
                                                            class="only-name form-control form-control-sm  @error('customer.city_name') is-invalid @enderror"
                                                            {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
@@ -1387,7 +1390,7 @@
                                                         <label class="form-label fs-16px  mb-1">Receiving Amount
                                                             (NGN) </label>
 
-                                                            <label class="form-label fs-14px  mb-1">Remaining</label>
+                                                            <label class="form-label fs-14px  mb-1">Remaining (NGN)</label>
                                                         </div>
                                                         <div class="input-group">
                                                         <input type="number" placeholder="Receiving Amount"
@@ -1397,7 +1400,7 @@
                                                                class="form-control fs-16px form-control-sm  @error('selected_beneficiary.' . $key . '.receiving_amount') is-invalid @enderror">
 
                                                             <div class="input-group-append ">
-                                                                <span class="input-group-text fs-14px" style="border-bottom-left-radius: 0; border-top-left-radius: 0 " >{{$remaining}} NGN</span>
+                                                                <span class="input-group-text fs-14px" style="border-bottom-left-radius: 0; border-top-left-radius: 0 " >{{number_format($remaining,2)}}</span>
                                                             </div>
                                                             @error('selected_beneficiary.' . $key . '.receiving_amount')
                                                             <span class="invalid-feedback fs-14px" role="alert">
@@ -1460,7 +1463,9 @@
                                 <div class="col-6">
                                     <button type="submit" id="submit"
                                             wire:loading.attr="disabled"
-                                            class="btn btn-primary shadow-none w-100">Submit Request Form
+                                            class="btn btn-primary shadow-none w-100">
+                                        <span wire:loading.remove wire:target="saveRequestForm">Submit Request Form</span>
+                                        <span wire:loading wire:target="saveRequestForm">Submitting...</span>
                                     </button>
                                 </div>
                             </div>
@@ -1478,6 +1483,7 @@
             }
             if (event.detail.id === 'collapseThree') {
                 $('#collapseTwo').removeClass('show');
+                $('#collapseOne').removeClass('show');
             }
             if (event.detail.id === 'collapseFour') {
                 $('#collapseThree').removeClass('show');

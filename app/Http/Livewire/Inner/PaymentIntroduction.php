@@ -566,10 +566,11 @@ class PaymentIntroduction extends Component
                     $this->benelistData();
 //                    $this->selected_window = 'payments';
 //                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
-                } else {
+                }
+//                else {
 //                    $this->selected_window = 'cus_docs';
 //                    $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseTwo']);
-                }
+//                }
             }
             $this->customer_check = true;
 
@@ -613,7 +614,7 @@ class PaymentIntroduction extends Component
 
             $this->details_completed['customer_info'] = true;
 
-            if ($this->details_completed['customer_docs'] = true && $this->details_completed['docs_found'] = true) {
+            if ($this->details_completed['customer_docs'] && $this->details_completed['docs_found']) {
                 $this->selected_window = 'payments';
                 $this->dispatchBrowserEvent('open-accord', ['id' => 'collapseThree']);
 
@@ -893,7 +894,9 @@ class PaymentIntroduction extends Component
                 if ($this->customer['is_verified'] == 't') {
                     Customer::find($this->customer_id)->update(['phone' => $this->customer['phone']]);
                 } else {
-                    Customer::find($this->customer_id)->update($this->customer);
+                    $update_customer = $this->customer;
+                    unset($update_customer['country_name'], $update_customer['iso2']);
+                        Customer::find($this->customer_id)->update($update_customer);
                 }
                 $user_id = $this->customer['user_id'] ?? null;
             }
@@ -919,7 +922,6 @@ class PaymentIntroduction extends Component
                     $bene_bank_id = $this->existing_beneficiary_bank_id[$key];
                     BeneficiaryBank::find($bene_bank_id)->update($this->beneficiaryBankMapping($bene, $bene_id));
                 }
-
                 $this->payments['status'] = 'PEN';
                 $this->payments['customer_id'] = $this->customer_id;
                 $this->payments['beneficiary_id'] = $bene_id;
@@ -951,7 +953,7 @@ class PaymentIntroduction extends Component
                     'gateway_id' => 3,
                     'sending_reason' => $bene['selected_sending_reason'],
                     'receiving_method_id' => $this->selected_payer['method_id'],
-                    'user_id' => $customer['user_id'],
+                    'user_id' => $user_id,
                     'company_id' => config('app.company_id'),
                     'payout_location_id' => $this->selected_cash_destination ?? null
                 ]);
@@ -990,6 +992,7 @@ class PaymentIntroduction extends Component
                     'transfer_id' => $transfer->id,
                     'ip' => $ip,
                     'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
+                    'introducer_id' => session('customer_id')
                 ]);
 
 
