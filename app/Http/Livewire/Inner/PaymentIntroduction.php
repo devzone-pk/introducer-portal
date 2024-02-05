@@ -850,7 +850,7 @@ class PaymentIntroduction extends Component
         $this->details_completed['beneficiary'] = true;
         $this->success = null;
         $this->resetErrorBag();
-       // try {
+        try {
 
             DB::beginTransaction();
 
@@ -981,7 +981,7 @@ class PaymentIntroduction extends Component
 
                 Ledger::create([
                     'user_id' => $user_id,
-                    'debit' => $this->amounts['sending_amount'] + $this->amounts['fees'],
+                    'debit' => $this->amounts['sending_amount'] ,
                     'credit' => 0,
                     'description' => 'INV ' . $transfer->id . '; Payment # ' . $code . '; Admin Charges ' . $this->amounts['fees'] . '; Sending Amount ' . $this->amounts['sending_amount'] . '; Rate ' . $this->selected_payer['rate_after_spread'],
                     'admin_charges' => $this->amounts['fees'],
@@ -1001,10 +1001,10 @@ class PaymentIntroduction extends Component
             DB::commit();
             redirect()->to('/paymentrequest')->with('form_success', 'Payment request form submitted successfully.');
 
-//        } catch (Exception $e) {
-//            DB::rollBack();
-//            $this->addError('request_form', $e->getMessage());
-//        }
+        } catch (Exception $e) {
+            DB::rollBack();
+            $this->addError('request_form', $e->getMessage());
+        }
     }
 
     private function dumpBeneficiary($transfer, $bene)
