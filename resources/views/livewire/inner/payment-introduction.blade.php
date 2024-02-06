@@ -211,7 +211,7 @@
                                                     <label class="form-label fs-16px  mb-1">Email<span
                                                                 class="text-danger">*</span></label>
                                                     <input
-                                                            disabled value="{{ $customer['email'] }}"
+                                                            wire:model.defer="customer.email"
                                                             type="email"
                                                             class=" fs-16px form-control form-control-sm  @error('customer.email') is-invalid @enderror"
                                                             placeholder="Email">
@@ -475,7 +475,7 @@
                                                     <label class="form-label fs-16px  mb-1">Email<span
                                                                 class="text-danger">*</span></label>
                                                     <input id="email"
-                                                            @if($customer['is_verified'] == 't')  disabled  value="{{$customer['email']}}" @else  wire:model.defer="customer.email"  @endif
+                                                           disabled  value="{{$customer['email']}}"
                                                             type="email"
                                                             class=" fs-16px form-control form-control-sm  @error('customer.email') is-invalid @enderror"
                                                             placeholder="Email">
