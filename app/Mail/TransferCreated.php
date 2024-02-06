@@ -20,10 +20,10 @@ class TransferCreated extends Mailable implements ShouldQueue
     public $transfer;
     public $sender;
 
-    public function __construct($transfer)
+    public function __construct($transfer, $customer_id)
     {
         $this->transfer = $transfer;
-        $customer = Customer::find(session('customer_id'));
+        $customer = Customer::find($customer_id);
         $this->sender = optional($customer)->first_name;
     }
 
