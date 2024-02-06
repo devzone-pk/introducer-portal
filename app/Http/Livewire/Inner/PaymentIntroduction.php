@@ -37,6 +37,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -918,6 +919,7 @@ class PaymentIntroduction extends Component
                 CustomerDocument::create($this->customer_documents);
             }
 
+            $introducer_batch_id = Str::uuid();
             foreach ($this->selected_beneficiary as $key => $bene) {
                 $bene['customer_id'] = $this->customer_id;
                 if (empty($this->existing_beneficiary_id[$key])) {
@@ -1004,7 +1006,8 @@ class PaymentIntroduction extends Component
                     'transfer_id' => $transfer->id,
                     'ip' => $ip,
                     'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
-                    'introducer_id' => session('customer_id')
+                    'introducer_id' => session('customer_id'),
+                    'introducer_batch' => $introducer_batch_id,
                 ]);
 
 
