@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
-use SendGrid\Mail\Mail;
+use Illuminate\Support\Facades\Mail;
 
 class SendMoney extends Component
 {
