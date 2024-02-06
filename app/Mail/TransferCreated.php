@@ -34,7 +34,7 @@ class TransferCreated extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject($this->transfer['transfer_code'] . ' Transfer has been created.')
+        return $this->subject('Update on Transaction ' . $this->transfer['transfer_code'] . ' - In Process')
             ->view('emails.inner.transfer-created')->with(['transfer' => $this->transfer, 'sender' => $this->sender]);
     }
 }

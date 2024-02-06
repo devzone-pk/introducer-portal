@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Mobile;
 
+use App\Mail\TransferCreated;
 use App\Models\Customer\Customer;
 use App\Models\Partner\Payer;
 use App\Models\Partner\PayerValidation;
@@ -39,6 +40,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
+use SendGrid\Mail\Mail;
 
 class SendMoney extends Component
 {
@@ -683,9 +685,8 @@ class SendMoney extends Component
 
 
             if ($this->selected_sending_method['sending_method_id'] == 91) {
-//                $mail = (new TransferCreated($transfer))->onQueue('portal_' . config('app.company_id'))->afterCommit();
-//                Mail::to(session('email'))->queue($mail);
-
+                $mail = (new TransferCreated($transfer))->onQueue('portal_' . config('app.company_id'))->afterCommit();
+                Mail::to(session('email'))->queue($mail);
             }
             DB::commit();
 
