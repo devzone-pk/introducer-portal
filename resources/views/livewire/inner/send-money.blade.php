@@ -33,17 +33,17 @@
         <div class="row g-3">
             <div class="col-xs-4 col-4">
                 <div role="button" wire:click.prevent="goTo('transfer')"
-                    class="card transfer-tab {{ $color_amount == 'bg-success' ? 'bg-success text-white' : '' }} {{ $selected_window == 'transfer' ? 'bg-danger' : '' }} card-border border-primary shadow-light-lg  ">
+                     class="card transfer-tab {{ $color_amount == 'bg-success' ? 'bg-success text-white' : '' }} {{ $selected_window == 'transfer' ? 'bg-danger' : '' }} card-border border-primary shadow-light-lg  ">
                     <div class="card-body   fs-16px p-4">
                         <div class="d-flex   justify-content-md-center align-items-lg-center">
                             @if ($color_amount == 'bg-success')
                                 <div class="me-2">
                                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
+                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M7.68213 12.3024L9.72081 14.3636L15.7958 8.15906" stroke="white"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         <circle cx="11.5" cy="11.5" r="10.5" stroke="white" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
 
                                 </div>
@@ -58,17 +58,17 @@
             </div>
             <div class="col-md-4 col-4">
                 <div wire:click.prevent="goTo('beneficiary')" role="button"
-                    class="card  transfer-tab {{ $color_beneficiary == 'bg-success' ? 'bg-success text-white' : '' }} {{ $selected_window == 'beneficiary' || $selected_window == 'bank' ? 'bg-danger' : '' }}  card-border border-primary shadow-light-lg  ">
+                     class="card  transfer-tab {{ $color_beneficiary == 'bg-success' ? 'bg-success text-white' : '' }} {{ $selected_window == 'beneficiary' || $selected_window == 'bank' ? 'bg-danger' : '' }}  card-border border-primary shadow-light-lg  ">
                     <div class="card-body  fs-16px p-4">
                         <div class="d-flex justify-content-md-center align-items-center">
                             @if ($color_beneficiary == 'bg-success')
                                 <div class="me-2">
                                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
+                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M7.68213 12.3024L9.72081 14.3636L15.7958 8.15906" stroke="white"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         <circle cx="11.5" cy="11.5" r="10.5" stroke="white" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
 
                                 </div>
@@ -83,17 +83,17 @@
             </div>
             <div class="col-md-4 col-4">
                 <div
-                    class="card  transfer-tab {{ $color_confirm == 'bg-success' ? 'bg-success text-white' : '' }} {{ $selected_window == 'confirm' ? 'bg-danger' : '' }}   card-border border-primary shadow-light-lg  ">
+                        class="card  transfer-tab {{ $color_confirm == 'bg-success' ? 'bg-success text-white' : '' }} {{ $selected_window == 'confirm' ? 'bg-danger' : '' }}   card-border border-primary shadow-light-lg  ">
                     <div class="card-body fs-16px p-4">
                         <div class="d-flex  justify-content-md-center align-items-center">
                             @if ($color_confirm == 'bg-success')
                                 <div class="me-2">
                                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
+                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M7.68213 12.3024L9.72081 14.3636L15.7958 8.15906" stroke="white"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         <circle cx="11.5" cy="11.5" r="10.5" stroke="white" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
 
                                 </div>
@@ -108,7 +108,7 @@
             </div>
             <div class="col-12">
                 <div
-                    class="card card-border border-primary shadow-light-lg  {{ $selected_window == 'transfer' ? '' : 'd-none' }} ">
+                        class="card card-border border-primary shadow-light-lg  {{ $selected_window == 'transfer' ? '' : 'd-none' }} ">
                     <div class="card-header">Transaction Details</div>
                     <div class="card-body">
                         <form wire:submit.prevent="validateSendingDetails">
@@ -183,7 +183,7 @@
                                             @endif
 
                                             <select name="" wire:model="payer_id"
-                                                class="form-select  fs-16px  @error('selected_payer.id') is-invalid @enderror">
+                                                    class="form-select  fs-16px  @error('selected_payer.id') is-invalid @enderror">
                                                 <option value="">Select</option>
                                                 @foreach (collect($payers)->sortBy('name')->toArray() as $s)
                                                     <option value="{{ $s['id'] }}">{{ $s['name'] }}
@@ -193,7 +193,7 @@
                                                 @endforeach
                                             </select>
                                             @error('selected_payer.id')
-                                                <span class="invalid-feedback fs-14px" role="alert">
+                                            <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
@@ -209,14 +209,14 @@
                                         <div class="mb-3">
                                             <label class="form-label fs-16px mb-1">Pick-up Location</label>
                                             <select name="" wire:model="selected_cash_destination"
-                                                class="form-select fs-16px  @error('selected_cash_destination') is-invalid @enderror">
+                                                    class="form-select fs-16px  @error('selected_cash_destination') is-invalid @enderror">
                                                 <option value="">Select</option>
                                                 @foreach ($sd_data as $s)
                                                     <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
                                                 @endforeach
                                             </select>
                                             @error('selected_cash_destination')
-                                                <span class="invalid-feedback fs-14px" role="alert">
+                                            <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
@@ -234,20 +234,20 @@
 
                                             <div class="input-group">
                                                 <input style="font-size: 24px !important;" onclick="this.select()"
-                                                    type="text" wire:model.debounce.1000ms="amounts.sending_amount"
-                                                    class="form-control only-numbers  form-control-lg leading-zero @error('amounts.sending_amount') is-invalid @enderror"
-                                                    id="youSend" value="" placeholder="" autocomplete="off"
-                                                    autocorrect="off" autocapitalize="off">
+                                                       type="text" wire:model.debounce.1000ms="amounts.sending_amount"
+                                                       class="form-control only-numbers  form-control-lg leading-zero @error('amounts.sending_amount') is-invalid @enderror"
+                                                       id="youSend" value="" placeholder="" autocomplete="off"
+                                                       autocorrect="off" autocapitalize="off">
 
 
                                                 <span class="input-group-text fs-20px text-secondary fw-bold">
                                                     <img class="w-48px border rounded me-2"
-                                                        src="{{ asset('assets/flags/' . session('iso2') . '.svg') }}"
-                                                        alt="">
+                                                         src="{{ asset('assets/flags/' . session('iso2') . '.svg') }}"
+                                                         alt="">
                                                     {{ $selected_payer['source_currency'] ?? '' }}
                                                 </span>
                                                 @error('amounts.sending_amount')
-                                                    <span class="invalid-feedback fs-14px" role="alert">
+                                                <span class="invalid-feedback fs-14px" role="alert">
                                                         {{ $message }}
                                                     </span>
                                                 @enderror
@@ -260,21 +260,21 @@
                                                 Gets</label>
                                             <div class="input-group">
                                                 <input style="font-size: 24px !important;" onclick="this.select()"
-                                                    type="text" wire:model.debounce.1000ms="amounts.receive_amount"
-                                                    class="form-control only-numbers   form-control-lg leading-zero @error('amounts.receive_amount') is-invalid @enderror "
-                                                    id="recipient_gets" value="" placeholder=""
-                                                    autocomplete="off" autocorrect="off" autocapitalize="off">
+                                                       type="text" wire:model.debounce.1000ms="amounts.receive_amount"
+                                                       class="form-control only-numbers   form-control-lg leading-zero @error('amounts.receive_amount') is-invalid @enderror "
+                                                       id="recipient_gets" value="" placeholder=""
+                                                       autocomplete="off" autocorrect="off" autocapitalize="off">
 
 
                                                 <span class="input-group-text fs-20px text-secondary fw-bold">
 
                                                     <img class="w-48px border rounded me-2"
-                                                        src="{{ asset('assets/flags/' . $receiving_country['iso2'] . '.svg') }}"
-                                                        alt="">
+                                                         src="{{ asset('assets/flags/' . $receiving_country['iso2'] . '.svg') }}"
+                                                         alt="">
                                                     {{ $selected_payer['currency'] ?? '' }}
                                                 </span>
                                                 @error('amounts.receive_amount')
-                                                    <span class="invalid-feedback fs-14px" role="alert">
+                                                <span class="invalid-feedback fs-14px" role="alert">
                                                         {{ $message }}
                                                     </span>
                                                 @enderror
@@ -292,7 +292,7 @@
                                 </p>
                                 @if (!$show_coupon_input  && false)
                                     <div class="col-12 {{ !empty($amounts['coupon_code']) ? 'd-none' : '' }}"
-                                        style="color: #002f6c" id="have-coupon">
+                                         style="color: #002f6c" id="have-coupon">
                                         <a wire:click.prevent="couponShowInput()" style="cursor: pointer">
                                             Have a Coupon?
                                         </a>
@@ -304,9 +304,9 @@
                                         <div class="mb-3">
                                             <label class="form-label mb-1">Coupon Code</label>
                                             <input type="text" class="form-control" onclick="this.select()"
-                                                autocorrect="off" autocapitalize="off"
-                                                wire:model.debounce.2000ms="amounts.coupon_code"
-                                                placeholder="Enter code here..." autocomplete="off">
+                                                   autocorrect="off" autocapitalize="off"
+                                                   wire:model.debounce.2000ms="amounts.coupon_code"
+                                                   placeholder="Enter code here..." autocomplete="off">
                                         </div>
                                     </div>
                                 @endif
@@ -380,8 +380,7 @@
 
 
 
-
-
+ 
                                 <div class=" my-2 alert alert-warning    @if($payment_done == 'false') d-none @endif">
 
                                     <p class="m-0">
@@ -460,7 +459,7 @@
 
 
                 <div
-                    class="card card-border border-primary shadow-light-lg {{ $selected_window == 'beneficiary' ? '' : 'd-none' }}">
+                        class="card card-border border-primary shadow-light-lg {{ $selected_window == 'beneficiary' ? '' : 'd-none' }}">
                     <div class="card-header">Receiver Details</div>
                     <div class="card-body">
                         <form wire:submit.prevent="validateBeneficiaryDetail">
@@ -469,7 +468,7 @@
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Choose From Existing Receivers</label>
                                         <select name="" wire:model="beneficiary_id"
-                                            class="form-select fs-16px  @error('beneficiary_id') is-invalid @enderror">
+                                                class="form-select fs-16px  @error('beneficiary_id') is-invalid @enderror">
                                             <option value="">Select</option>
                                             @foreach ($bene_data as $s)
                                                 <option value="{{ $s['id'] }}">
@@ -485,12 +484,12 @@
                                         <div class="mb-3">
                                             <label class="form-label fs-16px  mb-1">First Name</label>
                                             <input type="text" placeholder="First Name" autocomplete="false"
-                                                autocorrect="off" autocapitalize="off"
-                                                wire:model.defer="selected_beneficiary.first_name"
-                                                class="form-control  fs-16px  only-name  @error('selected_beneficiary.first_name') is-invalid @enderror">
+                                                   autocorrect="off" autocapitalize="off"
+                                                   wire:model.defer="selected_beneficiary.first_name"
+                                                   class="form-control  fs-16px  only-name  @error('selected_beneficiary.first_name') is-invalid @enderror">
 
                                             @error('selected_beneficiary.first_name')
-                                                <span class="invalid-feedback fs-14px" role="alert">
+                                            <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
@@ -501,11 +500,11 @@
                                         <div class="mb-3">
                                             <label class="form-label fs-16px  mb-1">Last Name</label>
                                             <input type="text" placeholder="Last Name" autocomplete="false"
-                                                autocorrect="off" autocapitalize="off"
-                                                wire:model.defer="selected_beneficiary.last_name"
-                                                class="form-control fs-16px   only-name  @error('selected_beneficiary.last_name') is-invalid @enderror">
+                                                   autocorrect="off" autocapitalize="off"
+                                                   wire:model.defer="selected_beneficiary.last_name"
+                                                   class="form-control fs-16px   only-name  @error('selected_beneficiary.last_name') is-invalid @enderror">
                                             @error('selected_beneficiary.last_name')
-                                                <span class="invalid-feedback fs-14px" role="alert">
+                                            <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
@@ -516,13 +515,13 @@
                                             <label class="form-label   fs-16px mb-1">Phone</label>
                                             <div class="input-group mb-3">
                                                 <span
-                                                    class="input-group-text">{{ $selected_beneficiary['code'] ?? '' }}</span>
+                                                        class="input-group-text">{{ $selected_beneficiary['code'] ?? '' }}</span>
                                                 <input type="text"
-                                                    class="form-control only-just-numbers fs-16px   @error('selected_beneficiary.phone') is-invalid @enderror"
-                                                    wire:model.defer="selected_beneficiary.phone"
-                                                    placeholder="Phone number">
+                                                       class="form-control only-just-numbers fs-16px   @error('selected_beneficiary.phone') is-invalid @enderror"
+                                                       wire:model.defer="selected_beneficiary.phone"
+                                                       placeholder="Phone number">
                                                 @error('selected_beneficiary.phone')
-                                                    <span class="invalid-feedback fs-14px" role="alert">
+                                                <span class="invalid-feedback fs-14px" role="alert">
                                                         {{ $message }}
                                                     </span>
                                                 @enderror
@@ -534,14 +533,14 @@
                                         <div class="mb-3">
                                             <label class="form-label fs-16px  mb-1">Your Relationship</label>
                                             <select name="" wire:model="selected_beneficiary.relationship_id"
-                                                class="form-select fs-16px  @error('selected_beneficiary.relationship_id') is-invalid @enderror">
+                                                    class="form-select fs-16px  @error('selected_beneficiary.relationship_id') is-invalid @enderror">
                                                 <option value="">Select</option>
                                                 @foreach ($rl_data as $s)
                                                     <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
                                                 @endforeach
                                             </select>
                                             @error('selected_beneficiary.relationship_id')
-                                                <span class="invalid-feedback fs-14px" role="alert">
+                                            <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
@@ -551,14 +550,14 @@
                                         <div class="mb-3">
                                             <label class="form-label fs-16px  mb-1">Sending Reason</label>
                                             <select name="" wire:model="selected_sending_reason"
-                                                class="form-select fs-16px  @error('selected_sending_reason') is-invalid @enderror">
+                                                    class="form-select fs-16px  @error('selected_sending_reason') is-invalid @enderror">
                                                 <option value="">Select</option>
                                                 @foreach ($sr_data as $s)
                                                     <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
                                                 @endforeach
                                             </select>
                                             @error('selected_sending_reason')
-                                                <span class="invalid-feedback fs-14px" role="alert">
+                                            <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
@@ -574,7 +573,7 @@
                                     @endif
 
                                     <button type="button" wire:click.prevent="addNewBeneficiary"
-                                        class="btn btn-light shadow-none">Add New Receiver
+                                            class="btn btn-light shadow-none">Add New Receiver
                                     </button>
                                 </div>
 
@@ -593,7 +592,7 @@
 
 
                 <div
-                    class="card card-border border-primary shadow-light-lg {{ $selected_window == 'bank' ? '' : 'd-none' }}">
+                        class="card card-border border-primary shadow-light-lg {{ $selected_window == 'bank' ? '' : 'd-none' }}">
                     <div class="card-header">Receiver Bank Details</div>
                     <div class="card-body">
                         <form wire:submit.prevent="validateBeneficiaryBankDetail">
@@ -604,7 +603,7 @@
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Select Existing Receiver Account</label>
                                         <select name="" wire:model="beneficiary_bank_id"
-                                            class="form-select fs-16px  ">
+                                                class="form-select fs-16px  ">
                                             <option value="">Select</option>
                                             @foreach ($bb_data as $s)
                                                 <option value="{{ $s['id'] }}">{{ $s['old_name'] }}</option>
@@ -620,15 +619,15 @@
                                         <div class="mb-3">
                                             <label class="form-label mb-1">Bank</label>
                                             <select name="" onchange="myFunction()"
-                                                wire:model="selected_bank_beneficiary.bank_id"
-                                                class="form-select fs-16px @error('selected_bank_beneficiary.bank_id') is-invalid @enderror">
+                                                    wire:model="selected_bank_beneficiary.bank_id"
+                                                    class="form-select fs-16px @error('selected_bank_beneficiary.bank_id') is-invalid @enderror">
                                                 <option value="">Select</option>
                                                 @foreach (collect($sb_data)->sortBy('name')->toArray() as $s)
                                                     <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
                                                 @endforeach
                                             </select>
                                             @error('selected_bank_beneficiary.bank_id')
-                                                <span class="invalid-feedback fs-14px" role="alert">
+                                            <span class="invalid-feedback fs-14px" role="alert">
                                                     {{ $message }}
                                                 </span>
                                             @enderror
@@ -642,9 +641,9 @@
                                             <div class="mb-3">
                                                 <label class="form-label mb-1">Branch Name</label>
                                                 <select name=""
-                                                    wire:model="selected_bank_beneficiary.branch_name"
-                                                    id="select2_dropdown" onchange="branchChange()"
-                                                    class="form-select fs-16px select2_dropdown  @error('selected_bank_beneficiary.branch_name') is-invalid @enderror">
+                                                        wire:model="selected_bank_beneficiary.branch_name"
+                                                        id="select2_dropdown" onchange="branchChange()"
+                                                        class="form-select fs-16px select2_dropdown  @error('selected_bank_beneficiary.branch_name') is-invalid @enderror">
                                                     <option value="">Select</option>
                                                     @foreach ($branches as $dist => $ss)
                                                         <optgroup label="{{ $dist }}"></optgroup>
@@ -657,7 +656,7 @@
                                                     @endforeach
                                                 </select>
                                                 @error('selected_bank_beneficiary.branch_name')
-                                                    <span class="invalid-feedback fs-14px" role="alert">
+                                                <span class="invalid-feedback fs-14px" role="alert">
                                                         {{ $message }}
                                                     </span>
                                                 @enderror
@@ -668,15 +667,15 @@
                                             <div class="mb-3">
                                                 <label class="form-label mb-1">Routing #</label>
                                                 <input name=""
-                                                    wire:model="selected_bank_beneficiary.branch_code" readonly
-                                                    class="form-select fs-16px @error('selected_bank_beneficiary.branch_code') is-invalid @enderror">
+                                                       wire:model="selected_bank_beneficiary.branch_code" readonly
+                                                       class="form-select fs-16px @error('selected_bank_beneficiary.branch_code') is-invalid @enderror">
                                                 {{--                                                    <option value="">Select</option> --}}
                                                 {{--                                                    @foreach ($routings as $s) --}}
                                                 {{--                                                        <option value="{{ $s['code'] }}">{{ $s['code'] }}</option> --}}
                                                 {{--                                                    @endforeach --}}
 
                                                 @error('selected_bank_beneficiary.branch_code')
-                                                    <span class="invalid-feedback fs-14px" role="alert">
+                                                <span class="invalid-feedback fs-14px" role="alert">
                                                         {{ $message }}
                                                     </span>
                                                 @enderror
@@ -687,11 +686,11 @@
                                             <div class="mb-3">
                                                 <label class="form-label fs-16px mb-1">Account #</label>
                                                 <input type="text" placeholder="Account #"
-                                                    wire:model.lazy="selected_bank_beneficiary.account_no"
-                                                    autocomplete="false" autocorrect="off" autocapitalize="off"
-                                                    class="form-control fs-16px pe-2 @error('selected_bank_beneficiary.account_no') is-invalid @enderror">
+                                                       wire:model.lazy="selected_bank_beneficiary.account_no"
+                                                       autocomplete="false" autocorrect="off" autocapitalize="off"
+                                                       class="form-control fs-16px pe-2 @error('selected_bank_beneficiary.account_no') is-invalid @enderror">
                                                 @error('selected_bank_beneficiary.account_no')
-                                                    <span class="invalid-feedback fs-14px" role="alert">
+                                                <span class="invalid-feedback fs-14px" role="alert">
                                                         {{ $message }}
                                                     </span>
                                                 @enderror
@@ -703,12 +702,12 @@
                                                 <div class="mb-3">
                                                     <label class="form-label fs-16px mb-1">{{ $v['label'] }}</label>
                                                     <input type="{{ $v['type'] }}"
-                                                        placeholder="{{ $v['placeholder'] }}"
-                                                        wire:model.lazy="selected_bank_beneficiary.{{ $v['name'] }}"
-                                                        autocomplete="false" autocorrect="off" autocapitalize="off"
-                                                        class="form-control fs-16px {{ $v['class'] }} pe-2 @error('selected_bank_beneficiary.' . $v['name']) is-invalid @enderror">
+                                                           placeholder="{{ $v['placeholder'] }}"
+                                                           wire:model.lazy="selected_bank_beneficiary.{{ $v['name'] }}"
+                                                           autocomplete="false" autocorrect="off" autocapitalize="off"
+                                                           class="form-control fs-16px {{ $v['class'] }} pe-2 @error('selected_bank_beneficiary.' . $v['name']) is-invalid @enderror">
                                                     @error('selected_bank_beneficiary.' . $v['name'])
-                                                        <span class="invalid-feedback fs-14px" role="alert">
+                                                    <span class="invalid-feedback fs-14px" role="alert">
                                                             {{ $message }}
                                                         </span>
                                                     @enderror
@@ -727,7 +726,7 @@
                                         </p>
                                     @endif
                                     <button type="button" class="btn btn-light  shadow-none" id="new_bank"
-                                        wire:click.prevent="addNewBeneficiaryBank">Add New Bank
+                                            wire:click.prevent="addNewBeneficiaryBank">Add New Bank
                                     </button>
                                 </div>
                                 @if ($show_beneficiary_bank)
@@ -744,7 +743,7 @@
                 </div>
 
                 <div
-                    class="card card-border border-primary shadow-light-lg {{ $selected_window == 'confirm' ? '' : 'd-none' }}">
+                        class="card card-border border-primary shadow-light-lg {{ $selected_window == 'confirm' ? '' : 'd-none' }}">
                     <div class="card-header">Please Verify Transaction Details then Press Confirm & Send</div>
                     <div class="card-body">
                         <form wire:submit.prevent="sendMoney">
@@ -903,7 +902,7 @@
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Payment Method</label>
                                         <select name="" wire:model="sending_method_id"
-                                            class="form-select fs-16px  @error('selected_sending_method.id') is-invalid @enderror">
+                                                class="form-select fs-16px  @error('selected_sending_method.id') is-invalid @enderror">
                                             <option value="">Select</option>
                                             @foreach ($sm_data as $s)
                                                 <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
@@ -911,7 +910,7 @@
 
                                         </select>
                                         @error('selected_sending_method.id')
-                                            <span class="invalid-feedback fs-14px" role="alert">
+                                        <span class="invalid-feedback fs-14px" role="alert">
                                                 {{ $message }}
                                             </span>
                                         @enderror
@@ -924,7 +923,7 @@
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Source of Funds</label>
                                         <select name="" wire:model="source_of_funds"
-                                            class="form-select fs-16px  @error('source_of_funds') is-invalid @enderror">
+                                                class="form-select fs-16px  @error('source_of_funds') is-invalid @enderror">
                                             <option value="">Select</option>
                                             @php
                                                 $sources = ['SALARY', 'SAVINGS', 'BUSINESS', 'GIFT', 'PENSION', 'BANK LOAN', 'SALES OF PROPERTY OR ASSETS'];
@@ -934,7 +933,7 @@
                                             @endforeach
                                         </select>
                                         @error('source_of_funds')
-                                            <span class="invalid-feedback fs-14px" role="alert">
+                                        <span class="invalid-feedback fs-14px" role="alert">
                                                 {{ $message }}
                                             </span>
                                         @enderror
@@ -974,11 +973,11 @@
                 </div>
 
                 @error('error')
-                    <div class="alert alert-danger mb-3 fade show d-flex justify-content-between" role="alert">
-                        <div>
-                            <p class="m-0"> {{ $message }}</p>
-                        </div>
+                <div class="alert alert-danger mb-3 fade show d-flex justify-content-between" role="alert">
+                    <div>
+                        <p class="m-0"> {{ $message }}</p>
                     </div>
+                </div>
                 @enderror
             </div>
         </div>
@@ -999,17 +998,17 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#select2_dropdown').select2();
 
-        $('#new_bank').on('click', function(e) {
-            setTimeout(function() {
+        $('#new_bank').on('click', function (e) {
+            setTimeout(function () {
                 $('#select2_dropdown').select2();
             }, 400);
         });
 
 
-        $('.select2_dropdown').on('change', function(e) {
+        $('.select2_dropdown').on('change', function (e) {
             console.log('erer');
             var data = $('.select2_dropdown').select2("val");
 
@@ -1030,7 +1029,7 @@
     });
 
     function myFunction() {
-        setTimeout(function() {
+        setTimeout(function () {
             $('#select2_dropdown').select2();
         }, 400);
     }
