@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Mobile;
 
+use App\Mail\TransferCreated;
+use App\Mail\TransferFollowUp;
 use App\Models\Customer\Customer;
 use App\Models\Partner\Payer;
 use App\Models\Partner\PayerValidation;
@@ -39,6 +41,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
+use SendGrid\Mail\Mail;
 
 class SendMoney extends Component
 {
@@ -682,11 +685,19 @@ class SendMoney extends Component
             $this->dumpCustomer($transfer, $customer);
 
 
-            if ($this->selected_sending_method['sending_method_id'] == 91) {
-//                $mail = (new TransferCreated($transfer))->onQueue('portal_' . config('app.company_id'))->afterCommit();
-//                Mail::to(session('email'))->queue($mail);
+            if (env('APP_ENV') == 'production') {
 
+
+                $mail = (new TransferCreated($transfer, session('customer_id')))->onQueue('portal_' . config('app.company_id'))->afterCommit();
+                Mail::to('talha8018@gmail.com')->queue($mail);
+
+
+                foreach (['talha8018@gmail.com'] as $email) {
+                    $followup = (new TransferFollowUp($transfer))->onQueue('portal_' . config('app.company_id'))->afterCommit();
+                    Mail::to($email)->queue($followup);
+                }
             }
+
             DB::commit();
 
             //redirect to payment gateway
