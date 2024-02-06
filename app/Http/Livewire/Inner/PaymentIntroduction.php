@@ -365,6 +365,7 @@ class PaymentIntroduction extends Component
             $source->userAgentId = $this->agent_user_id;
             $this->reset('high_rate');
             $source->destinationCountry = $this->receiving_country['iso2'];
+            $source->receiving_country_id = $this->receiving_country['id'];
             $source->receiving_method_id = $this->receiving_method_id;
             $rates = new AllRates($source);
             $rates = $rates->rate();
@@ -802,6 +803,7 @@ class PaymentIntroduction extends Component
             $source = new Source();
             $source->userAgentId = session('user_agent_id');
             $source->destinationCountry = $this->receiving_country['iso2'];
+            $source->receiving_country_id = $this->receiving_country['id'];
             $rates = new AllRates($source);
             $rates = $rates->rate();
             $this->rates = json_decode(json_encode($rates), true);
@@ -1003,7 +1005,7 @@ class PaymentIntroduction extends Component
 
                 Ledger::create([
                     'user_id' => $user_id,
-                    'debit' => $this->amounts['sending_amount'] + $this->amounts['fees'],
+                    'debit' => $this->amounts['sending_amount'] ,
                     'credit' => 0,
                     'description' => 'INV ' . $transfer->id . '; Payment # ' . $code . '; Admin Charges ' . $this->amounts['fees'] . '; Sending Amount ' . $this->amounts['sending_amount'] . '; Rate ' . $this->selected_payer['rate_after_spread'],
                     'admin_charges' => $this->amounts['fees'],

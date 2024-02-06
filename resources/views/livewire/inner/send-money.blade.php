@@ -380,6 +380,7 @@
 
 
 
+ 
                                 <div class=" my-2 alert alert-warning    @if($payment_done == 'false') d-none @endif">
 
                                     <p class="m-0">

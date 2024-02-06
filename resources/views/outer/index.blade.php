@@ -38,8 +38,8 @@
 
 
                         <div class="mb-12 mt-5 d-none d-lg-block">
-                            <img src="{{url('/assets/img/covers/cover-new-4.webp')}}" alt="fdsafs"
-                                 style=" width: 75% !important;position:relative; bottom: -0; z-index: 1; border: 0.675625rem solid rgba(255, 255, 255, .6); border-radius: 1.25rem; ">
+                            <img src="{{url('/assets/feature.webp')}}" alt="fdsafs"
+                                 style=" width: 100% !important;position:relative; bottom: -0; z-index: 1; border: 0.675625rem solid rgba(255, 255, 255, .6); border-radius: 1.25rem; ">
                         </div>
                         <!-- Text -->
                         {{--                        <p class="fs-lg text-white-80 mb-6" style="text-shadow: 2px 2px 1px #00000090">--}}
