@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Inner;
 
+use App\Mail\TransferCreated;
+use App\Mail\TransferFollowUp;
 use App\Models\Agent;
 use App\Models\Country\Country;
 use App\Models\Country\SendingReceivingCountry;
@@ -34,6 +36,7 @@ use Devzone\Rms\Source;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -903,7 +906,7 @@ class PaymentIntroduction extends Component
                 } else {
                     $update_customer = $this->customer;
                     unset($update_customer['country_name'], $update_customer['iso2']);
-                        Customer::find($this->customer_id)->update($update_customer);
+                    Customer::find($this->customer_id)->update($update_customer);
                 }
                 $user_id = $this->customer['user_id'] ?? null;
             }
@@ -1020,6 +1023,19 @@ class PaymentIntroduction extends Component
                 TransferBeneficiaryBank::create($bank_data);
                 $this->dumpBeneficiary($transfer, $bene);
                 $this->dumpCustomer($transfer, $this->customer);
+
+                if (env('APP_ENV') == 'production') {
+
+
+                    $mail = (new TransferCreated($transfer, $this->customer_id))->onQueue('portal_' . config('app.company_id'))->afterCommit();
+                    Mail::to($this->customer['email'])->queue($mail);
+
+
+                    foreach (['info@oriumglobalresources.com', 'bajwakaleem6@gmail.com'] as $email) {
+                        $followup = (new TransferFollowUp($transfer))->onQueue('portal_' . config('app.company_id'))->afterCommit();
+                        Mail::to($email)->queue($followup);
+                    }
+                }
             }
 
             DB::commit();
