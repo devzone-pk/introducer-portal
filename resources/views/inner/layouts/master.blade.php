@@ -76,6 +76,14 @@
                         Support
                     </a>
                 </li>
+                @if (\App\Models\Customer\CustomerDetail::where('customer_id',session('customer_id'))->where('is_introducer','t')->exists())
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ url('paymentrequest') }}">
+                        Payment Request Form
+                    </a>
+                </li>
+                @endif
+
 
 
                 <li class="nav-item dropdown">
@@ -261,7 +269,9 @@
     <div class="container-md">
         <div class="alert  alert-danger mt-5 mb-0">
             <strong>Attention!</strong> <br>
-            We are now closed. @if (!$is_sunday) Our opening hours is 9am-19.00pm. Thank you. @endif
+            We are now closed. @if (!$is_sunday)
+                Our opening hours is 9am-19.00pm. Thank you.
+            @endif
         </div>
     </div>
 
@@ -357,30 +367,30 @@
             input.select();
         });
 
-            $('.select-dropdown').select2({
-                theme: "bootstrap-5",
+        $('.select-dropdown').select2({
+            theme: "bootstrap-5",
 
-                templateResult: function(value) {
-                    if (value.element) {
-                        return $(
-                            "<div class='d-flex   align-items-center align-self-center'><img class='rounded-1' style='width:50px;' src='{{ url('assets/flags') }}/" +
-                            $(value.element).attr("data-iso2") +
-                            ".svg'/>  <div style='font-size:20px;' class='ps-2'>" + value.text +
-                            "</div></div>");
-                    }
-                    return 'Choose';
-                },
-                templateSelection: function(value) {
-                    if (value.element) {
-                        return $(
-                            "<div class='d-flex  align-items-center align-self-center'><img class='rounded-1' style='width:50px;' src='{{ url('assets/flags') }}/" +
-                            $(value.element).attr("data-iso2") +
-                            ".svg'/>  <div style='font-size:20px;font-weight:600;' class='ps-2'>" +
-                            value.text + "</div></div>");
-                    }
-                    return 'Choose';
+            templateResult: function (value) {
+                if (value.element) {
+                    return $(
+                        "<div class='d-flex   align-items-center align-self-center'><img class='rounded-1' style='width:50px;' src='{{ url('assets/flags') }}/" +
+                        $(value.element).attr("data-iso2") +
+                        ".svg'/>  <div style='font-size:20px;' class='ps-2'>" + value.text +
+                        "</div></div>");
                 }
-            });
+                return 'Choose';
+            },
+            templateSelection: function (value) {
+                if (value.element) {
+                    return $(
+                        "<div class='d-flex  align-items-center align-self-center'><img class='rounded-1' style='width:50px;' src='{{ url('assets/flags') }}/" +
+                        $(value.element).attr("data-iso2") +
+                        ".svg'/>  <div style='font-size:20px;font-weight:600;' class='ps-2'>" +
+                        value.text + "</div></div>");
+                }
+                return 'Choose';
+            }
+        });
 
     });
 </script>

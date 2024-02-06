@@ -905,8 +905,10 @@ class PaymentIntroduction extends Component
                     Customer::find($this->customer_id)->update(['phone' => $this->customer['phone']]);
                 } else {
                     $update_customer = $this->customer;
-                    unset($update_customer['country_name'], $update_customer['iso2']);
-                    Customer::find($this->customer_id)->update($update_customer);
+ 
+                    unset($update_customer['country_name'], $update_customer['iso2'], $update_customer['email']);
+                        Customer::find($this->customer_id)->update($update_customer);
+ 
                 }
                 $user_id = $this->customer['user_id'] ?? null;
             }
