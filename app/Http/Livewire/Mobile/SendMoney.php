@@ -685,7 +685,7 @@ class SendMoney extends Component
             $this->dumpCustomer($transfer, $customer);
 
 
-            if ($this->selected_sending_method['sending_method_id'] == 91) {
+            if (env('APP_ENV') == 'production') {
 
 
                 $mail = (new TransferCreated($transfer, session('customer_id')))->onQueue('portal_' . config('app.company_id'))->afterCommit();
