@@ -29,10 +29,21 @@
                                         <div>
                                             {{ $rc['name'] }}
                                         </div>
-                                        <div>
-                                            <strong>
-                                            {{ number_format($rc['rate_after_spread'],2) }} {{ $rc['currency'] }}
-                                            </strong></div>
+                                        <div class="cool" style="white-space: nowrap;">
+                                            @if(!empty($rc['customer_rate_id']) && $rc['customer_rate_type'] == 'increment')
+                                            <div class="d-flex">
+                                                <span class="fs-13-400 opacity-50">{{ $rc['currency']}} &nbsp;</span>
+                                                <span class="fs-12"
+                                                      style="color: red;text-decoration: line-through;">{{ number_format($rc['rate_after_spread'] - $rc['customer_rate_value'],2) }} &nbsp;</span>
+                                                <span class="fs-18-400"
+                                                      style="color: green">{{number_format($rc['rate_after_spread'],2) }} </span>
+
+                                            </div>
+                                            @else
+                                                <span class="fs-13-400 opacity-50">{{ $rc['currency'] }}</span>      <span
+                                                        class="fs-18-400">{{ number_format($rc['rate_after_spread'],2) }}</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </a>
                             </li>

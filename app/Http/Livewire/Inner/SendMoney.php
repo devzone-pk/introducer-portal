@@ -313,6 +313,7 @@ class SendMoney extends Component
             $source->destinationCountry = $this->receiving_country['iso2'];
             $source->receiving_method_id = $this->receiving_method_id;
             //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+            $source->receiving_country_id = $this->receiving_country['id'];
 
             $rates = new AllRates($source);
             $rates = $rates->rate();
@@ -575,6 +576,18 @@ class SendMoney extends Component
         }
     }
 
+    function addCombiningLongStrokeOverlay($text)
+    {
+        $result = '';
+        $combiningCharacter = html_entity_decode('&#x336;');
+
+        for ($i = 0; $i < mb_strlen($text, 'UTF-8'); $i++) {
+            $result .= mb_substr($text, $i, 1, 'UTF-8') . $combiningCharacter;
+        }
+
+        return $result;
+    }
+
     public function sendMoney()
     {
         $this->reset(['profile', 'address', 'documents']);
@@ -730,6 +743,7 @@ class SendMoney extends Component
                 'transfer_id' => $transfer->id,
                 'ip' => $ip,
                 'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
+                'customer_rate_id' => optional($this->selected_payer)['customer_rate_id'] ?? null,
             ]);
 
 
@@ -817,6 +831,7 @@ class SendMoney extends Component
         $source->payerId = $this->selected_payer['id'];
         $source->receiving_method_id = $this->receiving_method_id;
         //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+        $source->receiving_country_id = $this->receiving_country['id'];
         $rates = new AllRates($source);
         $rates = $rates->rate();
         if (empty($rates)) {

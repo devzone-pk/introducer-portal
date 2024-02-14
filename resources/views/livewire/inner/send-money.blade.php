@@ -186,9 +186,8 @@
                                                     class="form-select  fs-16px  @error('selected_payer.id') is-invalid @enderror">
                                                 <option value="">Select</option>
                                                 @foreach (collect($payers)->sortBy('name')->toArray() as $s)
-                                                    <option value="{{ $s['id'] }}">{{ $s['name'] }}
-                                                        - {{ $s['currency'] }}
-                                                        {{ number_format($s['rate_after_spread'], 2) }}
+                                                    <option  value="{{ $s['id'] }}">{{ ($s['name']) }}
+                                                        - {{ $s['currency'] }} {{ (!empty($s['customer_rate_id']) && $s['customer_rate_type'] == 'increment')  ? $this->addCombiningLongStrokeOverlay($s['rate_after_spread'] - $s['customer_rate_value'])  :  ''}} {{ number_format($s['rate_after_spread'],2) }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -286,9 +285,13 @@
                             @if (!empty($selected_payer))
 
                                 <p class="  text-center">The current exchange rate is
-                                    <span class="fw-500">{{ $selected_payer['source_currency'] ?? '' }} 1 =
-                                        {{ round($selected_payer['rate_after_spread'], 2) }}
-                                        {{ $selected_payer['currency'] ?? '' }}</span>
+                                    @if(!empty($selected_payer['customer_rate_id']) && $selected_payer['customer_rate_type'] == 'increment')
+                                        <span
+                                                class="fw-500">{{ $selected_payer['source_currency'] ?? '' }} 1 = <span style="text-decoration: line-through;color: red"> {{ round($selected_payer['rate_after_spread'] -  $selected_payer['customer_rate_value'],2) }} </span> <span style="color: green">{{ round($selected_payer['rate_after_spread'],2) }}   {{$selected_payer['currency'] ?? ''}}</span></span>
+                                    @else
+                                        <span
+                                                class="fw-500">{{ $selected_payer['source_currency'] ?? '' }} 1 = {{ round($selected_payer['rate_after_spread'],2) }} {{$selected_payer['currency'] ?? ''}}</span>
+                                    @endif
                                 </p>
                                 @if (!$show_coupon_input  && false)
                                     <div class="col-12 {{ !empty($amounts['coupon_code']) ? 'd-none' : '' }}"
@@ -841,9 +844,17 @@
                                             &nbsp;
                                         </p>
                                     @endif
-                                    <p class=" fs-16px mb-0 ">1 {{ $selected_payer['source_currency'] ?? '' }}
-                                        = {{ number_format($selected_payer['rate_after_spread'] ?? 0, 2) }}
-                                        {{ $selected_payer['currency'] ?? '' }}</p>
+                                        @if(!empty($selected_payer['customer_rate_id']) && $selected_payer['customer_rate_type'] == 'increment')
+                                            <p class="fs-12px mb-0">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span style="text-decoration: line-through;color: red">{{ number_format($selected_payer['rate_after_spread'] -  $selected_payer['customer_rate_value'],2) }} </span>
+                                            </p>
+                                            <p class=" fs-16px mb-0 ">1 {{ $selected_payer['source_currency'] ?? '' }}
+                                                =  <span style="color: green"> {{ number_format($selected_payer['rate_after_spread'] ?? 0,2) }}
+                                                    {{ $selected_payer['currency'] ?? '' }} </span></p>
+                                        @else
+                                            <p class=" fs-16px mb-0 ">1 {{ $selected_payer['source_currency'] ?? '' }}
+                                                = {{ number_format($selected_payer['rate_after_spread'] ?? 0,2) }}
+                                                {{ $selected_payer['currency'] ?? '' }}</p>
+                                        @endif
                                     <p class="text-gray fs-12px mb-0">
                                         Exchange Rate</p>
                                 </div>
@@ -860,6 +871,11 @@
                                             {{ $selected_payer['source_currency'] ?? '' }}
                                         </p>
                                     @else
+                                        @if(!empty($selected_payer['customer_rate_id']) && $selected_payer['customer_rate_type'] == 'increment')
+                                            <p class="fs-12px mb-0">
+                                                &nbsp;
+                                            </p>
+                                        @endif
                                         <p class=" fs-16px mb-0 ">{{ number_format($amounts['fees'] ?? 0,2) }}
                                             {{ $selected_payer['source_currency'] ?? '' }}</p>
                                     @endif
