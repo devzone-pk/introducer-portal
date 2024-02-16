@@ -8,6 +8,7 @@ use App\Models\Agent;
 use App\Models\Country\Country;
 use App\Models\Country\SendingReceivingCountry;
 use App\Models\Customer\Customer;
+use App\Models\Customer\CustomerDetail;
 use App\Models\Customer\CustomerDocument;
 use App\Models\Options\Option;
 use App\Models\Partner\Payer;
@@ -901,6 +902,10 @@ class PaymentIntroduction extends Component
                 unset($customer['country_name'], $customer['iso2'], $customer['password']);
                 $customer_details = Customer::create($customer);
                 $this->customer_id = $customer_details->id;
+                CustomerDetail::create([
+                    'customer_id' => $customer->id,
+                    'introducer_id' => session('customer_id')
+                ]);
             } else {
                 if ($this->customer['is_verified'] == 't') {
                     Customer::find($this->customer_id)->update(['phone' => $this->customer['phone']]);
