@@ -205,7 +205,7 @@
 
                     <!-- Image -->
                     <div class="h-100 w-cover "
-                         style="background-image: url(/assets/login.webp);"></div>
+                         style="background-image: url(/assets/login.jpeg);"></div>
 
                     <!-- Shape -->
                     <div class="shape shape-start shape-fluid-y text-white">

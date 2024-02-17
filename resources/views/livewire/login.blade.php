@@ -75,7 +75,7 @@
                 <div class="col-lg-7 offset-lg-1 align-self-stretch d-none d-lg-block">
 
                     <!-- Image -->
-                    <div class="h-100 w-cover " style="background-image: url(/assets/login.webp);"></div>
+                    <div class="h-100 w-cover " style="background-image: url(/assets/login.jpeg);"></div>
 
                     <!-- Shape -->
                     <div class="shape shape-start shape-fluid-y text-white">
