@@ -18,7 +18,7 @@ Route::middleware(['auth.allow'])->group(function () {
 
     Route::get('logout', [\App\Http\Controllers\Auth\LogoutController::class, 'logout']);
 
-    Route::middleware(['UserCountryCheck'])->group(function(){
+    Route::middleware(['country.check'])->group(function(){
         Route::get('/dashboard', function () {
             return view('inner.dashboard');
         });

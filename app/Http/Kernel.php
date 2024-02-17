@@ -47,10 +47,7 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-        'UserCountryCheck' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-             UserCountryCheck::class
-        ],
+       
     ];
 
     /**
@@ -72,5 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'auth.allow' => IsUserLoggedIn::class,
         'site.down' => SiteDown::class,
+        'country.check' => UserCountryCheck::class
     ];
 }
