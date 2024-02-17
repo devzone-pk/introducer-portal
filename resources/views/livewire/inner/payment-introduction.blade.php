@@ -446,7 +446,10 @@
                                                 <div class="col-12 col-sm-4">
                                                     <label class="form-label fs-16px mb-1">First Name<span
                                                                 class="text-danger">*</span></label>
-                                                    <input type="text" @if($customer['is_verified'] == 't')  disabled  value="{{$customer['first_name']}}" @else  wire:model.defer="customer.first_name"  @endif
+                                                    <input type="text"
+
+                                                               wire:model.defer="customer.first_name"
+
                                                            class="only-name form-control form-control-sm  @error('customer.first_name') is-invalid @enderror"
                                                            {{--                                                   {{ $customer['is_verified'] == 't' ? 'readonly':'' }}--}}
                                                            id="first_name"
