@@ -867,7 +867,7 @@ class PaymentIntroduction extends Component
         $this->details_completed['beneficiary'] = true;
         $this->success = null;
         $this->resetErrorBag();
-        try {
+       // try {
 
             DB::beginTransaction();
 
@@ -1051,10 +1051,10 @@ class PaymentIntroduction extends Component
             DB::commit();
             redirect()->to('/paymentrequest')->with('form_success', 'Payment request form submitted successfully.');
 
-        } catch (Exception $e) {
-            DB::rollBack();
-            $this->addError('request_form', $e->getMessage());
-        }
+//        } catch (Exception $e) {
+//            DB::rollBack();
+//            $this->addError('request_form', $e->getMessage());
+//        }
     }
 
     private function dumpBeneficiary($transfer, $bene)
