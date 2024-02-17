@@ -903,7 +903,7 @@ class PaymentIntroduction extends Component
                 $customer_details = Customer::create($customer);
                 $this->customer_id = $customer_details->id;
                 CustomerDetail::create([
-                    'customer_id' => $customer->id,
+                    'customer_id' =>$this->customer_id,
                     'introducer_id' => session('customer_id')
                 ]);
             } else {
