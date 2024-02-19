@@ -1,4 +1,7 @@
 <div class="row g-3">
+@php
+    $customer['is_verified'] = 'f';
+@endphp
 
     @if (session()->has('form_success'))
         <div class="alert fs-12px  alert-success">

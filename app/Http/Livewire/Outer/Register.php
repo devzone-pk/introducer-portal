@@ -235,7 +235,7 @@ class Register extends Component
             CustomerDetail::create([
                 'customer_id' => $customer->id,
                 'ip' => $ip,
-                'registration_device' => $device,
+                'registration_device' => 'Web',
                 'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
             ]);
 

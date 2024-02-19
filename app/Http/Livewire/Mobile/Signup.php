@@ -246,10 +246,17 @@ class Signup extends Component
             $platform =\Jenssegers\Agent\Facades\Agent::platform();
             $browser = \Jenssegers\Agent\Facades\Agent::browser();
             $version = \Jenssegers\Agent\Facades\Agent::version($platform);
+
+            if (!empty($this->data['notification-token'])) {
+                $reg_device = $platform;
+            }else{
+                $reg_device = 'Web';
+            }
+
             CustomerDetail::create([
                 'customer_id' => $customer->id,
                 'ip' => $ip,
-                'registration_device' => $device,
+                'registration_device' => $reg_device,
                 'device_details' => $device . ',' .$platform . ' (' .$version . '),' .$browser,
             ]);
 
