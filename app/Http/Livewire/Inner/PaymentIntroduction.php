@@ -103,6 +103,8 @@ class PaymentIntroduction extends Component
     public $high_rate = [
         'rate_after_spread' => 0
     ];
+
+    public $user_customer_rate = 0;
     public $agent_user_id;
     public $source_of_funds = null;
     public $error;
@@ -362,6 +364,7 @@ class PaymentIntroduction extends Component
 
     }
 
+
     public function getRates()
     {
         try {
@@ -396,6 +399,7 @@ class PaymentIntroduction extends Component
                 $this->payers = collect($this->rates)->where('method', $this->receiving_method)->toArray();
                 $this->selected_payer = $this->high_rate;
                 $this->payer_id = $this->high_rate['id'];
+                $this->user_customer_rate = $this->high_rate['rate_after_spread'];
                 $this->updatedAmountsSendingAmount(0);
 
             }
@@ -442,7 +446,7 @@ class PaymentIntroduction extends Component
         }
         if (empty($value)) {
             $this->amounts['sending_amount'] = 100;
-            $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'] * 100, 2);
+            $this->amounts['receive_amount'] = round($this->user_customer_rate * 100, 2);
             $this->calculateRate();
         } else {
 
@@ -459,7 +463,7 @@ class PaymentIntroduction extends Component
 
         if (empty($value)) {
             $this->amounts['sending_amount'] = 0;
-            $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'] * 100, 2);
+            $this->amounts['receive_amount'] = round($this->user_customer_rate * 100, 2);
             $this->calculateRate();
         } else {
             $this->amounts['calculation_mode'] = 'R';
@@ -467,6 +471,20 @@ class PaymentIntroduction extends Component
         }
     }
 
+    public function updatedUserCustomerRate($val)
+    {
+        $this->resetErrorBag();
+        if (!empty($val)) {
+            if (floatval($this->user_customer_rate) > $this->high_rate['rate_after_spread']) {
+
+                $this->user_customer_rate = floatval($this->high_rate['rate_after_spread']);
+                $this->addError('user_customer_rate', 'Rate must not be higher than current exchange rate ' . (!empty($this->selected_payer['rate_after_spread']) ? number_format($this->selected_payer['rate_after_spread'],2) . ' ' . $this->selected_payer['currency']  :0)) ;
+            }
+        } else {
+            $this->user_customer_rate = 0;
+        }
+        $this->calculateRate();
+    }
 
     private function calculateRate()
     {
@@ -491,10 +509,10 @@ class PaymentIntroduction extends Component
 
             if ($this->amounts['calculation_mode'] == 'S') {
                 //  $this->dispatchBrowserEvent('focus-out', ['id' => 'youSend']);
-                $this->amounts['receive_amount'] = round($this->selected_payer['rate_after_spread'] * $this->amounts['sending_amount'], 2);
+                $this->amounts['receive_amount'] = round($this->user_customer_rate * $this->amounts['sending_amount'], 2);
             } else {
                 //$this->dispatchBrowserEvent('focus-out', ['id' => 'recipient_gets']);
-                $this->amounts['sending_amount'] = round($this->amounts['receive_amount'] / $this->selected_payer['rate_after_spread'], 2);
+                $this->amounts['sending_amount'] = round($this->amounts['receive_amount'] / $this->user_customer_rate, 2);
             }
 
 //            $this->validate([
@@ -602,8 +620,8 @@ class PaymentIntroduction extends Component
                 return;
             }
             $customer_user_ids = Customer::where('phone', $this->customer['phone'])
-                ->when(!empty($this->customer_id),function ($q){
-                    $q->where('id','!=',$this->customer_id);
+                ->when(!empty($this->customer_id), function ($q) {
+                    $q->where('id', '!=', $this->customer_id);
                 })
                 ->where('phone_code', $this->customer['phone_code'])->whereNotNull('user_id')->pluck('user_id')->toArray();
 
@@ -870,7 +888,7 @@ class PaymentIntroduction extends Component
 
             DB::beginTransaction();
 
-            if (!\App\Models\Customer\CustomerDetail::where('customer_id',session('customer_id'))->where('is_introducer','t')->exists()){
+            if (!\App\Models\Customer\CustomerDetail::where('customer_id', session('customer_id'))->where('is_introducer', 't')->exists()) {
                 throw new Exception("You don't have the permission to perform this action.");
             }
 
@@ -906,10 +924,10 @@ class PaymentIntroduction extends Component
                     Customer::find($this->customer_id)->update(['phone' => $this->customer['phone']]);
                 } else {
                     $update_customer = $this->customer;
- 
+
                     unset($update_customer['country_name'], $update_customer['iso2'], $update_customer['email']);
-                        Customer::find($this->customer_id)->update($update_customer);
- 
+                    Customer::find($this->customer_id)->update($update_customer);
+
                 }
                 $user_id = $this->customer['user_id'] ?? null;
             }
@@ -940,7 +958,14 @@ class PaymentIntroduction extends Component
                 $this->payments['customer_id'] = $this->customer_id;
                 $this->payments['beneficiary_id'] = $bene_id;
 
-                $sending_amount = $bene['receiving_amount'] / $this->selected_payer['rate_after_spread'];
+                $sending_amount = $bene['receiving_amount'] / $this->user_customer_rate;
+
+
+                if (floatval($this->user_customer_rate) > $this->high_rate['rate_after_spread']) {
+                    $this->user_customer_rate = floatval($this->high_rate['rate_after_spread']);
+                    $this->addError('user_customer_rate', 'Rate must not be higher than current exchange rate ' . (!empty($this->high_rate['rate_after_spread']) ? number_format($this->high_rate['rate_after_spread'],2) . ' ' . $this->high_rate['currency']  :0)) ;
+                    throw new Exception('Rate must not be higher than current exchange rate ' . (!empty($this->high_rate['rate_after_spread']) ? number_format($this->high_rate['rate_after_spread'],2) . ' ' . $this->high_rate['currency']  :0));
+                }
 
                 $transfer = Transfer::create([
                     'status' => $this->payments['status'],
@@ -956,7 +981,7 @@ class PaymentIntroduction extends Component
                     'sending_country' => session('country_name'),
                     'receiving_country_id' => $this->receiving_country['id'],
                     'receiving_country' => $this->receiving_country['name'],
-                    'customer_rate' => $this->selected_payer['rate_after_spread'],
+                    'customer_rate' => $this->user_customer_rate,
                     'agent_rate' => $this->selected_payer['rate_before_spread'],
                     'main_agent_rate' => $this->selected_payer['main_agent_rate'],
                     'sending_amount' => $sending_amount,
@@ -1013,7 +1038,7 @@ class PaymentIntroduction extends Component
 
                 Ledger::create([
                     'user_id' => $user_id,
-                    'debit' => $this->amounts['sending_amount'] ,
+                    'debit' => $this->amounts['sending_amount'],
                     'credit' => 0,
                     'description' => 'INV ' . $transfer->id . '; Payment # ' . $code . '; Admin Charges ' . $this->amounts['fees'] . '; Sending Amount ' . $this->amounts['sending_amount'] . '; Rate ' . $this->selected_payer['rate_after_spread'],
                     'admin_charges' => $this->amounts['fees'],
