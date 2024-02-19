@@ -478,7 +478,7 @@ class PaymentIntroduction extends Component
             if (floatval($this->user_customer_rate) > $this->high_rate['rate_after_spread']) {
 
                 $this->user_customer_rate = floatval($this->high_rate['rate_after_spread']);
-                $this->addError('user_customer_rate', 'Rate must not be higher than current exchange rate ' . (!empty($this->selected_payer['rate_after_spread']) ? number_format($this->selected_payer['rate_after_spread'],2) . ' ' . $this->selected_payer['currency']  :0)) ;
+                $this->addError('user_customer_rate', 'Rate must not be higher than current exchange rate ' . (!empty($this->selected_payer['rate_after_spread']) ? number_format($this->selected_payer['rate_after_spread'], 2) . ' ' . $this->selected_payer['currency'] : 0));
             }
         } else {
             $this->user_customer_rate = 0;
@@ -963,8 +963,8 @@ class PaymentIntroduction extends Component
 
                 if (floatval($this->user_customer_rate) > $this->high_rate['rate_after_spread']) {
                     $this->user_customer_rate = floatval($this->high_rate['rate_after_spread']);
-                    $this->addError('user_customer_rate', 'Rate must not be higher than current exchange rate ' . (!empty($this->high_rate['rate_after_spread']) ? number_format($this->high_rate['rate_after_spread'],2) . ' ' . $this->high_rate['currency']  :0)) ;
-                    throw new Exception('Rate must not be higher than current exchange rate ' . (!empty($this->high_rate['rate_after_spread']) ? number_format($this->high_rate['rate_after_spread'],2) . ' ' . $this->high_rate['currency']  :0));
+                    $this->addError('user_customer_rate', 'Rate must not be higher than current exchange rate ' . (!empty($this->high_rate['rate_after_spread']) ? number_format($this->high_rate['rate_after_spread'], 2) . ' ' . $this->high_rate['currency'] : 0));
+                    throw new Exception('Rate must not be higher than current exchange rate ' . (!empty($this->high_rate['rate_after_spread']) ? number_format($this->high_rate['rate_after_spread'], 2) . ' ' . $this->high_rate['currency'] : 0));
                 }
 
                 $transfer = Transfer::create([
@@ -1074,6 +1074,9 @@ class PaymentIntroduction extends Component
         } catch (Exception $e) {
             DB::rollBack();
             $this->addError('request_form', $e->getMessage());
+            if (!empty($this->customer_id) && !Customer::where('id', $this->customer_id)->exists()) {
+                $this->customer_id = null;
+            }
         }
     }
 
