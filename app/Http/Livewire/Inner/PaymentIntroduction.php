@@ -885,7 +885,7 @@ class PaymentIntroduction extends Component
         $this->details_completed['beneficiary'] = true;
         $this->success = null;
         $this->resetErrorBag();
-       // try {
+        try {
 
             DB::beginTransaction();
 
