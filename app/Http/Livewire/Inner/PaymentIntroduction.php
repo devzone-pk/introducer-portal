@@ -1074,7 +1074,7 @@ class PaymentIntroduction extends Component
         } catch (Exception $e) {
             DB::rollBack();
             $this->addError('request_form', $e->getMessage());
-            if (!empty($this->customer_id) && !Customer::where('id', $this->customer_id)->exists()) {
+            if (!empty($this->customer_id) && (!Customer::where('id', $this->customer_id)->exists())) {
                 $this->customer_id = null;
             }
         }
