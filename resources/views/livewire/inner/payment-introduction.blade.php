@@ -1077,6 +1077,7 @@
                                                             wire:model.debounce.500ms="amounts.sending_amount"
                                                             class="form-control country-calculator  only-numbers leading-zero @error('amounts.sending_amount') is-invalid @enderror"
                                                             id="youSend"
+                                                            step="0.01"
                                                             style="border: 1px solid #ced4da;"
                                                             value="" placeholder="" autocorrect="off"
                                                             autocapitalize="off">
@@ -1118,6 +1119,7 @@
                                                             wire:model.debounce.500ms="amounts.receive_amount"
                                                             class="form-control  country-calculator only-numbers leading-zero "
                                                             id="recipient_gets"
+                                                            step="0.01"
                                                             style="border: 1px solid #ced4da;"
                                                             value="" placeholder="" autocorrect="off"
                                                             autocapitalize="off" maxlength="10">
