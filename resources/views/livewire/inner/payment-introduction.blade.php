@@ -1068,6 +1068,35 @@
 
                                             </div>
                                         </div>
+                                        @if(!empty($selected_payer))
+                                                <div class="col-12 mt-2">
+
+                                                    <div class="d-flex my-2 justify-content-between align-items-center">
+                                                        <div>
+                                                            <h5 class="fw-bold m-0">
+                                                                Today's Rate 1 {{ $high_rate['source_currency'] }} =</h5>
+                                                        </div>
+                                                        <div wire:key="user_customer_rate.{{$iteration}}" style="width: 32%;">
+                                                            <div class="input-group">
+                                                                     <span class="input-group-text fs-12px">
+                                                                         {{  $high_rate['currency'] ?? '' }}
+                                                                          </span>
+                                                                <input type="number" id="user_customer_rate" step="0.01"
+                                                                       class="form-control form-control-sm fs-16px   @error('user_customer_rate') is-invalid @enderror"
+                                                                       wire:model.lazy="user_customer_rate">
+                                                                @error('user_customer_rate')
+                                                                <span class="invalid-feedback fs-14px"
+                                                                      role="alert">
+                                                                        {{ $message }}
+                                                                        </span>
+                                                                @enderror
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        @endif
                                         <div class="col-12">
                                             <div class="form-group country-page" wire:ignore>
                                                 <label class="form-label mb-1 " for="">You Send</label>
@@ -1155,30 +1184,30 @@
                                                 <div class="row   ">
                                                     <div class="col-12 mt-2">
 
-                                                        <div class="d-flex my-2 justify-content-between align-items-center">
-                                                            <div>
-                                                                <h5 class="fw-bold m-0">
-                                                                    1 {{ $high_rate['source_currency'] }}</h5>
-                                                            </div>
-                                                            <div wire:key="user_customer_rate.{{$iteration}}" style="width: 32%;">
-                                                                    <div class="input-group">
-                                                                     <span class="input-group-text fs-12px">
-                                                                         {{  $high_rate['currency'] ?? '' }}
-                                                                          </span>
-                                                                        <input type="number" id="user_customer_rate"
-                                                                               class="form-control form-control-sm only-just-numbers fs-16px   @error('user_customer_rate') is-invalid @enderror"
-                                                                               wire:model.lazy="user_customer_rate">
-                                                                        @error('user_customer_rate')
-                                                                        <span class="invalid-feedback fs-14px"
-                                                                              role="alert">
-                                                                        {{ $message }}
-                                                                        </span>
-                                                                        @enderror
+{{--                                                        <div class="d-flex my-2 justify-content-between align-items-center">--}}
+{{--                                                            <div>--}}
+{{--                                                                <h5 class="fw-bold m-0">--}}
+{{--                                                                    1 {{ $high_rate['source_currency'] }}</h5>--}}
+{{--                                                            </div>--}}
+{{--                                                            <div wire:key="user_customer_rate.{{$iteration}}" style="width: 32%;">--}}
+{{--                                                                    <div class="input-group">--}}
+{{--                                                                     <span class="input-group-text fs-12px">--}}
+{{--                                                                         {{  $high_rate['currency'] ?? '' }}--}}
+{{--                                                                          </span>--}}
+{{--                                                                        <input type="number" id="user_customer_rate"--}}
+{{--                                                                               class="form-control form-control-sm only-just-numbers fs-16px   @error('user_customer_rate') is-invalid @enderror"--}}
+{{--                                                                               wire:model.lazy="user_customer_rate">--}}
+{{--                                                                        @error('user_customer_rate')--}}
+{{--                                                                        <span class="invalid-feedback fs-14px"--}}
+{{--                                                                              role="alert">--}}
+{{--                                                                        {{ $message }}--}}
+{{--                                                                        </span>--}}
+{{--                                                                        @enderror--}}
 
-                                                                    </div>
+{{--                                                                    </div>--}}
 
-                                                            </div>
-                                                        </div>
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
                                                         <div class="d-flex my-2 justify-content-between">
                                                             <div>
                                                                 <h5 class="fw-bold m-0">Fee</h5>

@@ -534,10 +534,10 @@ class PaymentIntroduction extends Component
 
             if ($this->amounts['calculation_mode'] == 'S') {
                 $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'], 2);
-                $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'],2);
+//                $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'],2);
             } else {
                 $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'], 2);
-                $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'],2);
+//                $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'],2);
             }
 
 
@@ -1038,6 +1038,7 @@ class PaymentIntroduction extends Component
                     'device_details' => $device . ',' . $platform . ' (' . $version . '),' . $browser,
                     'introducer_id' => session('customer_id'),
                     'introducer_batch' => $introducer_batch_id,
+                    'customer_rate_id' => optional($this->selected_payer)['customer_rate_id'] ?? null,
                 ]);
 
 
