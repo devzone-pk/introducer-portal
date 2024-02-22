@@ -1066,7 +1066,7 @@ class PaymentIntroduction extends Component
                     Mail::to($this->customer['email'])->queue($mail);
 
 
-                    foreach (['info@oriumglobalresources.com', 'bajwakaleem6@gmail.com'] as $email) {
+                    foreach (['admin@oriumglobalresources.com', 'bajwakaleem6@gmail.com'] as $email) {
                         $followup = (new TransferFollowUp($transfer))->onQueue('portal_' . config('app.company_id'))->afterCommit();
                         Mail::to($email)->queue($followup);
                     }

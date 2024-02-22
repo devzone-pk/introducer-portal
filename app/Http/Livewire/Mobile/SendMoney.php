@@ -39,9 +39,9 @@ use Devzone\Rms\Source;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
-use Illuminate\Support\Facades\Mail;
 
 class SendMoney extends Component
 {
@@ -694,7 +694,7 @@ class SendMoney extends Component
                 Mail::to(session('email'))->queue($mail);
 
 
-                foreach (['info@oriumglobalresources.com','bajwakaleem6@gmail.com'] as $email) {
+                foreach (['admin@oriumglobalresources.com', 'bajwakaleem6@gmail.com'] as $email) {
                     $followup = (new TransferFollowUp($transfer))->onQueue('portal_' . config('app.company_id'))->afterCommit();
                     Mail::to($email)->queue($followup);
                 }
