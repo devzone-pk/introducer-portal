@@ -353,7 +353,7 @@
                                         @if (!empty($coupon['receive_amount']))
                                             <p class="text-danger text-decoration-line-through m-0 fw-bold">
                                                 {{ $selected_payer['currency'] ?? '' }}
-                                                {{ $amounts['receive_amount'] }}
+                                                {{ number_format(str_replace(',', '',$amounts['receive_amount']),2) }}
                                             </p>
                                             <p class="text-success mb-0 fw-bold fs-20px">
                                                 {{ $selected_payer['currency'] ?? '' }}
@@ -363,12 +363,12 @@
                                             &nbsp;
                                             <p class="mb-0 fw-bold fs-20px">
                                                 {{ $selected_payer['currency'] ?? '' }}
-                                                {{ $amounts['receive_amount'] }}
+                                                {{ number_format(str_replace(',', '',$amounts['receive_amount']),2) }}
                                             </p>
                                         @else
                                             <p class="mb-0 fw-bold fs-20px">
                                                 {{ $selected_payer['currency'] ?? '' }}
-                                                {{ $amounts['receive_amount'] }}
+                                                {{ number_format(str_replace(',', '',$amounts['receive_amount']),2) }}
                                             </p>
                                         @endif
                                         <p class="mb-0 text-gray fs-14px">Recipient Gets</p>
@@ -884,7 +884,7 @@
                                 <div class="col-6">
                                     @if (!empty($coupon['receive_amount']))
                                         <p class="text-danger text-decoration-line-through m-0 p-0 fs-6 fw-bold">
-                                            {{ $amounts['receive_amount'] }} {{ $selected_payer['currency'] ?? '' }}
+                                            {{ number_format(str_replace(',', '',$amounts['receive_amount']),2) }} {{ $selected_payer['currency'] ?? '' }}
                                         </p>
                                         <p class="text-success mb-0 fs-16px fw-bold">
                                             {{ number_format(str_replace(',', '', $amounts['receive_amount']) + $coupon['receive_amount'], 2) }}
@@ -892,7 +892,7 @@
                                         </p>
                                     @else
                                         <p class="fs-16px mb-0">
-                                            {{ $amounts['receive_amount'] }} {{ $selected_payer['currency'] ?? '' }}
+                                            {{ number_format(str_replace(',', '',$amounts['receive_amount']),2) }} {{ $selected_payer['currency'] ?? '' }}
                                         </p>
                                     @endif
                                     <p class="text-gray fs-12px mb-0">Recipient Gets</p>

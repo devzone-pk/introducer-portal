@@ -391,7 +391,7 @@
                                                         @if (!empty($coupon['receive_amount']))
                                                             <p class="text-danger text-decoration-line-through m-0">
                                                                 {{ $selected_payer['currency'] ?? '' }}
-                                                                {{ $amounts['receive_amount'] }}
+                                                                {{ number_format(str_replace(',', '', $amounts['receive_amount']),2) }}
                                                             </p>
                                                             <p class="text-success fs-16px mb-0 fw-bold">
                                                                 {{ $selected_payer['currency'] ?? '' }}
@@ -400,7 +400,7 @@
                                                         @else
                                                             <p class="fs-16px mb-0">
                                                                 {{ $selected_payer['currency'] ?? '' }}
-                                                                {{ $amounts['receive_amount'] }}
+                                                                {{ number_format(str_replace(',', '', $amounts['receive_amount']),2) }}
                                                             </p>
                                                         @endif
                                                         <p class="fs-16px m-0 text-muted">Recipient Gets</p>
@@ -900,11 +900,11 @@
                                             </span>
                                             <span class="text-danger text-decoration-line-through m-0 p-0"
                                                 style="font-size: 14px;">
-                                                {{ $amounts['receive_amount'] }}
+                                                {{ number_format(str_replace(',', '', $amounts['receive_amount']),2) }}
                                                 {{ $selected_payer['currency'] ?? '' }}
                                             </span>
                                         @else
-                                            {{ $amounts['receive_amount'] }}
+                                            {{ number_format(str_replace(',', '', $amounts['receive_amount']),2) }}
                                             {{ $selected_payer['currency'] ?? '' }}
                                         @endif
                                     </th>
