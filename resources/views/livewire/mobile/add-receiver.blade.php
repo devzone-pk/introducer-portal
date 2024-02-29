@@ -72,7 +72,7 @@
                         <div class="row ">
                             <div class="col-4">
                                 <input type="text" style="background: rgb(204 204 204 / 31%);" readonly
-                                       class="form-control  pe-2 @error('code') is-invalid @enderror"
+                                       class="form-control only-code pe-2 @error('code') is-invalid @enderror"
                                        wire:model.defer="code" placeholder="Code">
                             </div>
                             <div class="col-8">

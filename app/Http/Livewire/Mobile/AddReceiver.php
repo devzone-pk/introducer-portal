@@ -29,7 +29,7 @@ class AddReceiver extends Component
         'first_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
         'last_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
         'phone' => 'required|regex:/^[0-9]+$/',
-        'code' => 'required|string',
+        'code' => 'required|regex:/^[0-9\+\-]+$/',
         'country.id' => 'required|integer',
         'relation.relationship_id' => 'required|integer'
     ];
@@ -87,7 +87,7 @@ class AddReceiver extends Component
                 'type' => 'on',
                 'status' => 't'
             ]);
-
+            $this->success = 'Receiver has been created.';
             $this->reset(['relation', 'country', 'code', 'phone', 'first_name', 'last_name']);
 
         } catch (Exception $exception) {
