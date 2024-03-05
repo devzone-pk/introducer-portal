@@ -15,193 +15,188 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware(['auth.allow'])->group(function () {
-
-    Route::get('logout', [\App\Http\Controllers\Auth\LogoutController::class, 'logout']);
-
     Route::middleware(['country.check'])->group(function(){
-        Route::get('/dashboard', function () {
-            return view('inner.dashboard');
-        });
-        Route::get('/send/money', function () {
-            return view('inner.send-money');
-        });
-        Route::get('/transfer/success', function () {
-            return view('inner.send-money-success');
-        });
-        Route::get('/transfer/history', function () {
-            return view('inner.transfer-history');
-        });
-        Route::get('/transfer/history/{id}', function ($id) {
-            return view('inner.transfer-history-detail', compact('id'));
-        });
-    
-        Route::get('/recipients', function () {
-            return view('inner.recipients');
-        });
-    
-        Route::get('/recipients/add', function () {
-            return view('inner.add-recipients');
-        });
-    
-        Route::get('/recipients/view/{id}', function () {
-            return view('inner.view-recipients');
-        });
-        Route::get('/profile', function () {
-            return view('inner.profile');
-        })->name('profile');
-        Route::get('/customer-support', function () {
-            return view('inner.customer-support');
-        });
-    
-        Route::get('/customer-support/details/{id}', function ($id) {
-            return view('inner.customer-support-details', compact('id'));
-        });
-        Route::get('/customer-support/add-complaint', function () {
-            return view('inner.add-complaint');
-        });
-        Route::get('contact-preferences', function () {
-            return view('inner.customer-preferences');
-        });
-        Route::get('refer-friend', function () {
-            return view('inner.refer-friend');
-        });
-    
-        Route::get('paymentrequest', function () {
-            if (!\App\Models\Customer\CustomerDetail::where('customer_id',session('customer_id'))->where('is_introducer','t')->exists()){
-                return redirect()->back();
-            }
-            return view('inner.payment-introduction');
-        });
-    
-        Route::get('user/documents', function () {
-            return view('inner.documents');
-        });
-        Route::get('user/document/add', function () {
-            return view('inner.document-add');
-        });
-        Route::get('user/document/view/{id}', function ($id) {
-            return view('inner.view-document', compact('id'));
-        });
-    
-        Route::get('receipt', function () {
-            $input = request();
-            $transfer = \App\Models\Transfer\Transfer::find($input['transfer_id']);
-            return view('receipt-pdf', compact('transfer'));
-    
-        });
-    
-    
-        //mobile screens
-        Route::get('mobile/send/money', function () {
-            return view('mobile.send-money');
-        });
-    
-        Route::get('mobile/transfer/success', function () {
-            return view('mobile.send-money-success');
-        });
-    
-    
-        Route::get('mobile/dashboard', function () {
-            return view('mobile.dashboard');
-        });
-        Route::get('mobile/transactions', function () {
-            return view('mobile.transfer-history');
-        });
-        Route::get('mobile/transaction/{id}', function ($id) {
-            return view('mobile.transfer-details', compact('id'));
-        });
-        Route::get('mobile/receivers', function () {
-            return view('mobile.recipients');
-        });
-        Route::get('mobile/receivers/add', function () {
-            return view('mobile.recipient-add');
-        });
-        Route::get('mobile/receiver/{id}', function ($id) {
-            return view('mobile.recipient-detail', compact('id'));
-        });
-        Route::get('mobile/account', function () {
-            return view('mobile.account-setting');
-        });
-        Route::get('mobile/profile-view', function () {
-            return view('mobile.profile-view');
-        });
-    
-        Route::get('mobile/profile', function () {
-            return view('mobile.profile');
-        });
-    
-    
-        Route::get('mobile/address-view', function () {
-            return view('mobile.user-address-view');
-        });
-        Route::get('mobile/address', function () {
-            return view('mobile.user-address');
-        });
-        Route::get('mobile/contact', function () {
-            return view('mobile.contact');
-        });
-        Route::get('mobile/contact-preferences', function () {
-            return view('mobile.customer-preferences');
-        });
-        Route::get('mobile/faqs', function () {
-            return view('mobile.faqs');
-        }); //TODO text need to update
-    
-        Route::get('mobile/terms-conditions', function () {
-            return view('mobile.terms-conditions');
-        });
-    
-        Route::get('mobile/password-view', function () {
-            return view('mobile.change-password-view');
-        });
-    
-        Route::get('mobile/change-password', function () {
-            return view('mobile.change-password');
-        });
-        Route::get('mobile/contact-preferences', function () {
-            return view('mobile.customer-preferences');
-        });
-        Route::get('mobile/privacy-policy', function () {
-            return view('mobile.privacy-policy');
-        });
-        Route::get('mobile/refer-friend', function () {
-            return view('mobile.refer-friend');
-        }); //TODO share and copy need to update.
-    
-        Route::get('mobile/documents', function () {
-            return view('mobile.documents');
-        });
-        Route::get('mobile/document/add', function () {
-            return view('mobile.document-add');
-        });
-    
-        Route::get('mobile/document/view/{id}', function ($id) {
-            return view('mobile.document-view', compact('id'));
-        });
-    
-        Route::get('mobile/customer-support', function () {
-            return view('mobile.customer-support');
-        });
-    
-        Route::get('mobile/customer-support/add', function () {
-            return view('mobile.customer-support-add');
-        });
-    
-        Route::get('mobile/customer-support/details/{id}', function ($id) {
-            return view('mobile.customer-support-details', compact('id'));
-        });
-    
-        Route::post('upload/documents', [\App\Http\Controllers\Documents\DocumentController::class, 'upload']);
-        //Trust Payments Routes
-        Route::get('gateway/trust/payment/{transfer_code}', [\App\Http\Controllers\Gateways\TrustPaymentController::class, 'index']);
-        Route::post('gateway/trust/payment/response', [\App\Http\Controllers\Gateways\TrustPaymentController::class, 'response']);
-    
-        Route::get('gateway/swipen/payment/{transfer_code}', [\App\Http\Controllers\Gateways\SwipenController::class, 'index']);
+    Route::get('/dashboard', function () {
+        return view('inner.dashboard');
+    });
+    Route::get('/send/money', function () {
+        return view('inner.send-money');
+    });
+    Route::get('/transfer/success', function () {
+        return view('inner.send-money-success');
+    });
+    Route::get('/transfer/history', function () {
+        return view('inner.transfer-history');
+    });
+    Route::get('/transfer/history/{id}', function ($id) {
+        return view('inner.transfer-history-detail', compact('id'));
+    });
+
+    Route::get('/recipients', function () {
+        return view('inner.recipients');
+    });
+
+    Route::get('/recipients/add', function () {
+        return view('inner.add-recipients');
+    });
+
+    Route::get('/recipients/view/{id}', function () {
+        return view('inner.view-recipients');
+    });
+    Route::get('/profile', function () {
+        return view('inner.profile');
+    })->name('profile');
+    Route::get('/customer-support', function () {
+        return view('inner.customer-support');
+    });
+
+    Route::get('/customer-support/details/{id}', function ($id) {
+        return view('inner.customer-support-details', compact('id'));
+    });
+    Route::get('/customer-support/add-complaint', function () {
+        return view('inner.add-complaint');
+    });
+    Route::get('contact-preferences', function () {
+        return view('inner.customer-preferences');
+    });
+    Route::get('refer-friend', function () {
+        return view('inner.refer-friend');
+    });
+
+    Route::get('paymentrequest', function () {
+        if (!\App\Models\Customer\CustomerDetail::where('customer_id',session('customer_id'))->where('is_introducer','t')->exists()){
+            return redirect()->back();
+        }
+        return view('inner.payment-introduction');
+    });
+
+    Route::get('user/documents', function () {
+        return view('inner.documents');
+    });
+    Route::get('user/document/add', function () {
+        return view('inner.document-add');
+    });
+    Route::get('user/document/view/{id}', function ($id) {
+        return view('inner.view-document', compact('id'));
+    });
+
+    Route::get('receipt', function () {
+        $input = request();
+        $transfer = \App\Models\Transfer\Transfer::find($input['transfer_id']);
+        return view('receipt-pdf', compact('transfer'));
 
     });
 
 
+    //mobile screens
+    Route::get('mobile/send/money', function () {
+        return view('mobile.send-money');
+    });
 
+    Route::get('mobile/transfer/success', function () {
+        return view('mobile.send-money-success');
+    });
+
+
+    Route::get('mobile/dashboard', function () {
+        return view('mobile.dashboard');
+    });
+    Route::get('mobile/transactions', function () {
+        return view('mobile.transfer-history');
+    });
+    Route::get('mobile/transaction/{id}', function ($id) {
+        return view('mobile.transfer-details', compact('id'));
+    });
+    Route::get('mobile/receivers', function () {
+        return view('mobile.recipients');
+    });
+    Route::get('mobile/receivers/add', function () {
+        return view('mobile.recipient-add');
+    });
+    Route::get('mobile/receiver/{id}', function ($id) {
+        return view('mobile.recipient-detail', compact('id'));
+    });
+    Route::get('mobile/account', function () {
+        return view('mobile.account-setting');
+    });
+    Route::get('mobile/profile-view', function () {
+        return view('mobile.profile-view');
+    });
+
+    Route::get('mobile/profile', function () {
+        return view('mobile.profile');
+    });
+
+
+    Route::get('mobile/address-view', function () {
+        return view('mobile.user-address-view');
+    });
+    Route::get('mobile/address', function () {
+        return view('mobile.user-address');
+    });
+    Route::get('mobile/contact', function () {
+        return view('mobile.contact');
+    });
+    Route::get('mobile/contact-preferences', function () {
+        return view('mobile.customer-preferences');
+    });
+    Route::get('mobile/faqs', function () {
+        return view('mobile.faqs');
+    }); //TODO text need to update
+
+    Route::get('mobile/terms-conditions', function () {
+        return view('mobile.terms-conditions');
+    });
+
+    Route::get('mobile/password-view', function () {
+        return view('mobile.change-password-view');
+    });
+
+    Route::get('mobile/change-password', function () {
+        return view('mobile.change-password');
+    });
+    Route::get('mobile/contact-preferences', function () {
+        return view('mobile.customer-preferences');
+    });
+    Route::get('mobile/privacy-policy', function () {
+        return view('mobile.privacy-policy');
+    });
+    Route::get('mobile/refer-friend', function () {
+        return view('mobile.refer-friend');
+    }); //TODO share and copy need to update.
+
+    Route::get('mobile/documents', function () {
+        return view('mobile.documents');
+    });
+    Route::get('mobile/document/add', function () {
+        return view('mobile.document-add');
+    });
+
+    Route::get('mobile/document/view/{id}', function ($id) {
+        return view('mobile.document-view', compact('id'));
+    });
+
+    Route::get('mobile/customer-support', function () {
+        return view('mobile.customer-support');
+    });
+
+    Route::get('mobile/customer-support/add', function () {
+        return view('mobile.customer-support-add');
+    });
+
+    Route::get('mobile/customer-support/details/{id}', function ($id) {
+        return view('mobile.customer-support-details', compact('id'));
+    });
+
+    Route::post('upload/documents', [\App\Http\Controllers\Documents\DocumentController::class, 'upload']);
+    //Trust Payments Routes
+    Route::get('gateway/trust/payment/{transfer_code}', [\App\Http\Controllers\Gateways\TrustPaymentController::class, 'index']);
+    Route::post('gateway/trust/payment/response', [\App\Http\Controllers\Gateways\TrustPaymentController::class, 'response']);
+
+    Route::get('gateway/swipen/payment/{transfer_code}', [\App\Http\Controllers\Gateways\SwipenController::class, 'index']);
+
+});
+    Route::get('logout', [\App\Http\Controllers\Auth\LogoutController::class, 'logout']);
 });
 //Route::post('gateway/swipen/payment/{token}', [\App\Http\Controllers\Gateways\SwipenController::class, 'response']);
 
