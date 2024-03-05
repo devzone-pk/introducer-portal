@@ -268,7 +268,6 @@ class SendMoney extends Component
             $rates = new AllRates($source);
             $rates = $rates->rate();
             $this->rates = json_decode(json_encode($rates), true);
-
             $rates = collect($rates);
             $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
@@ -692,6 +691,7 @@ class SendMoney extends Component
                 'customer_rate' => $this->selected_payer['rate_after_spread'],
                 'agent_rate' => $this->selected_payer['rate_before_spread'],
                 'main_agent_rate' => $this->selected_payer['main_agent_rate'],
+                'sub_agent_rate' => !empty($this->selected_payer['sub_agent_rate'])? $this->selected_payer['sub_agent_rate']:0,
                 'sending_amount' => $this->amounts['sending_amount'],
                 'receiving_amount' => $this->amounts['receive_amount'] + $this->coupon['receive_amount'],
                 'agent_charges' => 0,
