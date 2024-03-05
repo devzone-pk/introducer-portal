@@ -989,6 +989,7 @@ class PaymentIntroduction extends Component
                     'customer_rate' => $this->user_customer_rate,
                     'agent_rate' => $this->selected_payer['rate_before_spread'],
                     'main_agent_rate' => $this->selected_payer['main_agent_rate'],
+                    'sub_agent_rate' => !empty($this->selected_payer['sub_agent_rate'])? $this->selected_payer['sub_agent_rate']:0,
                     'sending_amount' => $sending_amount,
                     'receiving_amount' => $bene['receiving_amount'],
                     'agent_charges' => 0,
