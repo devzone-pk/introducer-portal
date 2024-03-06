@@ -304,10 +304,10 @@ class CountryPage extends Component
 
             if ($this->amounts['calculation_mode'] == 'S') {
                 $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount'], 2);
-                $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount']);
+                // $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount']);
             } else {
                 $this->amounts['sending_amount'] = number_format($this->amounts['sending_amount'], 2);
-                $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount']);
+                // $this->amounts['receive_amount'] = number_format($this->amounts['receive_amount']);
             }
 
 
