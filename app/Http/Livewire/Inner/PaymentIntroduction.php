@@ -78,6 +78,8 @@ class PaymentIntroduction extends Component
         'calculation_mode' => 'S',
         'total' => 0
     ];
+
+
     public $beneficiaries = [];
     public $countries = [];
     public $front;
