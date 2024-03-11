@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware(['auth.allow'])->group(function () {
-
+    Route::middleware(['country.check'])->group(function(){
     Route::get('/dashboard', function () {
         return view('inner.dashboard');
     });
@@ -87,7 +87,6 @@ Route::middleware(['auth.allow'])->group(function () {
 
     });
 
-    Route::get('logout', [\App\Http\Controllers\Auth\LogoutController::class, 'logout']);
 
     //mobile screens
     Route::get('mobile/send/money', function () {
@@ -196,6 +195,8 @@ Route::middleware(['auth.allow'])->group(function () {
 
     Route::get('gateway/swipen/payment/{transfer_code}', [\App\Http\Controllers\Gateways\SwipenController::class, 'index']);
 
+});
+    Route::get('logout', [\App\Http\Controllers\Auth\LogoutController::class, 'logout']);
 });
 //Route::post('gateway/swipen/payment/{token}', [\App\Http\Controllers\Gateways\SwipenController::class, 'response']);
 

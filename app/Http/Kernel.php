@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\IsUserLoggedIn;
 use App\Http\Middleware\SiteDown;
+use App\Http\Middleware\UserCountryCheck;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -46,6 +47,7 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+       
     ];
 
     /**
@@ -67,5 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'auth.allow' => IsUserLoggedIn::class,
         'site.down' => SiteDown::class,
+        'country.check' => UserCountryCheck::class
     ];
 }
