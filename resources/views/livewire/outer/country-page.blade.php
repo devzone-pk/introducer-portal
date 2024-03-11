@@ -142,7 +142,8 @@
                                                     <h3 class="fw-bold m-0">Recipient Gets</h3>
                                                 </div>
                                                 <div>
-                                                    <h3 class="fw-bold m-0">{{$selected_payer['currency'] ?? ''}} {{ $amounts['receive_amount'] }}</h3>
+                                                    <h3 class="fw-bold m-0">{{$selected_payer['currency'] ?? ''}}{{ number_format(str_replace(',', '',$amounts['receive_amount']),2) }}
+                                                    </h3>
                                                 </div>
                                             </div>
 
