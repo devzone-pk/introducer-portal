@@ -185,7 +185,7 @@
         </div> <!-- / .container -->
     </section>
 
-    <footer class="py-8 py-md-11" style="background-color: #002f6c">
+    <footer class="py-8 py-md-8" style="background-color: #002f6c">
         <div class="container">
             <div class="row" data-aos="fade-up">
                 <div class="col-12 col-md-5 text-white">
@@ -391,6 +391,11 @@
 
 
             </div> <!-- / .row -->
+            <div class="col-12 mt-5">
+                <p class="text-white fs-14px p-0 m-0">
+                    Alert : Please note that under its MSB license from the FCA, Orium Global Resources can only provide home remittance services. Thus, we do not offer any financial services other than home remittances. We are not financial partners or payment collection partners of companies offering any other products or services. Customers are informed clearly that we only offer remittance services and are advised to acquire products/services from such companies at their own risk. We are not liable for any of their financial losses. We are not taking payments via MOTO (mail order, telephone order). If you have concerns about potential fraud, please don't hesitate to get in touch with the Orium Global Resources  right away. You can reach us by phone 01224 453978 or you can send an email to info@oriumglobalresources.com
+                </p>
+            </div>
         </div> <!-- / .container -->
     </footer>
     <section class="py-2 bg-black">
@@ -576,8 +581,7 @@
             s0.parentNode.insertBefore(s1, s0);
         })();
 
-        <
-        !--End of Tawk.to Script -->
+        <!--End of Tawk.to Script -->
 
         /**
          * @description Shows the cookie banner
