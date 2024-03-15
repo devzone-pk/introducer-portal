@@ -115,6 +115,14 @@
     <section class="py-8 py-md-11 border-bottom">
         <div class="container">
             <div class="row">
+                <div class="col-12 mt-5">
+                    <div class="alert alert-info">
+                        Alert : Please note that under its MSB license from the FCA, Orium Global Resources can only provide home remittance services. Thus, we do not offer any financial services other than home remittances. We are not financial partners or payment collection partners of companies offering any other products or services. Customers are informed clearly that we only offer remittance services and are advised to acquire products/services from such companies at their own risk. We are not liable for any of their financial losses. We are not taking payments via MOTO (mail order, telephone order).
+                        Also, we do not accept cash payments or third party payments. We only receive bank transfer payments from customers and this is paid only to account in the name of
+                        Orium Global Resources.
+                        If you have concerns about potential fraud, please don't hesitate to get in touch with the Orium Global Resources right away. You can reach us by phone 01224 453978 or you can send an email to info@oriumglobalresources.com
+                    </div>
+                </div>
                 <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up">
 
                     <!-- Icon -->
