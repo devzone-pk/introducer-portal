@@ -247,12 +247,15 @@ Route::get('verify/{id}/{email}', function ($id, $email) {
 });
 
 Route::get('mobile/app', function () {
-    $device = \Jenssegers\Agent\Facades\Agent::device();
-    if (in_array($device, ['iPhone', 'iPad'])) {
+//    $device = \Jenssegers\Agent\Facades\Agent::device();
+    $platform = \Jenssegers\Agent\Facades\Agent::platform();
+    if (strtolower($platform) == 'ios') {
         return redirect('https://apps.apple.com/us/app/orium-global-resources/id6463112338');
+    }elseif(strtolower($platform) == 'androidos'){
+        return redirect('https://play.google.com/store/apps/details?id=com.oriumglobal.resources');
+    }else{
+        return redirect('/');
     }
-    return redirect('https://play.google.com/store/apps/details?id=com.oriumglobal.resources');
-
 });
 
 //Route::view('forgot-password', 'outer.forgot-password-request');
