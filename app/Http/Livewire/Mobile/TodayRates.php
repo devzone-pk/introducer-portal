@@ -43,6 +43,7 @@ class TodayRates extends Component
         $source = new Source();
         $source->userAgentId = session('user_agent_id');
         $source->destinationCountry = $this->country['iso2'];
+        $source->receiving_country_id = $this->country['id'];
 
 
         $rates = new AllRates($source);
