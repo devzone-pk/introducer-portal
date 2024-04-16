@@ -9,5 +9,7 @@ class SourceRate extends Model
 {
 
     use HasFactory;
+    protected $table = 'n_source_rates';
     protected $guarded = [];
+
 }
