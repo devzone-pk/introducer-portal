@@ -35,7 +35,8 @@ class ResetRates implements ShouldQueue
             ->where('rate', '>', 0)
             ->whereNull('deleted_at')
             ->update([
-                'rate' => 0.0000,
+                'rate' => 0,
+                'sub_agent_rate' => 0,
             ]);
         
     }
