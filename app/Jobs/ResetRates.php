@@ -33,6 +33,7 @@ class ResetRates implements ShouldQueue
     {
         SourceRate::where('company_id', config('app.company_id'))
             ->where('rate', '>', 0)
+            ->whereNull('deleted_at')
             ->update([
                 'rate' => 0.0000,
             ]);
