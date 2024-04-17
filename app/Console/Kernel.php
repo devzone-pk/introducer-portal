@@ -16,7 +16,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new ResetRates)->dailyAt('19:00');
+        $schedule->call(function (){
+            ResetRates::dispatch()->onQueue('portal_'.env('COMPANY_ID'));
+        })->dailyAt('19:00');
         // $schedule->command('inspire')->hourly();
     }
 
