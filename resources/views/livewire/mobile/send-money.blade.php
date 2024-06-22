@@ -418,20 +418,23 @@
 
                                 <p class="m-0">
                                     <span>Bank Name: </span>
-                                    <strong>Leatherback Ltd</strong>
+                                    <strong>Clear Bank</strong>
                                 </p>
                                 <p class="m-0">
-                                    <span>Account Name: </span>
-                                    <strong>ORIUM GLOBAL RESOURCES LIMITED </strong>
+                                    <span>Account Title: </span>
+                                    <strong>REMIT UNION LIMITED</strong>
                                 </p>
                                 <p class="m-0">
                                     <span>Sort Code: </span>
-                                    <strong>040691</strong>
+                                    <strong>040693</strong>
                                 </p>
                                 <p class="m-0">
                                     <span>Account Number: </span>
-                                    <strong>00027862</strong>
+                                    <strong>00000165</strong>
                                 </p>
+
+                                <p>Remit Union is our Financial Partner and they collect funds on behalf of
+                                    OriumPay.</p>
 
                             </div>
                             <p class="my-2 mx-1 fw-bold  @if($payment_done == 'false') d-none @endif"> Has payment been deposited into the account stated above?</p>
@@ -472,20 +475,23 @@
 
                                     <p class="m-0">
                                         <span>Bank Name: </span>
-                                        <strong>Leatherback Ltd</strong>
+                                        <strong>Clear Bank</strong>
                                     </p>
                                     <p class="m-0">
-                                        <span>Account Name: </span>
-                                        <strong>ORIUM GLOBAL RESOURCES LIMITED </strong>
+                                        <span>Account Title: </span>
+                                        <strong>REMIT UNION LIMITED</strong>
                                     </p>
                                     <p class="m-0">
                                         <span>Sort Code: </span>
-                                        <strong>040691</strong>
+                                        <strong>040693</strong>
                                     </p>
                                     <p class="m-0">
                                         <span>Account Number: </span>
-                                        <strong>00027862</strong>
+                                        <strong>00000165</strong>
                                     </p>
+
+                                    <p>Remit Union is our Financial Partner and they collect funds on behalf of
+                                        OriumPay.</p>
 
                                 </div>
                             @endif
