@@ -142,6 +142,26 @@
                                     </div>
                                 </div>
 
+                                <div class="col-xs-12 col-sm-6 {{ count($sm_data) == 1 ? 'd-none':'' }}">
+                                    <div class="mb-3">
+                                        <label class="form-label fs-16px mb-1">Payment Method</label>
+                                        <select name="" wire:model="sending_method_id" id="sending_method_id"
+                                                class="form-select fs-16px  @error('selected_sending_method.id') is-invalid @enderror">
+                                            <option value="">Select</option>
+                                            @foreach ($sm_data as $s)
+                                                <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
+                                            @endforeach
+
+                                        </select>
+
+                                        @error('selected_sending_method.id')
+                                            <span class="invalid-feedback fs-14px" role="alert">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
 
                                 <div class="col-xs-12   col-sm-6  {{ count($receiving_methods) == 1 ? 'd-none':'' }}">
                                     <div class="mb-3">
@@ -381,7 +401,7 @@
                                 @endif
 
 
-                                @if(strtolower($receiving_method) == 'bank')
+                                @if(!empty($selected_sending_method['sending_method_id']) && $selected_sending_method['sending_method_id'] == '91')
 
                                     <div class="my-2 alert alert-warning @if($payment_done == 'false') d-none @endif">
 
@@ -938,7 +958,8 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-xs-12  ">
+
+                                {{-- <div class="col-xs-12  ">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Payment Method</label>
                                         <select name="" wire:model="sending_method_id"
@@ -956,7 +977,7 @@
                                         @enderror
 
                                     </div>
-                                </div>
+                                </div> --}}
 
 
                                 <div class="col-xs-12  ">

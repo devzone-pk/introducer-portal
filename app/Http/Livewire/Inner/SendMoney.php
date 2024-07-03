@@ -246,10 +246,10 @@ class SendMoney extends Component
             $this->receiving_country_id = $this->rc_data[0]['id'];
             $this->updatedReceivingCountryId($this->receiving_country_id);
         }
+
         if (count($this->sm_data) == 1) {
             $this->selected_sending_method = $this->sm_data[0];
             $this->sending_method_id = $this->selected_sending_method['id'];
-
         }
     }
 
@@ -258,7 +258,7 @@ class SendMoney extends Component
     {
 
         try {
-            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination']);
+            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination', 'sending_method_id', 'payer_id']);
             if (empty($this->receiving_country['iso2'])) {
                 throw new \Exception('Sending to country is required.');
             }
@@ -272,11 +272,11 @@ class SendMoney extends Component
             $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
 
-            if (count($this->receiving_methods) == 1) {
-                $this->receiving_method = $this->receiving_methods[0];
-                $this->getPayers();
-
-            }
+            // if (count($this->receiving_methods) == 1) {
+            //     $this->receiving_method = $this->receiving_methods[0];
+            //     $this->getPayers();
+            // }
+            
         } catch (\Exception $e) {
             $this->reset('amounts');
             $this->error = $e->getMessage();
@@ -292,7 +292,7 @@ class SendMoney extends Component
 
     public function getPayers()
     {
-        if (empty($this->selected_sending_method) && false) {
+        if (empty($this->selected_sending_method)) {
             $this->addError('error', 'Sending method field is required.');
         } else {
             $this->resetErrors();
@@ -311,7 +311,7 @@ class SendMoney extends Component
             $source->userAgentId = session('user_agent_id');
             $source->destinationCountry = $this->receiving_country['iso2'];
             $source->receiving_method_id = $this->receiving_method_id;
-            //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+            $source->sending_method_id = $this->selected_sending_method['sending_method_id'];
             $source->receiving_country_id = $this->receiving_country['id'];
 
             $rates = new AllRates($source);
@@ -364,7 +364,12 @@ class SendMoney extends Component
     public function updatedSendingMethodId($val)
     {
         $this->selected_sending_method = collect($this->sm_data)->firstWhere('id', $val);
-        //$this->reset(['receiving_method']);
+        $this->reset(['receiving_method']);
+
+        if (count($this->receiving_methods) == 1) {
+            $this->receiving_method = $this->receiving_methods[0];
+            $this->getPayers();
+        }
 
     }
 
@@ -474,7 +479,7 @@ class SendMoney extends Component
             $source->sourceCurrency = $this->selected_payer['source_currency'];
             $source->receiving_method_id = $this->receiving_method_id;
             //  dd($this->selected_sending_method);
-            //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+            $source->sending_method_id = $this->selected_sending_method['sending_method_id'];
 
             $rates = new AdminFee($source);
             $fees = $rates->apply();
@@ -830,7 +835,7 @@ class SendMoney extends Component
         $source->destinationCountry = $this->receiving_country['iso2'];
         $source->payerId = $this->selected_payer['id'];
         $source->receiving_method_id = $this->receiving_method_id;
-        //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+        $source->sending_method_id = $this->selected_sending_method['sending_method_id'];
         $source->receiving_country_id = $this->receiving_country['id'];
         $rates = new AllRates($source);
         $rates = $rates->rate();
@@ -863,7 +868,7 @@ class SendMoney extends Component
         $source->sourceAmount = $this->amounts['sending_amount'];
         $source->sourceCurrency = $this->selected_payer['source_currency'];
         $source->receiving_method_id = $this->receiving_method_id;
-        //$source->sending_method_id = $this->selected_sending_method['sending_method_id'];
+        $source->sending_method_id = $this->selected_sending_method['sending_method_id'];
         $rates = new AdminFee($source);
         $fees = $rates->apply();
 
@@ -1135,7 +1140,7 @@ class SendMoney extends Component
                 'selected_payer.id' => 'required',
                 'amounts.total' => 'required',
                 'amounts.sending_amount' => 'required|string',
-                //'selected_sending_method.id' => 'required'
+                'selected_sending_method.id' => 'required'
             ];
             if (strtolower($this->receiving_method) == 'cash') {
                 $rules['selected_cash_destination'] = 'required';
@@ -1259,7 +1264,7 @@ class SendMoney extends Component
             'amount' => $sending_amount,
             'receiving_c' => $this->receiving_country['id'],
             'session' => session()->all(),
-            // 'sen_me' => $this->selected_sending_method['sending_method_id'],
+            'sen_me' => $this->selected_sending_method['sending_method_id'],
             'rec_me' => $this->receiving_method_id
 
         ]);
@@ -1283,10 +1288,10 @@ class SendMoney extends Component
                 return $q->orWhere('receiving_country_id', $this->receiving_country['id'])
                     ->orWhere('receiving_country_id', '0')->orWhereNull('receiving_country_id');
             })
-            // ->where(function ($q) {
-            //     return $q->orWhere('sending_method_id', $this->selected_sending_method['sending_method_id'])
-            //         ->orWhere('sending_method_id', '0')->orWhereNull('sending_method_id');
-            // })
+            ->where(function ($q) {
+                return $q->orWhere('sending_method_id', $this->selected_sending_method['sending_method_id'])
+                    ->orWhere('sending_method_id', '0')->orWhereNull('sending_method_id');
+            })
             ->where(function ($q) {
                 return $q->orWhere('receiving_method_id', $this->receiving_method_id)
                     ->orWhere('receiving_method_id', '0')->orWhereNull('receiving_method_id');
