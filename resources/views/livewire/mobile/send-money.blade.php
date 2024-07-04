@@ -170,7 +170,7 @@
 
                         @if (!empty($receiving_country['iso2']))
 
-                            <div class="form-group boxed {{ (count($sm_data) == 1) ? 'd-none' :'' }}">
+                            <div class="form-group boxed">
                                 <div class="input-wrapper">
 
                                     <div class="d-flex form-control mobile-input justify-content-between pe-2 align-items-center @error('selected_sending_method.id') is-invalid @enderror"

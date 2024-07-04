@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-6 {{ count($sm_data) == 1 ? 'd-none':'' }}">
+                                <div class="col-xs-12 col-sm-6">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Payment Method</label>
                                         <select name="" wire:model="sending_method_id" id="sending_method_id"
