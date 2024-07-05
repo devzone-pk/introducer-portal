@@ -225,7 +225,7 @@ class SendMoney extends Component
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
 
             //auto select receiving method
-            if (count($this->receiving_methods) == 1) {
+            if (count($this->receiving_methods) == 1 && !empty($this->selected_sending_method)) {
                 $this->receiving_method = $this->receiving_methods[0];
                 $this->getPayers();
             }

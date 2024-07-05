@@ -278,7 +278,7 @@ class SendMoney extends Component
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
 
             //auto select receiving method
-            if (count($this->receiving_methods) == 1) {
+            if (count($this->receiving_methods) == 1 && !empty($this->selected_sending_method)) {
                 $this->receiving_method = $this->receiving_methods[0];
                 $this->getPayers();
             }
@@ -299,7 +299,7 @@ class SendMoney extends Component
     public function getPayers()
     {
         if (empty($this->selected_sending_method)) {
-            $this->addError('error', 'Sending method field is required.');
+            $this->addError('error', 'Payment method field is required.');
         } else {
             $this->resetErrors();
             $this->reset(['payers', 'selected_payer', 'amounts', 'receiving_method_id', 'selected_cash_destination']);
@@ -371,7 +371,7 @@ class SendMoney extends Component
     public function updatedSendingMethodId($val)
     {
         $this->selected_sending_method = collect($this->sm_data)->firstWhere('id', $val);
-        $this->reset(['receiving_method']);
+        $this->reset(['receiving_method','payers','payer_id','selected_payer']);
 
         //auto select receiving method
         if (count($this->receiving_methods) == 1) {
