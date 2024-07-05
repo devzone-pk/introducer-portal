@@ -142,6 +142,26 @@
                                     </div>
                                 </div>
 
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fs-16px mb-1">Payment Method</label>
+                                        <select name="" wire:model="sending_method_id" id="sending_method_id"
+                                                class="form-select fs-16px  @error('selected_sending_method.id') is-invalid @enderror">
+                                            <option value="">Select</option>
+                                            @foreach ($sm_data as $s)
+                                                <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
+                                            @endforeach
+
+                                        </select>
+
+                                        @error('selected_sending_method.id')
+                                            <span class="invalid-feedback fs-14px" role="alert">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
 
                                 <div class="col-xs-12   col-sm-6  {{ count($receiving_methods) == 1 ? 'd-none':'' }}">
                                     <div class="mb-3">
@@ -381,82 +401,100 @@
                                 @endif
 
 
+                                @if(!empty($selected_sending_method['sending_method_id']) && $selected_sending_method['sending_method_id'] == '91')
 
-
- 
-                                <div class=" my-2 alert alert-warning    @if($payment_done == 'false') d-none @endif">
-
-                                    <p class="m-0">
-                                        <span>Bank Name: </span>
-                                        <strong>Clear Bank</strong>
-                                    </p>
-                                    <p class="m-0">
-                                        <span>Account Title: </span>
-                                        <strong>REMIT UNION LIMITED</strong>
-                                    </p>
-                                    <p class="m-0">
-                                        <span>Sort Code: </span>
-                                        <strong>040693</strong>
-                                    </p>
-                                    <p class="m-0">
-                                        <span>Account Number: </span>
-                                        <strong>00000165</strong>
-                                    </p>
-
-                                    <p>Remit Union is our Financial Partner and they collect funds on behalf of
-                                        OriumPay.</p>
-
-                                </div>
-                                <p class="my-2 mx-1 fw-bold  @if($payment_done == 'false') d-none @endif"> Has payment been deposited into the account stated above?</p>
-                                <div class="d-flex w-50 justify-content-between mb-3 my-2  mx-1 ">
-                                    <div class="form-check">
-                                        <label class="form-check-label" for="customCheckb1">
-                                            Yes
-                                        </label>
-
-                                        <input type="radio" wire:model="payment_done" value="true"
-                                               class="form-check-input  @error('agree') is-invalid @enderror">
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            No
-                                        </label>
-                                        <input type="radio" wire:model="payment_done" value="false"
-                                               class="form-check-input  @error('agree') is-invalid @enderror">
-                                    </div>
-                                </div>
-                                @if($payment_done == 'true')
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary  shadow-none">Continue</button>
-                                    </div>
-                                @elseif($payment_done == 'false')
-
-                                    <p class="my-2 mx-1 text-danger fw-bold">Please deposit the payment into the account stated below.</p>
-
-                                    <div class=" my-2 alert alert-warning">
+                                    <div class="my-2 alert alert-warning @if($payment_done == 'false') d-none @endif">
 
                                         <p class="m-0">
                                             <span>Bank Name: </span>
                                             <strong>Clear Bank</strong>
                                         </p>
+
                                         <p class="m-0">
                                             <span>Account Title: </span>
                                             <strong>REMIT UNION LIMITED</strong>
                                         </p>
+
                                         <p class="m-0">
                                             <span>Sort Code: </span>
                                             <strong>040693</strong>
                                         </p>
+
                                         <p class="m-0">
                                             <span>Account Number: </span>
                                             <strong>00000165</strong>
                                         </p>
 
-                                        <p>Remit Union is our Financial Partner and they collect funds on behalf of
-                                            OriumPay.</p>
+                                        <p>
+                                            Remit Union is our Financial Partner and they collect funds on behalf of OriumPay.
+                                        </p>
 
                                     </div>
 
+                                    <p class="my-2 mx-1 fw-bold @if($payment_done == 'false') d-none @endif">
+                                        Has payment been deposited into the account stated above?
+                                    </p>
+
+                                    <div class="d-flex w-50 justify-content-between mb-3 my-2 mx-1">
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="yes-radio">
+                                                Yes
+                                            </label>
+                                            <input type="radio" wire:model="payment_done" value="true" id="yes-radio"
+                                                class="form-check-input @error('payment_done') is-invalid @enderror">
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="no-radio">
+                                                No
+                                            </label>
+                                            <input type="radio" wire:model="payment_done" value="false" id="no-radio"
+                                                class="form-check-input @error('payment_done') is-invalid @enderror">
+                                        </div>
+                                    </div>
+
+                                    @if($payment_done == 'true')
+
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary shadow-none">Continue</button>
+                                        </div>
+
+                                    @elseif($payment_done == 'false')
+
+                                        <p class="my-2 mx-1 text-danger fw-bold">Please deposit the payment into the account stated below.</p>
+
+                                        <div class=" my-2 alert alert-warning">
+
+                                            <p class="m-0">
+                                                <span>Bank Name: </span>
+                                                <strong>Clear Bank</strong>
+                                            </p>
+                                            <p class="m-0">
+                                                <span>Account Title: </span>
+                                                <strong>REMIT UNION LIMITED</strong>
+                                            </p>
+                                            <p class="m-0">
+                                                <span>Sort Code: </span>
+                                                <strong>040693</strong>
+                                            </p>
+                                            <p class="m-0">
+                                                <span>Account Number: </span>
+                                                <strong>00000165</strong>
+                                            </p>
+
+                                            <p>
+                                                Remit Union is our Financial Partner and they collect funds on behalf of OriumPay.
+                                            </p>
+
+                                        </div>
+
+                                    @endif
+                                
+                                @else
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary shadow-none">Continue</button>
+                                    </div>
+                                    
                                 @endif
 
                             @endif
@@ -920,7 +958,8 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-xs-12  ">
+
+                                {{-- <div class="col-xs-12  ">
                                     <div class="mb-3">
                                         <label class="form-label fs-16px mb-1">Payment Method</label>
                                         <select name="" wire:model="sending_method_id"
@@ -938,7 +977,7 @@
                                         @enderror
 
                                     </div>
-                                </div>
+                                </div> --}}
 
 
                                 <div class="col-xs-12  ">

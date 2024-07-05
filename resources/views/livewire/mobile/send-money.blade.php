@@ -169,11 +169,38 @@
                         </div>
 
                         @if (!empty($receiving_country['iso2']))
+
+                            <div class="form-group boxed">
+                                <div class="input-wrapper">
+
+                                    <div class="d-flex form-control mobile-input justify-content-between pe-2 align-items-center @error('selected_sending_method.id') is-invalid @enderror"
+                                        role="button"
+                                        wire:click.prevent="smOpenModel('selected_sending_method','0')">
+                                        <span
+                                            class="{{ empty($selected_sending_method['id']) ? 'text-placeholder' : '' }} ">{{ empty($selected_sending_method['id']) ? 'Select Sending Method' : $selected_sending_method['name'] }}</span>
+
+                                        <svg width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17 9.5L14.5 12L12 14.5L7 9.5" stroke="#85a555"
+                                                stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M7 9.5L12 14.5L14.5 12" stroke="black"
+                                                stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        @endif
+
+                        @if (!empty($selected_sending_method['id']))
                             <div class="form-group boxed {{ (count($receiving_methods) == 1) ? 'd-none' :'' }}">
                                 <div class="input-wrapper">
 
                                     <div class="d-flex form-control mobile-input align-items-center  pe-2 justify-content-between @error('receiving_method') is-invalid @enderror"
-                                         role="button" wire:click.prevent="rmOpenModel('receiving_method','0')">
+                                        role="button" wire:click.prevent="rmOpenModel('receiving_method','0')">
 
                                         <span class="{{ empty($receiving_method) ? 'text-placeholder' : '' }} ">
 
@@ -186,7 +213,6 @@
                                             @else
                                                 Select Receiving Method
                                             @endif
-
 
                                         </span>
 
@@ -414,64 +440,9 @@
                                 </div>
                             </div>
 
-                            <div class=" my-2 alert alert-warning @if($payment_done == 'false') d-none @endif">
-
-                                <p class="m-0">
-                                    <span>Bank Name: </span>
-                                    <strong>Clear Bank</strong>
-                                </p>
-                                <p class="m-0">
-                                    <span>Account Title: </span>
-                                    <strong>REMIT UNION LIMITED</strong>
-                                </p>
-                                <p class="m-0">
-                                    <span>Sort Code: </span>
-                                    <strong>040693</strong>
-                                </p>
-                                <p class="m-0">
-                                    <span>Account Number: </span>
-                                    <strong>00000165</strong>
-                                </p>
-
-                                <p>Remit Union is our Financial Partner and they collect funds on behalf of
-                                    OriumPay.</p>
-
-                            </div>
-                            <p class="my-2 mx-1 fw-bold  @if($payment_done == 'false') d-none @endif"> Has payment been deposited into the account stated above?</p>
-
-                            <div class="d-flex w-50 justify-content-between mb-3 my-2  mx-1 ">
-                                <div class="d-flex align-items-center gap-2">
-                                    <input type="radio" wire:model="payment_done" value="true" id="true_radio"
-                                           class="  @error('agree') is-invalid @enderror">
-
-                                    <label class="fw-semibold" for="">
-                                        Yes
-                                    </label>
-
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <input type="radio" wire:model="payment_done" value="false" id="false_radio"
-                                           class=" @error('agree') is-invalid @enderror">
-                                    <label class="fw-semibold">
-                                        No
-                                    </label>
-                                </div>
-                            </div>
-
-
-                            @if($payment_done == 'true')
-                                <button type="submit" class="btn btn-primary mt-2  btn-block btn-lg">
-                                <span wire:loading wire:target="validateSendingDetails">
-                                    <span class="spinner-grow spinner-grow-sm me-05" role="status"
-                                          aria-hidden="true"></span>
-                                </span>
-                                    Continue
-                                </button>
-                            @elseif($payment_done == 'false')
-
-                                <p class="my-2 mx-1 text-danger fw-bold">Please deposit the payment into the account stated below.</p>
-
-                                <div class=" my-2 alert alert-warning">
+                            @if(!empty($selected_sending_method['sending_method_id']) && $selected_sending_method['sending_method_id'] == '91')
+                                
+                                <div class=" my-2 alert alert-warning @if($payment_done == 'false') d-none @endif">
 
                                     <p class="m-0">
                                         <span>Bank Name: </span>
@@ -494,6 +465,76 @@
                                         OriumPay.</p>
 
                                 </div>
+
+                                <p class="my-2 mx-1 fw-bold  @if($payment_done == 'false') d-none @endif">
+                                    Has payment been deposited into the account stated above?
+                                </p>
+
+                                <div class="d-flex w-50 justify-content-between mb-3 my-2  mx-1 ">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="radio" wire:model="payment_done" value="true" id="true_radio"
+                                            class="  @error('agree') is-invalid @enderror">
+
+                                        <label class="fw-semibold" for="true_radio">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="radio" wire:model="payment_done" value="false" id="false_radio"
+                                            class=" @error('agree') is-invalid @enderror">
+
+                                        <label class="fw-semibold" for="false_radio">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+
+                                @if($payment_done == 'true')
+                                    <button type="submit" class="btn btn-primary mt-2  btn-block btn-lg">
+                                    <span wire:loading wire:target="validateSendingDetails">
+                                        <span class="spinner-grow spinner-grow-sm me-05" role="status"
+                                            aria-hidden="true"></span>
+                                    </span>
+                                        Continue
+                                    </button>
+                                @elseif($payment_done == 'false')
+
+                                    <p class="my-2 mx-1 text-danger fw-bold">Please deposit the payment into the account stated below.</p>
+
+                                    <div class=" my-2 alert alert-warning">
+
+                                        <p class="m-0">
+                                            <span>Bank Name: </span>
+                                            <strong>Clear Bank</strong>
+                                        </p>
+                                        <p class="m-0">
+                                            <span>Account Title: </span>
+                                            <strong>REMIT UNION LIMITED</strong>
+                                        </p>
+                                        <p class="m-0">
+                                            <span>Sort Code: </span>
+                                            <strong>040693</strong>
+                                        </p>
+                                        <p class="m-0">
+                                            <span>Account Number: </span>
+                                            <strong>00000165</strong>
+                                        </p>
+
+                                        <p>Remit Union is our Financial Partner and they collect funds on behalf of
+                                            OriumPay.</p>
+
+                                    </div>
+                                @endif
+
+                            @else
+
+                                <button type="submit" class="btn btn-primary mt-2  btn-block btn-lg">
+                                    <span wire:loading wire:target="validateSendingDetails">
+                                        <span class="spinner-grow spinner-grow-sm me-05" role="status" aria-hidden="true"></span>
+                                    </span>
+                                    Continue
+                                </button>
+
                             @endif
 
                         @endif
@@ -926,7 +967,7 @@
                             <div class="row  ">
 
 
-                                <div class="col-12 mt-1">
+                                {{-- <div class="col-12 mt-1">
                                     @if (!empty($receiving_country['iso2']))
                                         <div class="form-group boxed">
                                             <div class="input-wrapper">
@@ -951,13 +992,13 @@
                                             </div>
                                         </div>
                                     @endif
-                                </div>
+                                </div> --}}
                                 <div class="col-12">
                                     @if (!empty($receiving_country['iso2']))
                                         <div class="form-group boxed">
                                             <div class="input-wrapper">
 
-                                                <div class="d-flex form-control mobile-input justify-content-between pe-2 align-items-center @error('source_of_funds') is-invalid @enderror"
+                                                <div class="d-flex form-control mobile-input justify-content-between pe-2 align-items-center @error('source_of_funds') is-invalid border-danger @enderror"
                                                     role="button"
                                                     wire:click.prevent="sofOpenModel('source_of_funds','0')">
                                                     <span
