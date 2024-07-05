@@ -190,26 +190,26 @@ class SendMoney extends Component
         if (!$this->validateUserMobileProfile($customer)) {
             $this->redirectTo = url('mobile/profile') . '?incomplete=true';
         }
-        $this->rcFetchData();
-
-        if (count($this->rc_data) == 1) {
-            $this->receiving_country = $this->rc_data[0];
-            $this->getReceivingMethods();
-        }
 
         $this->smfetchData();
+        //auto select sending method
         if (count($this->sm_data) == 1) {
             $this->selected_sending_method = $this->sm_data[0];
         }
 
+        $this->rcFetchData();
+        //auto select receiving country
+        if (count($this->rc_data) == 1) {
+            $this->receiving_country = $this->rc_data[0];
+            $this->getReceivingMethods();
+        }
     }
 
 
     public function getReceivingMethods()
     {
-
         try {
-            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination', 'selected_sending_method']);
+            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination']);
             if (empty($this->receiving_country['iso2'])) {
                 throw new \Exception('Sending to country is required.');
             }
@@ -224,10 +224,11 @@ class SendMoney extends Component
             $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
 
-            // if (count($this->receiving_methods) == 1) {
-            //     $this->receiving_method = $this->receiving_methods[0];
-            //     $this->getPayers();
-            // }
+            //auto select receiving method
+            if (count($this->receiving_methods) == 1 && !empty($this->selected_sending_method)) {
+                $this->receiving_method = $this->receiving_methods[0];
+                $this->getPayers();
+            }
 
         } catch (\Exception $e) {
 
@@ -266,6 +267,7 @@ class SendMoney extends Component
 
             $this->payers = collect($this->rates)->where('method', $this->receiving_method)->toArray();
 
+            //auto select payer
             if (count($this->payers) == 1) {
                 $this->selected_payer = $this->payers[0];
                 $this->setPayer();
@@ -289,6 +291,7 @@ class SendMoney extends Component
     {
         $this->reset(['receiving_method', 'selected_payer']);
 
+        //auto select receiving method
         if (count($this->receiving_methods) == 1) {
             $this->receiving_method = $this->receiving_methods[0];
             $this->getPayers();
