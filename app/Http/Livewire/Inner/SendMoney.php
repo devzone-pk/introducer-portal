@@ -235,8 +235,13 @@ class SendMoney extends Component
         $this->smfetchData();
         $this->rlfetchData();
         $this->srfetchData();
+        if (count($this->sm_data) == 1) {
+            $this->selected_sending_method = $this->sm_data[0];
+            $this->sending_method_id = $this->selected_sending_method['id'];
+        }
 
         $query = (request()->all());
+
         if (!empty($query['receiving_country_id'])) {
             $this->receiving_country_id = $query['receiving_country_id'];
             $this->updatedReceivingCountryId($query['receiving_country_id']);
@@ -247,10 +252,7 @@ class SendMoney extends Component
             $this->updatedReceivingCountryId($this->receiving_country_id);
         }
 
-        if (count($this->sm_data) == 1) {
-            $this->selected_sending_method = $this->sm_data[0];
-            $this->sending_method_id = $this->selected_sending_method['id'];
-        }
+
     }
 
 
@@ -258,7 +260,7 @@ class SendMoney extends Component
     {
 
         try {
-            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination', 'sending_method_id', 'payer_id']);
+            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination',]);
             if (empty($this->receiving_country['iso2'])) {
                 throw new \Exception('Sending to country is required.');
             }

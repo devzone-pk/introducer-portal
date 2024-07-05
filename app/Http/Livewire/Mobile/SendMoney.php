@@ -190,18 +190,17 @@ class SendMoney extends Component
         if (!$this->validateUserMobileProfile($customer)) {
             $this->redirectTo = url('mobile/profile') . '?incomplete=true';
         }
-        $this->rcFetchData();
-
-        if (count($this->rc_data) == 1) {
-            $this->receiving_country = $this->rc_data[0];
-            $this->getReceivingMethods();
-        }
 
         $this->smfetchData();
         if (count($this->sm_data) == 1) {
             $this->selected_sending_method = $this->sm_data[0];
         }
 
+        $this->rcFetchData();
+        if (count($this->rc_data) == 1) {
+            $this->receiving_country = $this->rc_data[0];
+            $this->getReceivingMethods();
+        }
     }
 
 
@@ -209,7 +208,7 @@ class SendMoney extends Component
     {
 
         try {
-            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination', 'selected_sending_method']);
+            $this->reset(['receiving_methods', 'receiving_method', 'payers', 'selected_payer', 'amounts', 'selected_cash_destination']);
             if (empty($this->receiving_country['iso2'])) {
                 throw new \Exception('Sending to country is required.');
             }
@@ -224,10 +223,10 @@ class SendMoney extends Component
             $this->receiving_methods = array_unique($rates->pluck('method')->toArray());
             $this->selected_beneficiary['code'] = $this->receiving_country['phonecode'];
 
-            // if (count($this->receiving_methods) == 1) {
-            //     $this->receiving_method = $this->receiving_methods[0];
-            //     $this->getPayers();
-            // }
+             if (count($this->receiving_methods) == 1) {
+                 $this->receiving_method = $this->receiving_methods[0];
+                 $this->getPayers();
+             }
 
         } catch (\Exception $e) {
 
